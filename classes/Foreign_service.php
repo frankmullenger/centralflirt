@@ -10,15 +10,14 @@ class Foreign_service extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'foreign_service';                 // table name
-    public $id;                              // int(4)  primary_key not_null
-    public $name;                            // varchar(32)  unique_key not_null
-    public $description;                     // varchar(255)  
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $id;                              // int(11)  not_null primary_key
+    public $name;                            // string(32)  not_null unique_key binary
+    public $description;                     // string(255)  binary
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Foreign_service',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Foreign_service',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

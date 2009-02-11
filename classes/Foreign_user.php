@@ -10,16 +10,15 @@ class Foreign_user extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'foreign_user';                    // table name
-    public $id;                              // int(4)  primary_key not_null
-    public $service;                         // int(4)  primary_key not_null
-    public $uri;                             // varchar(255)  unique_key not_null
-    public $nickname;                        // varchar(255)  
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $id;                              // int(11)  not_null primary_key
+    public $service;                         // int(11)  not_null primary_key
+    public $uri;                             // string(255)  not_null unique_key binary
+    public $nickname;                        // string(255)  binary
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Foreign_user',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Foreign_user',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

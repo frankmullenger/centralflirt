@@ -190,6 +190,9 @@ require_once(INSTALLDIR.'/lib/twitter.php');
 
 // XXX: other formats here
 
+//TODO is this correct plact to include country data? should it go into extlib?
+require_once(INSTALLDIR.'/lib/country.php');
+
 define('NICKNAME_FMT', VALIDATE_NUM.VALIDATE_ALPHA_LOWER);
 
 function __autoload($class)

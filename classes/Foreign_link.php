@@ -10,19 +10,18 @@ class Foreign_link extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'foreign_link';                    // table name
-    public $user_id;                         // int(4)  primary_key not_null
-    public $foreign_id;                      // int(4)  primary_key not_null
-    public $service;                         // int(4)  primary_key not_null
-    public $credentials;                     // varchar(255)
-    public $noticesync;                      // tinyint(1)   not_null default_1
-    public $friendsync;                      // tinyint(1)   not_null default_2
-    public $profilesync;                     // tinyint(1)   not_null default_1
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $user_id;                         // int(11)  not_null primary_key multiple_key
+    public $foreign_id;                      // int(11)  not_null primary_key
+    public $service;                         // int(11)  not_null primary_key
+    public $credentials;                     // string(255)  binary
+    public $noticesync;                      // int(4)  not_null
+    public $friendsync;                      // int(4)  not_null
+    public $profilesync;                     // int(4)  not_null
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Foreign_link',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Foreign_link',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

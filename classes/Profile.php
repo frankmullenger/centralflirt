@@ -30,19 +30,18 @@ class Profile extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'profile';                         // table name
-    public $id;                              // int(4)  primary_key not_null
-    public $nickname;                        // varchar(64)  multiple_key not_null
-    public $fullname;                        // varchar(255)  multiple_key
-    public $profileurl;                      // varchar(255)
-    public $homepage;                        // varchar(255)  multiple_key
-    public $bio;                             // varchar(140)  multiple_key
-    public $location;                        // varchar(255)  multiple_key
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $id;                              // int(11)  not_null primary_key auto_increment
+    public $nickname;                        // string(64)  not_null multiple_key binary
+    public $fullname;                        // string(255)  binary
+    public $profileurl;                      // string(255)  binary
+    public $homepage;                        // string(255)  binary
+    public $bio;                             // string(140)  binary
+    public $location;                        // string(255)  binary
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Profile',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Profile',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

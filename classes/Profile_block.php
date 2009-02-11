@@ -31,13 +31,12 @@ class Profile_block extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'profile_block';                   // table name
-    public $blocker;                         // int(4)  primary_key not_null
-    public $blocked;                         // int(4)  primary_key not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $blocker;                         // int(11)  not_null primary_key
+    public $blocked;                         // int(11)  not_null primary_key
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Profile_block',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Profile_block',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

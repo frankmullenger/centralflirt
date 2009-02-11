@@ -34,22 +34,21 @@ class Notice extends Memcached_DataObject
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
-    public $__table = 'notice';                             // table name
-    public $id;                                 // int(4)    primary_key not_null
-    public $profile_id;                         // int(4)     not_null
-    public $uri;                             // varchar(255)  unique_key
-    public $content;                         // varchar(140)
-    public $rendered;                         // text()
-    public $url;                             // varchar(255)
-    public $created;                         // datetime()     not_null
-    public $modified;                         // timestamp()      not_null default_CURRENT_TIMESTAMP
-    public $reply_to;                         // int(4)
-    public $is_local;                         // tinyint(1)
-    public $source;                             // varchar(32)
+    public $__table = 'notice';                          // table name
+    public $id;                              // int(11)  not_null primary_key auto_increment
+    public $profile_id;                      // int(11)  not_null multiple_key
+    public $uri;                             // string(255)  unique_key binary
+    public $content;                         // string(140)  multiple_key binary
+    public $rendered;                        // blob(65535)  blob binary
+    public $url;                             // string(255)  binary
+    public $created;                         // datetime(19)  not_null multiple_key binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
+    public $reply_to;                        // int(11)  
+    public $is_local;                        // int(4)  
+    public $source;                          // string(32)  binary
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Notice',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Notice',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

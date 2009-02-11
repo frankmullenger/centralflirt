@@ -10,13 +10,12 @@ class Remember_me extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'remember_me';                     // table name
-    public $code;                            // varchar(32)  primary_key not_null
-    public $user_id;                         // int(4)   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $code;                            // string(32)  not_null primary_key binary
+    public $user_id;                         // int(11)  not_null
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Remember_me',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Remember_me',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

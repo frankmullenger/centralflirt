@@ -10,20 +10,19 @@ class Message extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'message';                         // table name
-    public $id;                              // int(4)  primary_key not_null
-    public $uri;                             // varchar(255)  unique_key
-    public $from_profile;                    // int(4)   not_null
-    public $to_profile;                      // int(4)   not_null
-    public $content;                         // varchar(140)  
-    public $rendered;                        // text()  
-    public $url;                             // varchar(255)  
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
-    public $source;                          // varchar(32)  
+    public $id;                              // int(11)  not_null primary_key auto_increment
+    public $uri;                             // string(255)  unique_key binary
+    public $from_profile;                    // int(11)  not_null multiple_key
+    public $to_profile;                      // int(11)  not_null multiple_key
+    public $content;                         // string(140)  binary
+    public $rendered;                        // blob(65535)  blob binary
+    public $url;                             // string(255)  binary
+    public $created;                         // datetime(19)  not_null multiple_key binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
+    public $source;                          // string(32)  binary
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Message',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Message',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

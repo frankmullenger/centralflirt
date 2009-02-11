@@ -10,15 +10,14 @@ class Notice_source extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'notice_source';                   // table name
-    public $code;                            // varchar(32)  primary_key not_null
-    public $name;                            // varchar(255)   not_null
-    public $url;                             // varchar(255)   not_null
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $code;                            // string(32)  not_null primary_key binary
+    public $name;                            // string(255)  not_null binary
+    public $url;                             // string(255)  not_null binary
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Notice_source',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Notice_source',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

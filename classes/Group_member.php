@@ -9,14 +9,14 @@ class Group_member extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'group_member';                    // table name
-    public $group_id;                        // int(4)  primary_key not_null
-    public $profile_id;                      // int(4)  primary_key not_null
-    public $is_admin;                        // tinyint(1)
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $group_id;                        // int(11)  not_null primary_key
+    public $profile_id;                      // int(11)  not_null primary_key
+    public $is_admin;                        // int(1)  
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=NULL) { return Memcached_DataObject::staticGet('Group_member',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Group_member',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

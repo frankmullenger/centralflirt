@@ -30,18 +30,17 @@ class Subscription extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'subscription';                    // table name
-    public $subscriber;                      // int(4)  primary_key not_null
-    public $subscribed;                      // int(4)  primary_key not_null
-    public $jabber;                          // tinyint(1)   default_1
-    public $sms;                             // tinyint(1)   default_1
-    public $token;                           // varchar(255)  
-    public $secret;                          // varchar(255)  
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $subscriber;                      // int(11)  not_null primary_key multiple_key
+    public $subscribed;                      // int(11)  not_null primary_key multiple_key
+    public $jabber;                          // int(4)  
+    public $sms;                             // int(4)  
+    public $token;                           // string(255)  multiple_key binary
+    public $secret;                          // string(255)  binary
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Subscription',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Subscription',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

@@ -30,16 +30,15 @@ class Remote_profile extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'remote_profile';                  // table name
-    public $id;                              // int(4)  primary_key not_null
-    public $uri;                             // varchar(255)  unique_key
-    public $postnoticeurl;                   // varchar(255)  
-    public $updateprofileurl;                // varchar(255)  
-    public $created;                         // datetime()   not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $id;                              // int(11)  not_null primary_key
+    public $uri;                             // string(255)  unique_key binary
+    public $postnoticeurl;                   // string(255)  binary
+    public $updateprofileurl;                // string(255)  binary
+    public $created;                         // datetime(19)  not_null binary
+    public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Remote_profile',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Remote_profile',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE

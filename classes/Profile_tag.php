@@ -10,14 +10,13 @@ class Profile_tag extends Memcached_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'profile_tag';                     // table name
-    public $tagger;                          // int(4)  primary_key not_null
-    public $tagged;                          // int(4)  primary_key not_null
-    public $tag;                             // varchar(64)  primary_key not_null
-    public $modified;                        // timestamp()   not_null default_CURRENT_TIMESTAMP
+    public $tagger;                          // int(11)  not_null primary_key multiple_key
+    public $tagged;                          // int(11)  not_null primary_key
+    public $tag;                             // string(64)  not_null primary_key binary
+    public $modified;                        // timestamp(19)  not_null multiple_key unsigned zerofill binary timestamp
 
     /* Static get */
-    function staticGet($k,$v=null)
-    { return Memcached_DataObject::staticGet('Profile_tag',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Profile_tag',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
