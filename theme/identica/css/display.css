@@ -256,3 +256,15 @@ background-position:10% 45%;
 background-image:url(../images/icons/twotone/green/arrow-right.gif);
 background-position:90% 45%;
 }
+
+#content_wide {
+    -moz-border-radius-bottomleft:7px;
+    -moz-border-radius-bottomright:7px;
+    -moz-border-radius-topleft:0;
+    -moz-border-radius-topright:7px;
+    float:left;
+    padding:18px;
+    width: 960px;
+    background-color:#FFFFFF;
+    border-color:#FFFFFF;
+}

@@ -76,6 +76,11 @@ class AccountSettingsAction extends SettingsAction
         $this->elementEnd('div');
     }
     
+    /*
+     * TODO need to decide how to  layout the account pages, remove styling from here and apply custom ids to the
+     * divs instead in order to style from the css entirely
+     */
+    
     /**
      * Show content block.
      *
@@ -83,7 +88,7 @@ class AccountSettingsAction extends SettingsAction
      */
     function showContentBlock()
     {
-        $this->elementStart('div', array('id' => 'content', 'style' => 'width:auto;'));
+        $this->elementStart('div', array('id' => 'content_wide'));
         $this->showPageTitle();
         $this->showPageNoticeBlock();
         $this->elementStart('div', array('id' => 'content_inner'));
@@ -92,6 +97,7 @@ class AccountSettingsAction extends SettingsAction
         $this->elementEnd('div');
         $this->elementEnd('div');
     }
+
 }
 
 /**
