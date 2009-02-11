@@ -60,6 +60,38 @@ class AccountSettingsAction extends SettingsAction
         $menu = new AccountSettingsNav($this);
         $menu->show();
     }
+    
+    /**
+     * Show core.
+     *
+     * Shows local navigation, content block and aside.
+     *
+     * @return nothing
+     */
+    function showCore()
+    {
+        $this->elementStart('div', array('id' => 'core'));
+        $this->showLocalNavBlock();
+        $this->showContentBlock();
+        $this->elementEnd('div');
+    }
+    
+    /**
+     * Show content block.
+     *
+     * @return nothing
+     */
+    function showContentBlock()
+    {
+        $this->elementStart('div', array('id' => 'content', 'style' => 'width:auto;'));
+        $this->showPageTitle();
+        $this->showPageNoticeBlock();
+        $this->elementStart('div', array('id' => 'content_inner'));
+        // show the actual content (forms, lists, whatever)
+        $this->showContent();
+        $this->elementEnd('div');
+        $this->elementEnd('div');
+    }
 }
 
 /**
@@ -118,6 +150,32 @@ class AccountSettingsNav extends Widget
                 'othersettings' =>
                 array(_('Other'),
                       _('Other options')));
+                      
+        if (common_config('profile', 'enable_dating')) {
+            
+            $menu =
+              array('profilesettings' =>
+                    array(_('Profile'),
+                          _('Change your profile settings')),
+                    'datingprofilesettings' =>
+                    array(_('Dating Profile'),
+                          _('Change your dating profile settings')),
+                    'avatarsettings' =>
+                    array(_('Avatar'),
+                          _('Upload an avatar')),
+                    'passwordsettings' =>
+                    array(_('Password'),
+                          _('Change your password')),
+                    'emailsettings' =>
+                    array(_('Email'),
+                          _('Change email handling')),
+                    'openidsettings' =>
+                    array(_('OpenID'),
+                          _('Add or remove OpenIDs')),
+                    'othersettings' =>
+                    array(_('Other'),
+                          _('Other options')));
+        }
 
         $action_name = $this->action->trimmed('action');
         $this->action->elementStart('ul', array('class' => 'nav'));
