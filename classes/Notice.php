@@ -45,6 +45,7 @@ class Notice extends Memcached_DataObject
     public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
     public $reply_to;                        // int(11)  
     public $is_local;                        // int(4)  
+    public $is_private;                      // int(4)  
     public $source;                          // string(32)  binary
 
     /* Static get */
@@ -152,6 +153,27 @@ class Notice extends Memcached_DataObject
         $notice->rendered = common_render_content($notice->content, $notice);
         $notice->source = $source;
         $notice->uri = $uri;
+        
+        //Set the privacy of the notice if dating site is enabled
+        if (common_config('profile', 'enable_dating')) {
+            
+            
+            /**
+             * TODO frank: is there a better approach? using the hidden form elements? or will that add complexity that is hard to map to other devices?
+             * TODO frank: should @public be stripped out of the content field? Does it matter?
+             */
+            //Need to check the notice for @public and set notice privacy accordingly
+            //$cnt = preg_match_all('/(?:^|\s)@public\s/i', $notice->content, $match);
+            
+            if (stristr($notice->content, '@public ')) {
+                $notice->is_private = 0;
+                $notice->content = str_ireplace('@public ', '', $notice->content);
+            }
+            else {
+                $user = common_current_user();
+                $notice->is_private = $user->post_privately;
+            }
+        }
 
         $id = $notice->insert();
 
@@ -552,6 +574,11 @@ class Notice extends Memcached_DataObject
         } else {
             # -1 == blacklisted
             $parts[] = 'is_local != -1';
+        }
+        
+        //Add privacy checking for dating enabled sites
+        if (common_config('profile', 'enable_dating')) {
+            $parts[] = 'is_private = 0';
         }
 
         if ($parts) {

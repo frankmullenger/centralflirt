@@ -2,9 +2,9 @@
 /**
  * Table Definition for dating_profile
  */
-require_once 'DB/DataObject.php';
+require_once INSTALLDIR.'/classes/Memcached_DataObject.php';
 
-class Dating_profile extends DB_DataObject 
+class Dating_profile extends Memcached_DataObject 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
@@ -19,9 +19,7 @@ class Dating_profile extends DB_DataObject
     public $country;                         // int(11)  
     public $postcode;                        // string(255)  
     public $bio;                             // string(255)  
-    public $birthdate_year;                  // int(11)  
-    public $birthdate_month;                 // int(4)  
-    public $birthdate_day;                   // int(4)  
+    public $birthdate;                       // date(10)  binary
     public $sex;                             // int(11)  
     public $partner_sex;                     // int(11)  
     public $interested_in;                   // int(11)  
@@ -58,6 +56,18 @@ class Dating_profile extends DB_DataObject
         return Profile::staticGet('id', $this->id);
     }
     
+    function getBirthdate($format='Y-m-d') {
+        
+        if (!empty($this->birthdate)) {
+            $birthdate = new DateTime($this->birthdate);
+            return $birthdate->format($format);
+        }
+        else {
+            return null;
+        }
+        
+    }
+    
     function getNiceSexList() {
         
         return array(self::SEX_MALE => _('Male'), self::SEX_FEMALE => _('Female'));
@@ -75,8 +85,11 @@ class Dating_profile extends DB_DataObject
     }
     
     function getNiceYearList() {
+        
+        //TODO need to change this so that its flexible when year increases
+        
         $yearList = array();
-        for ($i=1950; $i<2000; $i++) {
+        for ($i=1950; $i<1991; $i++) {
             $yearList[$i] = $i;
         }
         return $yearList;
@@ -105,4 +118,27 @@ class Dating_profile extends DB_DataObject
         }
         return $monthDays;
     }
+    
+    /**
+     * Overriding function to limit database queries to MySQL
+     * TODO: Support Postgres and Sphinx for dating profiles
+     * @see Memcached_DataObject::getSearchEngine()
+     *
+     * @param string $table
+     */
+    function getSearchEngine($table) {
+        require_once INSTALLDIR.'/lib/search_engines.php';
+        static $search_engine;
+        
+        if (!isset($search_engine)) {
+
+            if ('mysql' === common_config('db', 'type')) {
+                $search_engine = new MySQLSearch($this, $table);
+            } else {
+                //TODO throw an exception here if the db is NOT MySQL
+            }
+        }
+        return $search_engine;
+    }
+    
 }

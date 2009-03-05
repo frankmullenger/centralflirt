@@ -115,6 +115,39 @@ class MySQLSearch extends SearchEngine
         if ('identica_notices' === $this->table)
             return $this->target->whereAdd('MATCH(content) ' .
                            'against (\''.addslashes($q).'\')');
+            
+        if ('identica_dating' === $this->table) {
+
+            //common_debug(implode(', ', $q));
+            
+            //TODO frank: need to look into this date range search its not accurate
+            
+            //Compile a query based on the array of values passed in $q
+            foreach ($q as $columnName => $value) {
+                
+                switch ($columnName) {
+                    case 'sex' :
+                        $this->target->whereAdd('partner_sex = ' . $value);
+                        break;
+                    case 'partner_sex' :
+                        $this->target->whereAdd('sex = ' . $value);
+                        break;
+                        
+                    case 'age_lower' :
+                        $dateLower =  new DateTime('now');
+                        $dateLower->modify("-".$value." years");
+                        $this->target->whereAdd('birthdate <= \'' . $dateLower->format('Y-m-d') . '\'');
+                        break;
+                        
+                   case 'age_upper' :
+                        $dateUpper =  new DateTime('now');
+                        $dateUpper->modify("-".$value." years");
+                        $this->target->whereAdd('birthdate >= \'' . $dateUpper->format('Y-m-d') . '\'');
+                        break;
+                }
+            }
+            return;
+        }
     }
 }
 

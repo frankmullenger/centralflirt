@@ -146,6 +146,16 @@ class ProfilesettingsAction extends AccountSettingsAction
                         ($this->arg('autosubscribe')) ?
                         $this->boolean('autosubscribe') : $user->autosubscribe);
         $this->elementEnd('li');
+        
+        
+        $this->elementStart('li');
+        $this->checkbox('post_privately',
+                        _('Posts are private for your subscribers only.'),
+                        ($this->arg('post_privately')) ?
+                        $this->boolean('post_privately') : $user->post_privately);
+        $this->elementEnd('li');
+        
+        
         $this->elementEnd('ul');
         $this->submit('save', _('Save'));
 
@@ -180,6 +190,7 @@ class ProfilesettingsAction extends AccountSettingsAction
         $bio = $this->trimmed('bio');
         $location = $this->trimmed('location');
         $autosubscribe = $this->boolean('autosubscribe');
+        $post_privately = $this->boolean('post_privately');
         $language = $this->trimmed('language');
         $timezone = $this->trimmed('timezone');
         $tagstring = $this->trimmed('tags');
@@ -277,6 +288,22 @@ class ProfilesettingsAction extends AccountSettingsAction
             if ($result === false) {
                 common_log_db_error($user, 'UPDATE', __FILE__);
                 $this->serverError(_('Couldn\'t update user for autosubscribe.'));
+                return;
+            }
+        }
+        
+        //TODO keep posts private unless specified otherwise during the posting process
+        if ($user->post_privately ^ $post_privately) {
+
+            $original = clone($user);
+
+            $user->post_privately = $post_privately;
+
+            $result = $user->update($original);
+
+            if ($result === false) {
+                common_log_db_error($user, 'UPDATE', __FILE__);
+                $this->serverError(_('Couldn\'t update user for posting privately.'));
                 return;
             }
         }

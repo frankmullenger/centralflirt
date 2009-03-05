@@ -376,6 +376,99 @@ class ShowstreamAction extends Action
         }
         $this->elementEnd('ul');
         $this->elementEnd('div');
+        
+        if (common_config('profile', 'enable_dating')) {
+            $this->showDatingProfile();
+        }
+    }
+    
+    function showDatingProfile() {
+        
+        $datingProfile = $this->user->getDatingProfile();
+        
+        //Belt and braces
+        if ($datingProfile == false) {
+            //TODO frank: throw an error here as it seems dating profiles are not enabled
+        }
+        
+        $this->elementStart('div', 'entity_dating_profile vcard author');
+        $this->element('h2', null, _('Dating profile'));
+        
+        //$this->element('p', null, _('Place parts of dating profile in collapsable divs in here.'));
+        
+        if ($datingProfile->firstname) {
+            $this->elementStart('dl', 'name');
+            $this->element('dt', null, _('Name'));
+            $this->element('dd', 'name', $datingProfile->firstname.' '.$datingProfile->lastname);
+            $this->elementEnd('dl');
+        }
+        
+        $this->elementStart('dl', 'address_1');
+        $this->element('dt', null, _('Street'));
+        $this->element('dd', 'address_1', $datingProfile->address_1);
+        $this->elementEnd('dl');
+            
+        $this->elementStart('dl', 'city');
+        $this->element('dt', null, _('City'));
+        $this->element('dd', 'city', $datingProfile->city);
+        $this->elementEnd('dl');
+        
+        $this->elementStart('dl', 'state');
+        $this->element('dt', null, _('State'));
+        $this->element('dd', 'state', $datingProfile->state);
+        $this->elementEnd('dl');
+        
+        $this->elementStart('dl', 'country');
+        $this->element('dt', null, _('Country'));
+        $this->element('dd', 'country', $datingProfile->country);
+        $this->elementEnd('dl');
+        
+        $this->elementStart('dl', 'postcode');
+        $this->element('dt', null, _('Postcode'));
+        $this->element('dd', 'postcode', $datingProfile->postcode);
+        $this->elementEnd('dl');
+        
+        if ($datingProfile->bio) {
+            $this->elementStart('dl', 'bio');
+            $this->element('dt', null, _('Bio'));
+            $this->element('dd', 'bio', $datingProfile->bio);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->birthdate) {
+            $this->elementStart('dl', 'birthdate');
+            $this->element('dt', null, _('birthdate'));
+            $this->element('dd', 'birthdate', $datingProfile->birthdate);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->sex) {
+            $sexList = $datingProfile->getNiceSexList();
+            $this->elementStart('dl', 'sex');
+            $this->element('dt', null, _('Sex'));
+            $this->element('dd', 'sex', $sexList[$datingProfile->sex]);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->partner_sex) {
+            $sexList = $datingProfile->getNiceSexList();
+            $this->elementStart('dl', 'partner_sex');
+            $this->element('dt', null, _('Looking for a'));
+            $this->element('dd', 'partner_sex', $sexList[$datingProfile->partner_sex]);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->interested_in) {
+            $interestedinList = $datingProfile->getNiceInterestList();
+            $this->elementStart('dl', 'interested_in');
+            $this->element('dt', null, _('Interested in'));
+            $this->element('dd', 'interested_in', $interestedinList[$datingProfile->interested_in]);
+            $this->elementEnd('dl');
+        }
+        
+        //$this->element('pre', null, print_r($this->user, false));
+        
+        $this->elementEnd('div');
     }
 
     function showRemoteSubscribeLink()

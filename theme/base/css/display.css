@@ -571,6 +571,73 @@ display:none;
 
 /* entity_profile */
 
+/* entity_dating_profile */
+.entity_dating_profile {
+position:relative;
+width:475px;
+min-height:123px;
+float:left;
+margin-bottom:18px;
+margin-left:0;
+overflow:hidden;
+}
+.entity_dating_profile dt,
+#entity_statistics dt {
+font-weight:bold;
+}
+.entity_dating_profile dd {
+margin-left: 140px;
+}
+
+.entity_dating_profile .entity_depiction {
+float:left;
+width:96px;
+margin-right:18px;
+margin-bottom:18px;
+}
+
+.entity_dating_profile .entity_fn,
+.entity_dating_profile .entity_nickname,
+.entity_dating_profile .entity_location,
+.entity_dating_profile .entity_url,
+.entity_dating_profile .entity_note,
+.entity_dating_profile .entity_tags {
+margin-left:113px;
+margin-bottom:4px;
+width:322px;
+}
+
+.entity_dating_profile .entity_fn,
+.entity_dating_profile .entity_nickname {
+margin-left:11px;
+display:inline;
+font-weight:bold;
+}
+.entity_dating_profile .entity_nickname {
+margin-left:0;
+}
+
+.entity_dating_profile .entity_fn dd:before {
+content: "(";
+font-weight:normal;
+}
+.entity_dating_profile .entity_fn dd:after {
+content: ")";
+font-weight:normal;
+}
+.entity_dating_profile dl {
+    clear: left;
+}
+.entity_dating_profile dt {
+float: left;
+width: 140px;
+}
+.entity_dating_profile h2 {
+display: block;
+}
+
+/* entity_dating_profile */
+
 
 /*entity_actions*/
 .entity_actions {

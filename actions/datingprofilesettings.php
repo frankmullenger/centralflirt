@@ -144,15 +144,15 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementEnd('li');
         $this->elementStart('li');
         $this->dropdown('birthdate_year', _('Year'),
-                     $datingProfile->getNiceYearList(), null, false, $datingProfile->birthdate_year);
+                     $datingProfile->getNiceYearList(), null, false, $datingProfile->getBirthdate('Y'));
         $this->elementEnd('li');
         $this->elementStart('li');
         $this->dropdown('birthdate_month', _('Month'),
-                     $datingProfile->getNiceMonthList(), null, false, $datingProfile->birthdate_month);  
+                     $datingProfile->getNiceMonthList(), null, false, $datingProfile->getBirthdate('m'));  
         $this->elementEnd('li');
         $this->elementStart('li');
         $this->dropdown('birthdate_day', _('Day'),
-                     $datingProfile->getNiceMonthDayList(), null, false, $datingProfile->birthdate_day);          
+                     $datingProfile->getNiceMonthDayList(), null, false, $datingProfile->getBirthdate('d'));          
         $this->elementEnd('li');
         $this->elementStart('li');
         $this->dropdown('interested_in', _('Interested In'),
@@ -196,9 +196,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $sex = $this->trimmed('sex');
         $partner_sex = $this->trimmed('partner_sex');
         $interested_in = $this->trimmed('interested_in');
-        $birthdate_year = $this->trimmed('birthdate_year');
-        $birthdate_month = $this->trimmed('birthdate_month');
-        $birthdate_day = $this->trimmed('birthdate_day');
+        $birthdate = $this->trimmed('birthdate_year') .'-'. $this->trimmed('birthdate_month') .'-'. $this->trimmed('birthdate_day');
         
         //TODO validation needs to go here !!!
 
@@ -221,9 +219,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $datingProfile->country = $country;
         $datingProfile->postcode = $postcode;
         $datingProfile->bio = $bio;
-        $datingProfile->birthdate_year = $birthdate_year;
-        $datingProfile->birthdate_month = $birthdate_month;
-        $datingProfile->birthdate_day = $birthdate_day;
+        $datingProfile->birthdate = $birthdate;
         $datingProfile->sex = $sex;
         $datingProfile->partner_sex = $partner_sex;
         $datingProfile->interested_in = $interested_in;
