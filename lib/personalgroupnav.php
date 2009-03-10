@@ -82,8 +82,11 @@ class PersonalGroupNav extends Widget
 	// FIXME: we should probably pass this in
 	
         $action = $this->action->trimmed('action');
-        $nickname = $this->action->trimmed('nickname');
-
+        
+        //Altered to allow for usernick to be passed to group related actions to facilitate private/personal groups
+        $usernick = $this->action->trimmed('usernick');
+        $nickname = (!empty($usernick))?$usernick:$this->action->trimmed('nickname');
+        
         if ($nickname) {
             $user = User::staticGet('nickname', $nickname);
             $user_profile = $user->getProfile();
@@ -117,6 +120,12 @@ class PersonalGroupNav extends Widget
         $cur = common_current_user();
 
         if ($cur && $cur->id == $user->id) {
+            
+            $this->out->menuItem(common_local_url('groups', array('usernick' =>
+                                                                     $nickname)),
+                             _('Groups'),
+                             _('Your groups'),
+                             $action == 'groups');
 
             $this->out->menuItem(common_local_url('inbox', array('nickname' =>
                                                                      $nickname)),

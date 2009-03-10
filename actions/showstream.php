@@ -418,9 +418,10 @@ class ShowstreamAction extends Action
         $this->element('dd', 'state', $datingProfile->state);
         $this->elementEnd('dl');
         
+        $niceCountryList = get_nice_country_list();
         $this->elementStart('dl', 'country');
         $this->element('dt', null, _('Country'));
-        $this->element('dd', 'country', $datingProfile->country);
+        $this->element('dd', 'country', $niceCountryList[$datingProfile->country]);
         $this->elementEnd('dl');
         
         $this->elementStart('dl', 'postcode');
@@ -436,9 +437,10 @@ class ShowstreamAction extends Action
         }
         
         if ($datingProfile->birthdate) {
+            $birthDateObject = new DateTime($datingProfile->birthdate);
             $this->elementStart('dl', 'birthdate');
-            $this->element('dt', null, _('birthdate'));
-            $this->element('dd', 'birthdate', $datingProfile->birthdate);
+            $this->element('dt', null, _('Birthdate'));
+            $this->element('dd', 'birthdate', $birthDateObject->format('j M Y'));
             $this->elementEnd('dl');
         }
         

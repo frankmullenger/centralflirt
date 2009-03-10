@@ -19,6 +19,8 @@ class User_group extends Memcached_DataObject
     public $homepage_logo;                   // string(255)  binary
     public $stream_logo;                     // string(255)  binary
     public $mini_logo;                       // string(255)  binary
+    public $is_private;                      // int(1)  not_null
+    public $admin_nickname;                  // string(64)  binary
     public $created;                         // datetime(19)  not_null binary
     public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 

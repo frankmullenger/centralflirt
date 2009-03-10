@@ -47,6 +47,7 @@ if (!defined('LACONICA')) {
 class NewgroupAction extends Action
 {
     var $msg;
+    public $privateGroup = false;
 
     function title()
     {
@@ -90,6 +91,10 @@ class NewgroupAction extends Action
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->trySave();
         } else {
+            //Passing in nickname of user to display users personal (private) groups
+            if (isset($args['usernick'])) {
+                $this->privateGroup = true;
+            }
             $this->showForm();
         }
     }
@@ -169,6 +174,22 @@ class NewgroupAction extends Action
         $group->description = $description;
         $group->location    = $location;
         $group->created     = common_sql_now();
+        
+        //vairables for private forms
+        if (common_config('profile', 'enable_dating')) {
+            $is_private    = $this->boolean('is_private');
+            
+            common_debug($is_private);
+            common_debug($cur->nickname);
+            
+            if ($is_private) {
+                $group->is_private = $is_private;
+                common_debug($cur->nickname);
+                $group->admin_nickname = $cur->nickname;
+            }
+        }
+        
+        common_debug(common_log_objstring($group));
 
         $result = $group->insert();
 

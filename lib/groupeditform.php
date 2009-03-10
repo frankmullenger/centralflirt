@@ -132,6 +132,14 @@ class GroupEditForm extends Form
     function formData()
     {
         $this->out->elementStart('ul', 'form_data');
+        
+        //Setting hidden fields for private groups
+        if ($this->out->privateGroup) {
+            $this->out->elementStart('li');
+            $this->out->hidden('is_private', 1);
+            $this->out->elementEnd('li');
+        }
+        
         $this->out->elementStart('li');
         $this->out->hidden('groupid', $this->group->id);
         $this->out->input('nickname', _('Nickname'),

@@ -50,6 +50,7 @@ class GroupsAction extends Action
 {
     var $page = null;
     var $profile = null;
+    private $privateGroups = false;
 
     function isReadOnly()
     {
@@ -75,17 +76,40 @@ class GroupsAction extends Action
     function handle($args)
     {
         parent::handle($args);
+        
+        //Passing in nickname of user to display users personal (private) groups
+        if (isset($args['usernick'])) {
+            $this->privateGroups = true;
+        }
+        
         $this->showPage();
     }
 
     function showLocalNav()
     {
-        $nav = new PublicGroupNav($this);
+        if ($this->privateGroups) {
+            $nav = new PersonalGroupNav($this);
+        }
+        else {
+            $nav = new PublicGroupNav($this);
+        }
         $nav->show();
     }
 
     function showPageNotice()
     {
+        if ($this->privateGroups) {
+            $notice =
+              sprintf(_('%%%%site.name%%%% private groups let you sort your followers ' .
+                        'into groups so that you can message a select group of your followers ' .
+                        'at once. You can send messages to one of your groups using the ' .
+                        'syntax "!groupname".'));
+            $this->elementStart('div', 'instructions');
+            $this->raw(common_markup_to_html($notice));
+            $this->elementEnd('div');
+            return;
+        }
+        
         $notice =
           sprintf(_('%%%%site.name%%%% groups let you find and talk with ' .
                     'people of similar interests. After you join a group ' .
@@ -100,6 +124,16 @@ class GroupsAction extends Action
 
     function showContent()
     {
+        if ($this->privateGroups) {
+            $this->showPrivateGroups();
+        }
+        else {
+            $this->showPublicGroups();
+        }
+    }
+    
+    private function showPublicGroups() {
+        
         $this->elementStart('p', array('id' => 'new_group'));
         $this->element('a', array('href' => common_local_url('newgroup'),
                                   'class' => 'more'),
@@ -110,6 +144,40 @@ class GroupsAction extends Action
         $limit =  GROUPS_PER_PAGE + 1;
 
         $groups = new User_group();
+        $groups->whereAdd('is_private = 0');
+        $groups->orderBy('created DESC');
+        $groups->limit($offset, $limit);
+
+        if ($groups->find()) {
+            $gl = new GroupList($groups, null, $this);
+            $cnt = $gl->show();
+        }
+
+        $this->pagination($this->page > 1, $cnt > GROUPS_PER_PAGE,
+                          $this->page, 'groups');
+    }
+    
+    /**
+     * To retireve the groups that are private and owned by current logged in user.
+     */
+    private function showPrivateGroups() {
+        
+        $user = common_current_user();
+        
+        //TODO frank: if no user logged in then throw an error or do not show any groups...
+        
+        $this->elementStart('p', array('id' => 'new_group'));
+        $this->element('a', array('href' => common_local_url('newgroup', array('usernick' => $user->nickname)),
+                                  'class' => 'more'),
+                       _('Create a new group'));
+        $this->elementEnd('p');
+
+        $offset = ($this->page-1) * GROUPS_PER_PAGE;
+        $limit =  GROUPS_PER_PAGE + 1;
+
+        $groups = new User_group();
+        $groups->whereAdd('is_private = 1');
+        $groups->whereAdd("admin_nickname = '".$user->nickname."'");
         $groups->orderBy('created DESC');
         $groups->limit($offset, $limit);
 
