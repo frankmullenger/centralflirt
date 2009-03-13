@@ -196,11 +196,20 @@ class ProfileList extends Widget
         $this->out->elementStart('ul');
 
         //For adding users to groups
-        if (common_config('profile', 'enable_dating') && $this->action instanceof AddtogroupAction) {
+        if (common_config('profile', 'enable_dating') && $this->action->privateGroup) {
 
             $this->out->elementStart('li', 'entity_subscribe');
+
+            switch (true) {
+                case ($this->action instanceof GroupmembersAction) :
+                    $jf = new LeaveForm($this->out, $this->action->group, $this->profile);
+                    break;
+                case ($this->action instanceof AddtogroupAction) :
+                default :
+                    $jf = new JoinForm($this->out, $this->action->group, $this->profile);
+                    break;
+            }
             
-            $jf = new JoinForm($this->out, $this->action->group, $this->profile);
             $jf->show();
             
             $this->out->elementEnd('li');

@@ -139,10 +139,6 @@ class ShowgroupAction extends Action
                 $this->group->find();
                 $this->group->fetch();
             }
-            else {
-                $this->clientError(_('No user nickname'), 404);
-                return false;
-            }
         }
 
         if (!$this->group) {

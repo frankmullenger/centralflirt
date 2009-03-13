@@ -47,6 +47,7 @@ require_once INSTALLDIR.'/lib/publicgroupnav.php';
 class GroupmembersAction extends Action
 {
     var $page = null;
+    public $privateGroup = false;
 
     function isReadOnly()
     {
@@ -85,16 +86,14 @@ class GroupmembersAction extends Action
             $usernick = $this->arg('usernick');
 
             if (isset($usernick)) {
+                $this->privateGroup = true;
+                
                 $this->group = new User_group();
                 $this->group->whereAdd('is_private = 1');
                 $this->group->whereAdd("admin_nickname = '$usernick'");
                 $this->group->whereAdd("nickname = '$nickname'");
                 $this->group->find();
                 $this->group->fetch();
-            }
-            else {
-                $this->clientError(_('No user nickname'), 404);
-                return false;
             }
         }
 
@@ -126,8 +125,14 @@ class GroupmembersAction extends Action
 
     function showPageNotice()
     {
-        $this->element('p', 'instructions',
-                       _('A list of the users in this group.'));
+        if ($this->privateGroup) {
+            $this->element('p', 'instructions',
+                       _('A list of the users in this group. Add users to this group with [addtogroup link here]')); 
+        }
+        else {
+            $this->element('p', 'instructions',
+                       _('A list of the users in this group.')); 
+        }
     }
 
     function showLocalNav()

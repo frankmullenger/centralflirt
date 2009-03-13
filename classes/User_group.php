@@ -87,8 +87,12 @@ class User_group extends Memcached_DataObject
           'SELECT profile.* ' .
           'FROM profile JOIN group_member '.
           'ON profile.id = group_member.profile_id ' .
-          'WHERE group_member.group_id = %d ' .
-          'ORDER BY group_member.created DESC ';
+          'WHERE group_member.group_id = %d ';
+        
+        if ($this->is_private) {
+            $qry .= sprintf("AND profile.nickname <> '%s' ", $this->admin_nickname);
+        }
+        $qry .= 'ORDER BY group_member.created DESC ';
 
         if ($limit != null) {
             if (common_config('db','type') == 'pgsql') {
@@ -107,7 +111,7 @@ class User_group extends Memcached_DataObject
     public function getNonMembers($cur, $offset=0, $limit=null) {
         
         /*
-         * TODO: if cur does not match the current user then throw an exception
+         * TODO frank: if cur does not match the current user then throw an exception
          */
         
         if (common_config('profile', 'enable_dating')) {
