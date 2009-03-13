@@ -47,6 +47,7 @@ if (!defined('LACONICA')) {
 class JoingroupAction extends Action
 {
     var $group = null;
+    public $privateGroup = false;
 
     /**
      * Prepare to run
@@ -83,17 +84,45 @@ class JoingroupAction extends Action
         }
 
         $this->group = User_group::staticGet('nickname', $nickname);
+        
+        //To retrieve the correct private group if necessary:
+        $checkCurrentUser = true;
+        if (common_config('profile', 'enable_dating')) {
+            
+            $usernick = $this->arg('usernick');
+
+            if (isset($usernick)) {
+                $this->group = new User_group();
+                $this->group->whereAdd('is_private = 1');
+                $this->group->whereAdd("admin_nickname = '$usernick'");
+                $this->group->whereAdd("nickname = '$nickname'");
+                $this->group->find();
+                $this->group->fetch();
+            }
+            else {
+                $this->clientError(_('No user nickname'), 404);
+                return false;
+            }
+            
+            if (isset($args['user_to_add'])) {
+                $checkCurrentUser = false;
+            }
+        }
 
         if (!$this->group) {
             $this->clientError(_('No such group'), 404);
             return false;
         }
+        
+        //TODO frank: check the other user
 
-        $cur = common_current_user();
-
-        if ($cur->isMember($this->group)) {
-            $this->clientError(_('You are already a member of that group'), 403);
-            return false;
+        //Don't check the current user if adding another user
+        if ($checkCurrentUser) {
+            $cur = common_current_user();
+            if ($cur->isMember($this->group)) {
+                $this->clientError(_('You are already a member of that group'), 403);
+                return false;
+            }
         }
 
         return true;
@@ -112,6 +141,11 @@ class JoingroupAction extends Action
     function handle($args)
     {
         parent::handle($args);
+        
+        //Passing in nickname of user to display users personal (private) groups
+        if (isset($args['usernick'])) {
+            $this->privateGroup = true;
+        }
 
         $cur = common_current_user();
 
@@ -120,6 +154,12 @@ class JoingroupAction extends Action
         $member->group_id   = $this->group->id;
         $member->profile_id = $cur->id;
         $member->created    = common_sql_now();
+        
+        //If adding a user to a private group
+        if (common_config('profile', 'enable_dating') && $this->privateGroup) {
+            $userToAdd = $this->trimmed('user_to_add');
+            $member->profile_id = $userToAdd;
+        }
 
         $result = $member->insert();
 
@@ -137,7 +177,13 @@ class JoingroupAction extends Action
                                                   $this->group->nickname));
             $this->elementEnd('head');
             $this->elementStart('body');
+            
             $lf = new LeaveForm($this, $this->group);
+            if (common_config('profile', 'enable_dating') && $this->privateGroup) {
+                $addedUser = User::staticGet('id', $member->profile_id);
+                $lf = new LeaveForm($this, $this->group, $addedUser->getProfile());
+            }
+            
             $lf->show();
             $this->elementEnd('body');
             $this->elementEnd('html');

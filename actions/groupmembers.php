@@ -78,6 +78,25 @@ class GroupmembersAction extends Action
         }
 
         $this->group = User_group::staticGet('nickname', $nickname);
+        
+        //To retrieve the correct private group if necessary:
+        if (common_config('profile', 'enable_dating')) {
+            
+            $usernick = $this->arg('usernick');
+
+            if (isset($usernick)) {
+                $this->group = new User_group();
+                $this->group->whereAdd('is_private = 1');
+                $this->group->whereAdd("admin_nickname = '$usernick'");
+                $this->group->whereAdd("nickname = '$nickname'");
+                $this->group->find();
+                $this->group->fetch();
+            }
+            else {
+                $this->clientError(_('No user nickname'), 404);
+                return false;
+            }
+        }
 
         if (!$this->group) {
             $this->clientError(_('No such group'), 404);

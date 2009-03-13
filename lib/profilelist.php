@@ -195,23 +195,41 @@ class ProfileList extends Widget
 
         $this->out->elementStart('ul');
 
-        if ($user && $user->id != $this->profile->id) {
-            # XXX: special-case for user looking at own
-            # subscriptions page
+        //For adding users to groups
+        if (common_config('profile', 'enable_dating') && $this->action instanceof AddtogroupAction) {
+
             $this->out->elementStart('li', 'entity_subscribe');
-            if ($user->isSubscribed($this->profile)) {
-                $usf = new UnsubscribeForm($this->out, $this->profile);
-                $usf->show();
-            } else {
-                $sf = new SubscribeForm($this->out, $this->profile);
-                $sf->show();
-            }
+            
+            $jf = new JoinForm($this->out, $this->action->group, $this->profile);
+            $jf->show();
+            
             $this->out->elementEnd('li');
             $this->out->elementStart('li', 'entity_block');
             if ($user && $user->id == $this->owner->id) {
                 $this->showBlockForm();
             }
             $this->out->elementEnd('li');
+        }
+        else {
+            
+            if ($user && $user->id != $this->profile->id) {
+                # XXX: special-case for user looking at own
+                # subscriptions page
+                $this->out->elementStart('li', 'entity_subscribe');
+                if ($user->isSubscribed($this->profile)) {
+                    $usf = new UnsubscribeForm($this->out, $this->profile);
+                    $usf->show();
+                } else {
+                    $sf = new SubscribeForm($this->out, $this->profile);
+                    $sf->show();
+                }
+                $this->out->elementEnd('li');
+                $this->out->elementStart('li', 'entity_block');
+                if ($user && $user->id == $this->owner->id) {
+                    $this->showBlockForm();
+                }
+                $this->out->elementEnd('li');
+            }
         }
 
         $this->out->elementEnd('ul');

@@ -54,6 +54,9 @@ class JoinForm extends Form
      */
 
     var $group = null;
+    
+    //Profile of user joining group
+    var $profile = null;
 
     /**
      * Constructor
@@ -62,11 +65,12 @@ class JoinForm extends Form
      * @param group         $group group to join
      */
 
-    function __construct($out=null, $group=null)
+    function __construct($out=null, $group=null, $profile = null)
     {
         parent::__construct($out);
 
         $this->group = $group;
+        $this->profile = $profile;
     }
 
     /**
@@ -99,8 +103,21 @@ class JoinForm extends Form
 
     function action()
     {
+        //For adding subscribers to an individual group pass the usernick of user that owns the group (cur)
+        if (common_config('profile', 'enable_dating') && !is_null($this->profile)) {
+            $cur = common_current_user();
+            return common_local_url('joingroup',
+                                array('nickname' => $this->group->nickname, 'usernick' => $cur->nickname));
+        }
         return common_local_url('joingroup',
                                 array('nickname' => $this->group->nickname));
+    }
+    
+    function formData() {
+        //For adding subscribers to an individual group
+        if (common_config('profile', 'enable_dating') && !is_null($this->profile)) {
+            $this->out->hidden('user_to_add', $this->profile->id);
+        }
     }
 
     /**
@@ -111,6 +128,12 @@ class JoinForm extends Form
 
     function formActions()
     {
-        $this->out->submit('submit', _('Join'));
+        //For adding subscribers to an individual group
+        if (common_config('profile', 'enable_dating') && !is_null($this->profile)) {
+            $this->out->submit('submit', _('Add'));
+        }
+        else {
+            $this->out->submit('submit', _('Join'));
+        }
     }
 }

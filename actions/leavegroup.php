@@ -47,6 +47,7 @@ if (!defined('LACONICA')) {
 class LeavegroupAction extends Action
 {
     var $group = null;
+    public $privateGroup = false;
 
     /**
      * Prepare to run
@@ -83,23 +84,52 @@ class LeavegroupAction extends Action
         }
 
         $this->group = User_group::staticGet('nickname', $nickname);
+        
+        //To retrieve the correct private group if necessary:
+        $checkCurrentUser = true;
+        if (common_config('profile', 'enable_dating')) {
+            
+            $usernick = $this->arg('usernick');
+
+            if (isset($usernick)) {
+                $this->group = new User_group();
+                $this->group->whereAdd('is_private = 1');
+                $this->group->whereAdd("admin_nickname = '$usernick'");
+                $this->group->whereAdd("nickname = '$nickname'");
+                $this->group->find();
+                $this->group->fetch();
+            }
+            else {
+                $this->clientError(_('No user nickname'), 404);
+                return false;
+            }
+            
+            if (isset($args['user_to_remove'])) {
+                $checkCurrentUser = false;
+            }
+        }
 
         if (!$this->group) {
             $this->clientError(_('No such group.'), 404);
             return false;
         }
+        
+        //TODO frank: check the other user you are removing
 
-        $cur = common_current_user();
-
-        if (!$cur->isMember($this->group)) {
-            $this->clientError(_('You are not a member of that group.'), 403);
-            return false;
-        }
-
-        if ($cur->isAdmin($this->group)) {
-            $this->clientError(_('You may not leave a group while you are its administrator.'), 403);
-            return false;
-
+        //Don't check the current user if removing another user
+        if ($checkCurrentUser) {
+            $cur = common_current_user();
+    
+            if (!$cur->isMember($this->group)) {
+                $this->clientError(_('You are not a member of that group.'), 403);
+                return false;
+            }
+    
+            if ($cur->isAdmin($this->group)) {
+                $this->clientError(_('You may not leave a group while you are its administrator.'), 403);
+                return false;
+    
+            }
         }
 
         return true;
@@ -118,6 +148,11 @@ class LeavegroupAction extends Action
     function handle($args)
     {
         parent::handle($args);
+        
+        //Passing in nickname of user to display users personal (private) groups
+        if (isset($args['usernick'])) {
+            $this->privateGroup = true;
+        }
 
         $cur = common_current_user();
 
@@ -125,6 +160,12 @@ class LeavegroupAction extends Action
 
         $member->group_id   = $this->group->id;
         $member->profile_id = $cur->id;
+        
+        //If adding a user to a private group
+        if (common_config('profile', 'enable_dating') && $this->privateGroup) {
+            $userToRemove = $this->trimmed('user_to_remove');
+            $member->profile_id = $userToRemove;
+        }
 
         if (!$member->find(true)) {
             $this->serverError(_('Could not find membership record.'));
@@ -147,7 +188,13 @@ class LeavegroupAction extends Action
                                                   $this->group->nickname));
             $this->elementEnd('head');
             $this->elementStart('body');
+            
             $jf = new JoinForm($this, $this->group);
+            if (common_config('profile', 'enable_dating') && $this->privateGroup) {
+                $removedUser = User::staticGet('id', $member->profile_id);
+                $jf = new JoinForm($this, $this->group, $removedUser->getProfile());
+            }
+            
             $jf->show();
             $this->elementEnd('body');
             $this->elementEnd('html');

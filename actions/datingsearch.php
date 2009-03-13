@@ -1,13 +1,13 @@
 <?php
 /**
- * People search action class.
+ * Class to search through dating profiles. Based on people search class.
  *
  * PHP version 5
  *
  * @category Action
  * @package  Laconica
  * @author   Evan Prodromou <evan@controlyourself.ca>
- * @author   Robin Millette <millette@controlyourself.ca>
+ * @author   Frank Mullenger <frankmullenger@gmail.com>
  * @license  http://www.fsf.org/licensing/licenses/agpl.html AGPLv3
  * @link     http://laconi.ca/
  *

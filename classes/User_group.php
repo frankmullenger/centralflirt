@@ -40,6 +40,20 @@ class User_group extends Memcached_DataObject
 
     function homeUrl()
     {
+        //If private group pass admin nickname as usernick in home url
+        if (common_config('profile', 'enable_dating') && $this->is_private) {
+            
+            /*
+             * TODO frank: is it bad to use admin nickname from the db here? perhpas should use
+             * $cur = common_current_user();
+             * if ($cur && $cur->isAdmin($this->group)) {}
+             * to avoid hackers masquerading and getting access to groups without session cookies.
+             */
+            
+            return common_local_url('showgroup',
+                                array('nickname' => $this->nickname, 'usernick' => $this->admin_nickname));
+        }
+        
         return common_local_url('showgroup',
                                 array('nickname' => $this->nickname));
     }
@@ -88,6 +102,46 @@ class User_group extends Memcached_DataObject
 
         $members->query(sprintf($qry, $this->id));
         return $members;
+    }
+    
+    public function getNonMembers($cur, $offset=0, $limit=null) {
+        
+        /*
+         * TODO: if cur does not match the current user then throw an exception
+         */
+        
+        if (common_config('profile', 'enable_dating')) {
+            if ($this->is_private) {
+                
+                /*
+                 * Select profiles subscribed to current user that are not members of this group
+                 */
+                $curId = $cur->id;
+                $groupId = $this->id;
+                $qry = <<<EOS
+SELECT p.*
+FROM profile p
+INNER JOIN subscription s ON s.subscriber = p.id
+WHERE s.subscribed = %d
+AND p.id NOT IN (SELECT gm.profile_id FROM group_member gm WHERE gm.group_id = %d)
+ORDER BY p.nickname ASC
+EOS;
+
+                if ($limit != null) {
+                    if (common_config('db','type') == 'pgsql') {
+                        $qry .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
+                    } else {
+                        $qry .= ' LIMIT ' . $offset . ', ' . $limit;
+                    }
+                }
+        
+                $members = new Profile();
+        
+                $members->query(sprintf($qry, $cur->id, $this->id));
+                return $members;
+                
+            }
+        }
     }
 
     function setOriginal($filename)

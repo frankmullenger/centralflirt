@@ -128,6 +128,12 @@ class NewgroupAction extends Action
         $homepage    = $this->trimmed('homepage');
         $description = $this->trimmed('description');
         $location    = $this->trimmed('location');
+        
+        //Variables for private forms
+        if (common_config('profile', 'enable_dating')) {
+            $is_private    = $this->boolean('is_private');
+            $this->privateGroup = $is_private;
+        }
 
         if (!Validate::string($nickname, array('min_length' => 1,
                                                'max_length' => 64,
@@ -175,22 +181,14 @@ class NewgroupAction extends Action
         $group->location    = $location;
         $group->created     = common_sql_now();
         
-        //vairables for private forms
+        //Variables for private forms
         if (common_config('profile', 'enable_dating')) {
-            $is_private    = $this->boolean('is_private');
-            
-            common_debug($is_private);
-            common_debug($cur->nickname);
-            
             if ($is_private) {
                 $group->is_private = $is_private;
-                common_debug($cur->nickname);
                 $group->admin_nickname = $cur->nickname;
             }
         }
         
-        common_debug(common_log_objstring($group));
-
         $result = $group->insert();
 
         if (!$result) {
@@ -219,6 +217,26 @@ class NewgroupAction extends Action
 
     function nicknameExists($nickname)
     {
+        //Changed this nickname exists check to use fetch and grab either private groups or public groups depending
+        if (common_config('profile', 'enable_dating')) {
+            
+            $cur = common_current_user();
+            $usernick = $cur->nickname;
+            $group = new User_group();
+            if ($this->privateGroup) {
+                $group->whereAdd('is_private = 1');
+                $group->whereAdd("admin_nickname = '$usernick'");
+                $group->whereAdd("nickname = '$nickname'");
+            }
+            else {
+                $group = new User_group();
+                $group->whereAdd('is_private = 0');
+                $group->whereAdd("nickname = '$nickname'");
+            }
+            $result = $group->find();
+            return ($result !== 0);
+        }
+        
         $group = User_group::staticGet('nickname', $nickname);
         return (!is_null($group) && $group != false);
     }

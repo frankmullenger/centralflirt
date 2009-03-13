@@ -48,6 +48,7 @@ class EditgroupAction extends Action
 {
     var $msg;
     var $group = null;
+    public $privateGroup = false;
 
     function title()
     {
@@ -93,6 +94,25 @@ class EditgroupAction extends Action
             $this->group = User_group::staticGet('id', $groupid);
         } else {
             $this->group = User_group::staticGet('nickname', $nickname);
+            
+            //To retrieve the correct private group if necessary:
+            if (common_config('profile', 'enable_dating')) {
+                
+                $usernick = $this->arg('usernick');
+    
+                if (isset($usernick)) {
+                    $this->group = new User_group();
+                    $this->group->whereAdd('is_private = 1');
+                    $this->group->whereAdd("admin_nickname = '$usernick'");
+                    $this->group->whereAdd("nickname = '$nickname'");
+                    $this->group->find();
+                    $this->group->fetch();
+                }
+                else {
+                    $this->clientError(_('No user nickname'), 404);
+                    return false;
+                }
+            }
         }
 
         if (!$this->group) {
@@ -126,6 +146,10 @@ class EditgroupAction extends Action
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->trySave();
         } else {
+            //Passing in nickname of user to display users personal (private) groups
+            if (isset($args['usernick'])) {
+                $this->privateGroup = true;
+            }
             $this->showForm();
         }
     }
@@ -166,12 +190,17 @@ class EditgroupAction extends Action
             return;
         }
 
-
         $nickname    = common_canonical_nickname($this->trimmed('nickname'));
         $fullname    = $this->trimmed('fullname');
         $homepage    = $this->trimmed('homepage');
         $description = $this->trimmed('description');
         $location    = $this->trimmed('location');
+        
+        //Variables for private forms
+        if (common_config('profile', 'enable_dating')) {
+            $is_private    = $this->boolean('is_private');
+            $this->privateGroup = $is_private;
+        }
 
         if (!Validate::string($nickname, array('min_length' => 1,
                                                'max_length' => 64,
@@ -209,7 +238,17 @@ class EditgroupAction extends Action
         $this->group->homepage    = $homepage;
         $this->group->description = $description;
         $this->group->location    = $location;
+        
+        //TODO: Should this be in here?
         $this->group->created     = common_sql_now();
+        
+        //Variables for private forms
+        if (common_config('profile', 'enable_dating')) {
+            if ($is_private) {
+                $group->is_private = $is_private;
+                $group->admin_nickname = $cur->nickname;
+            }
+        }
 
         $result = $this->group->update($orig);
 
@@ -229,6 +268,27 @@ class EditgroupAction extends Action
 
     function nicknameExists($nickname)
     {
+
+        //Changed this nickname exists check to use fetch and grab either private groups or public groups depending
+        if (common_config('profile', 'enable_dating')) {
+            
+            $cur = common_current_user();
+            $usernick = $cur->nickname;
+            $group = new User_group();
+            if ($this->privateGroup) {
+                $group->whereAdd('is_private = 1');
+                $group->whereAdd("admin_nickname = '$usernick'");
+                $group->whereAdd("nickname = '$nickname'");
+            }
+            else {
+                $group = new User_group();
+                $group->whereAdd('is_private = 0');
+                $group->whereAdd("nickname = '$nickname'");
+            }
+            $result = $group->find();
+            return ($result !== 0);
+        }
+        
         $group = User_group::staticGet('nickname', $nickname);
         return (!is_null($group) &&
                 $group != false &&
