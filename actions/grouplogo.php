@@ -112,6 +112,13 @@ class GrouplogoAction extends Action
                     $this->group->find();
                     $this->group->fetch();
                 }
+                else {
+                    $this->group = new User_group();
+                    $this->group->whereAdd('is_private = 0');
+                    $this->group->whereAdd("nickname = '$nickname'");
+                    $this->group->find();
+                    $this->group->fetch();
+                }
             }
         }
 

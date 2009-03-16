@@ -108,6 +108,13 @@ class EditgroupAction extends Action
                     $this->group->find();
                     $this->group->fetch();
                 }
+                else {
+                    $this->group = new User_group();
+                    $this->group->whereAdd('is_private = 0');
+                    $this->group->whereAdd("nickname = '$nickname'");
+                    $this->group->find();
+                    $this->group->fetch();
+                }
             }
         }
 
@@ -167,6 +174,7 @@ class EditgroupAction extends Action
         $form = new GroupEditForm($this, $this->group);
         $form->show();
     }
+    
 
     function showPageNotice()
     {
@@ -275,16 +283,18 @@ class EditgroupAction extends Action
                 $group->whereAdd('is_private = 1');
                 $group->whereAdd("admin_nickname = '$usernick'");
                 $group->whereAdd("nickname = '$nickname'");
+                $group->whereAdd("id != ".$this->group->id);
             }
             else {
                 $group = new User_group();
                 $group->whereAdd('is_private = 0');
                 $group->whereAdd("nickname = '$nickname'");
+                $group->whereAdd("id != ".$this->group->id);
             }
             $result = $group->find();
             return ($result !== 0);
         }
-        
+
         $group = User_group::staticGet('nickname', $nickname);
         return (!is_null($group) &&
                 $group != false &&
