@@ -99,11 +99,7 @@ class LeavegroupAction extends Action
                 $this->group->find();
                 $this->group->fetch();
             }
-            else {
-                $this->clientError(_('No user nickname'), 404);
-                return false;
-            }
-            
+
             if (isset($args['user_to_remove'])) {
                 $checkCurrentUser = false;
             }
