@@ -125,9 +125,19 @@ class GroupmembersAction extends Action
 
     function showPageNotice()
     {
-        if ($this->privateGroup) {
-            $this->element('p', 'instructions',
-                       _('A list of the users in this group. Add users to this group with [addtogroup link here]')); 
+        if ($this->privateGroup) {   
+            //TODO frank: this markup is a bit messed up, there must be a better way to inject a link into a paragraph...      
+            $notice =
+              sprintf(_('A list of the users in this group.'));
+            $this->elementStart('p', 'instructions');
+            $this->raw(common_markup_to_html($notice));
+            $this->element('a', 
+                            array('href' => common_local_url('addtogroup', 
+                                                                 array('nickname' => $this->arg('nickname'), 
+                                                                       'usernick' => $this->arg('usernick')))), 
+                           'Add users');
+            $this->raw(' to this group.');        
+            $this->elementEnd('p');           
         }
         else {
             $this->element('p', 'instructions',
