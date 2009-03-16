@@ -53,6 +53,9 @@ class Notice extends Memcached_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+    
+    private $isPublicSet = false;
+    private $noticeForGroup = false;
 
     function getProfile()
     {
@@ -167,6 +170,7 @@ class Notice extends Memcached_DataObject
             
             if (stristr($notice->content, '@public ')) {
                 $notice->is_private = 0;
+                $notice->isPublicSet = true;
                 $notice->content = str_ireplace('@public ', '', $notice->content);
             }
             else {
@@ -595,6 +599,15 @@ class Notice extends Memcached_DataObject
         $enabled = common_config('inboxes', 'enabled');
 
         if ($enabled === true || $enabled === 'transitional') {
+            
+            /*
+             * If this is for the dating site, and the group has been posted to privately, then do not add a notice to all subscribers of this user
+             * to enable private groups to save messages only to group members...
+             */
+            if (common_config('profile', 'enable_dating') && $this->is_private && $this->noticeForGroup) {
+                return;
+            }
+            
             $inbox = new Notice_inbox();
             $UT = common_config('db','type')=='pgsql'?'"user"':'user';
             $qry = 'INSERT INTO notice_inbox (user_id, notice_id, created) ' .
@@ -608,7 +621,7 @@ class Notice extends Memcached_DataObject
             if ($enabled === 'transitional') {
                 $qry .= " AND $UT.inboxed = 1";
             }
-            $inbox->query($qry);
+            $inbox->query($qry);    
         }
         return;
     }
@@ -635,6 +648,31 @@ class Notice extends Memcached_DataObject
         foreach (array_unique($match[1]) as $nickname) {
             /* XXX: remote groups. */
             $group = User_group::staticGet('nickname', $nickname);
+            
+            //Look for a private group of this name that the user is admin for
+            if ($this->is_private) {
+
+                $user  = common_current_user();
+                $usernick = $user->nickname;
+                $group = new User_group();
+                $group->whereAdd('is_private = 1');
+                $group->whereAdd("admin_nickname = '$usernick'");
+                $group->whereAdd("nickname = '$nickname'");
+                $group->find();
+                $group->fetch();
+            }
+            //Look for a private group if @public has not been explicitely set in the notice
+            elseif (!$this->isPublicSet) {
+                
+                $user  = common_current_user();
+                $usernick = $user->nickname;
+                $group = new User_group();
+                $group->whereAdd('is_private = 1');
+                $group->whereAdd("admin_nickname = '$usernick'");
+                $group->whereAdd("nickname = '$nickname'");
+                $group->find();
+                $group->fetch();
+            }
 
             if (!$group) {
                 continue;
@@ -655,7 +693,8 @@ class Notice extends Memcached_DataObject
                 }
 
                 // FIXME: do this in an offline daemon
-
+                
+                $this->noticeForGroup = true;
                 $inbox = new Notice_inbox();
                 $UT = common_config('db','type')=='pgsql'?'"user"':'user';
                 $qry = 'INSERT INTO notice_inbox (user_id, notice_id, created, source) ' .
@@ -666,6 +705,7 @@ class Notice extends Memcached_DataObject
                   'FROM notice_inbox ' .
                   "WHERE user_id = $UT.id " .
                   'AND notice_id = ' . $this->id . ' )';
+                
                 if ($enabled === 'transitional') {
                     $qry .= " AND $UT.inboxed = 1";
                 }

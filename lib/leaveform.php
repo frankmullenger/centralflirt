@@ -81,6 +81,9 @@ class LeaveForm extends Form
 
     function id()
     {
+        if (common_config('profile', 'enable_dating') && !is_null($this->profile)) {
+            return 'group-leave-' . $this->group->id.'-'.$this->profile->id;
+        }
         return 'group-leave-' . $this->group->id;
     }
 

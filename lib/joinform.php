@@ -81,6 +81,9 @@ class JoinForm extends Form
 
     function id()
     {
+        if (common_config('profile', 'enable_dating') && !is_null($this->profile)) {
+            return 'group-join-' . $this->group->id.'-'.$this->profile->id;
+        }
         return 'group-join-' . $this->group->id;
     }
 

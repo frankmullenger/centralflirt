@@ -149,8 +149,6 @@ class NewnoticeAction extends Action
         }
 
         $replyto = $this->trimmed('inreplyto');
-        
-        common_debug($replyto);
 
         $notice = Notice::saveNew($user->id, $content, 'web', 1,
                                   ($replyto == 'false') ? null : $replyto);
@@ -161,8 +159,6 @@ class NewnoticeAction extends Action
         }
 
         common_broadcast_notice($notice);
-        
-        common_debug(common_log_objstring($notice));
 
         if ($this->boolean('ajax')) {
             $this->startHTML('text/xml;charset=utf-8');
