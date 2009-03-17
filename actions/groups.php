@@ -50,7 +50,7 @@ class GroupsAction extends Action
 {
     var $page = null;
     var $profile = null;
-    private $privateGroups = false;
+    public $privateGroups = false;
 
     function isReadOnly()
     {

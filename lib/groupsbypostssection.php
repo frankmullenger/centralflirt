@@ -48,9 +48,23 @@ class GroupsByPostsSection extends GroupSection
         $qry = 'SELECT user_group.*, count(*) as value ' .
           'FROM user_group JOIN group_inbox '.
           'ON user_group.id = group_inbox.group_id ' .
+          'WHERE user_group.is_private = 0 ' .
           'GROUP BY user_group.id ' .
           'ORDER BY value DESC ';
 
+        if ($this->out->privateGroups) {
+            $cur = common_current_user();
+            $qry = <<<EOS
+SELECT user_group.*, count(*) as value 
+FROM user_group JOIN group_inbox 
+ON user_group.id = group_inbox.group_id 
+WHERE user_group.admin_nickname = '%s' 
+GROUP BY user_group.id 
+ORDER BY value DESC 
+EOS;
+            $qry = sprintf($qry, $cur->nickname);
+        }
+        
         $limit = GROUPS_PER_SECTION;
         $offset = 0;
 
@@ -68,6 +82,9 @@ class GroupsByPostsSection extends GroupSection
 
     function title()
     {
+        if ($this->out->privateGroups) {
+            return _('Your groups with most posts');
+        }
         return _('Groups with most posts');
     }
 

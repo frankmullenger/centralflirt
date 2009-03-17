@@ -636,10 +636,7 @@ class Notice extends Memcached_DataObject
         /* extract all !group */
         $count = preg_match_all('/(?:^|\s)!([A-Za-z0-9]{1,64})/',
                                 strtolower($this->content),
-                                $match);
-        
-        common_debug(implode(' ', $match[0]));                        
-                                
+                                $match);                
         if (!$count) {
             return true;
         }
