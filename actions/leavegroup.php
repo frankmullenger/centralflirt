@@ -108,6 +108,7 @@ class LeavegroupAction extends Action
             }
 
             if (isset($args['user_to_remove'])) {
+                $userIdToRemove = $this->trimmed('user_to_remove');
                 $checkCurrentUser = false;
             }
         }
@@ -116,8 +117,6 @@ class LeavegroupAction extends Action
             $this->clientError(_('No such group.'), 404);
             return false;
         }
-        
-        //TODO frank: check the other user you are removing
 
         //Don't check the current user if removing another user
         if ($checkCurrentUser) {
@@ -129,6 +128,20 @@ class LeavegroupAction extends Action
             }
     
             if ($cur->isAdmin($this->group)) {
+                $this->clientError(_('You may not leave a group while you are its administrator.'), 403);
+                return false;
+    
+            }
+        }
+        else {
+            $userToRemove = User::staticGet('id', $userIdToRemove);
+            
+            if (!$userToRemove->isMember($this->group)) {
+                $this->clientError(_('You are not a member of that group.'), 403);
+                return false;
+            }
+    
+            if ($userToRemove->isAdmin($this->group)) {
                 $this->clientError(_('You may not leave a group while you are its administrator.'), 403);
                 return false;
     

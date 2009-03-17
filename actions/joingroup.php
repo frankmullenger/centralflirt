@@ -108,6 +108,7 @@ class JoingroupAction extends Action
             }
             
             if (isset($args['user_to_add'])) {
+                $userIdToAdd = $this->trimmed('user_to_add');
                 $checkCurrentUser = false;
             }
         }
@@ -116,13 +117,19 @@ class JoingroupAction extends Action
             $this->clientError(_('No such group'), 404);
             return false;
         }
-        
-        //TODO frank: check the other user
 
         //Don't check the current user if adding another user
         if ($checkCurrentUser) {
             $cur = common_current_user();
             if ($cur->isMember($this->group)) {
+                $this->clientError(_('You are already a member of that group'), 403);
+                return false;
+            }
+        }
+        else {
+            $userToAdd = User::staticGet('id', $userIdToAdd);
+            
+            if ($userToAdd->isMember($this->group)) {
                 $this->clientError(_('You are already a member of that group'), 403);
                 return false;
             }
