@@ -165,7 +165,7 @@ class Notice extends Memcached_DataObject
              * TODO frank: is there a better approach? using the hidden form elements? or will that add complexity that is hard to map to other devices?
              * TODO frank: should @public be stripped out of the content field? Does it matter?
              */
-            //Need to check the notice for @public and set notice privacy accordingly
+            //Need to check the notice for @public and set notice privacy accordingly - if a message is to a public group it must have @public!
             //$cnt = preg_match_all('/(?:^|\s)@public\s/i', $notice->content, $match);
             
             if (stristr($notice->content, '@public ')) {
@@ -637,6 +637,9 @@ class Notice extends Memcached_DataObject
         $count = preg_match_all('/(?:^|\s)!([A-Za-z0-9]{1,64})/',
                                 strtolower($this->content),
                                 $match);
+        
+        common_debug(implode(' ', $match[0]));                        
+                                
         if (!$count) {
             return true;
         }
@@ -672,6 +675,7 @@ class Notice extends Memcached_DataObject
                 $group->whereAdd("nickname = '$nickname'");
                 $group->find();
                 $group->fetch();
+
             }
 
             if (!$group) {
@@ -710,6 +714,22 @@ class Notice extends Memcached_DataObject
                     $qry .= " AND $UT.inboxed = 1";
                 }
                 $result = $inbox->query($qry);
+                
+                //If the post was made to a private group (is private), then remove the groupname from the notice so followers
+                //do not know which groups they are in
+                if ($this->is_private) {
+
+                    $content = preg_replace('/(?:^|\s)!([A-Za-z0-9]{1,64})/',
+                                '',
+                                strtolower($this->content),
+                                -1,
+                                $count);
+                    if ($count > 0) {
+                        $this->content = common_shorten_links(trim($content));
+                        $this->rendered = common_render_content($this->content, $this);
+                        $this->update();
+                    }
+                }
             }
         }
     }
