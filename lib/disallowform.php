@@ -47,7 +47,7 @@ require_once INSTALLDIR.'/lib/form.php';
  * @see      UnsubscribeForm
  */
 
-class AllowForm extends Form
+class DisallowForm extends Form
 {
     /**
      * Profile of user to subscribe to
@@ -77,7 +77,7 @@ class AllowForm extends Form
 
     function id()
     {
-        return 'allow-' . $this->profile->id;
+        return 'disallow-' . $this->profile->id;
     }
 
 
@@ -89,7 +89,7 @@ class AllowForm extends Form
 
     function formClass()
     {
-        return 'form_user_allow';
+        return 'form_user_disallow';
     }
 
 
@@ -101,7 +101,7 @@ class AllowForm extends Form
 
     function action()
     {
-        return common_local_url('allow');
+        return common_local_url('disallow');
     }
 
 
@@ -112,7 +112,7 @@ class AllowForm extends Form
      */
     function formLegend()
     {
-        $this->out->element('legend', null, _('Add this user to your subscribers.'));
+        $this->out->element('legend', null, _('Unsubscribe this user from following you.'));
     }
 
     /**
@@ -123,9 +123,9 @@ class AllowForm extends Form
 
     function formData()
     {
-        $this->out->hidden('allow-' . $this->profile->id,
+        $this->out->hidden('disallow-' . $this->profile->id,
                            $this->profile->id,
-                           'allow');
+                           'disallow');
     }
 
     /**
@@ -136,6 +136,6 @@ class AllowForm extends Form
 
     function formActions()
     {
-        $this->out->submit('submit', _('Allow'), 'submit', null, _('Add this user as a subscriber.'));
+        $this->out->submit('submit', _('Disallow'), 'submit', null, _('Remove this user as a subscriber.'));
     }
 }

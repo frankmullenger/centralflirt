@@ -19,7 +19,7 @@
 
 if (!defined('LACONICA')) { exit(1); }
 
-class AllowAction extends Action
+class DisallowAction extends Action
 {
 
     function handle($args)
@@ -47,7 +47,7 @@ class AllowAction extends Action
             return;
         }
 
-        $other_id = $this->arg('allow');
+        $other_id = $this->arg('disallow');
         $other = User::staticGet('id', $other_id);
 
         if (!$other) {
@@ -55,7 +55,7 @@ class AllowAction extends Action
             return;
         }
 
-        $result = subs_allow_subscription($user, $other);
+        $result = subs_unsubscribe_user($other, $user->nickname);
 
         if($result !== true) {
             $this->clientError($result);
@@ -69,7 +69,7 @@ class AllowAction extends Action
             $this->elementEnd('head');
             $this->elementStart('body');
             
-            $unsubscribe = new DisallowForm($this, $other->getProfile());
+            $unsubscribe = new AllowForm($this, $other->getProfile());
             $unsubscribe->show();
             
             $this->elementEnd('body');

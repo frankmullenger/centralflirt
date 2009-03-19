@@ -10,7 +10,7 @@ class User_group extends Memcached_DataObject
 
     public $__table = 'user_group';                      // table name
     public $id;                              // int(11)  not_null primary_key auto_increment
-    public $nickname;                        // string(64)  unique_key multiple_key binary
+    public $nickname;                        // string(64)  multiple_key binary
     public $fullname;                        // string(255)  binary
     public $homepage;                        // string(255)  binary
     public $description;                     // string(140)  binary

@@ -60,7 +60,7 @@ class UnsubscribeAction extends Action
 
         $result = subs_unsubscribe_to($user, $other);
 
-        if ($result != true) {
+        if ($result !== true) {
             $this->clientError($result);
             return;
         }

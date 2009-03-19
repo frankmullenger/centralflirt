@@ -90,6 +90,28 @@ class SubGroupNav extends Widget
                                      $this->user->nickname),
                              $action == 'subscribers',
                              'nav_subscribers');
+                             
+        if ($this->user->id == $cur->id) {
+            
+            if (common_config('profile', 'enable_dating')) {
+                $this->out->menuItem(common_local_url('pendingsubscribers',
+                                              array('nickname' =>
+                                                    $this->user->nickname)),
+                             _('Requests'),
+                             sprintf(_('People requesting to subscribe to %s'),
+                                     $this->user->nickname),
+                             $action == 'pendingsubscribers',
+                             'nav_pendingsubscribers');
+            }
+            
+            $this->out->menuItem(common_local_url('invite'),
+                                 _('Invite'),
+                                 sprintf(_('Invite friends and colleagues to join you on %s'),
+                                         common_config('site', 'name')),
+                                 $action == 'invite',
+                                 'nav_invite');
+        }
+        
         $this->out->menuItem(common_local_url('usergroups',
                                               array('nickname' =>
                                                     $this->user->nickname)),
@@ -98,14 +120,7 @@ class SubGroupNav extends Widget
                                      $this->user->nickname),
                              $action == 'usergroups',
                              'nav_usergroups');
-        if ($this->user->id == $cur->id) {
-            $this->out->menuItem(common_local_url('invite'),
-                                 _('Invite'),
-                                 sprintf(_('Invite friends and colleagues to join you on %s'),
-                                         common_config('site', 'name')),
-                                 $action == 'invite',
-                                 'nav_invite');
-        }
+        
         $this->out->elementEnd('ul');
     }
 }

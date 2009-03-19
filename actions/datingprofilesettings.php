@@ -198,13 +198,13 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $interested_in = $this->trimmed('interested_in');
         $birthdate = $this->trimmed('birthdate_year') .'-'. $this->trimmed('birthdate_month') .'-'. $this->trimmed('birthdate_day');
         
-        //TODO validation needs to go here !!!
+        //TODO frank: validation needs to go here !!!
 
         $user = common_current_user();
         $datingProfile = $user->getDatingProfile();
         
         if ($datingProfile === false) {
-            //TODO throw an error in here
+            //TODO frank: throw an error in here
             exit('dating profile does not exist');
         }
 

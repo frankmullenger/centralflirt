@@ -60,14 +60,13 @@ function subs_subscribe_to($user, $other)
 
     subs_notify($other, $user);
 
-        $cache = common_memcache();
-
+    $cache = common_memcache();
     if ($cache) {
         $cache->delete(common_cache_key('user:notices_with_friends:' . $user->id));
 	}
 
-
     if ($other->autosubscribe && !$other->isSubscribed($user) && !$user->hasBlocked($other)) {
+        
         if (!$other->subscribeTo($user)) {
             return _('Could not subscribe other to you.');
         }
@@ -83,11 +82,61 @@ function subs_subscribe_to($user, $other)
     return true;
 }
 
+/**
+ * Allow the subscription of $other to $user, the subscription
+ * from $other should currently be in the pending table.
+ *
+ * @param User $user
+ * @param User $other
+ */
+function subs_allow_subscription($user, $other) {
+    
+    if ($other->isSubscribed($user)) {
+        return _('Already subscribed!.');
+    }
+
+    if ($user->hasBlocked($other)) {
+        return _('You have this user blocked.');
+    }
+    
+    if (!$user->isPendingSubscription($other)) {
+        return _('No pending subscriptions exist for this user.');
+    }
+
+    if (!$user->allowSubscription($other)) {
+        return _('Could not subscribe.');
+    }
+
+    subs_notify($user, $other);
+    
+    $cache = common_memcache();
+    if ($cache) {
+        $cache->delete(common_cache_key('user:notices_with_friends:' . $other->id));
+    }
+
+    if ($user->autosubscribe && !$user->isSubscribed($other) && !$other->hasBlocked($user)) {
+        
+        if (!$user->subscribeTo($other)) {
+            return _('Could not subscribe other to you.');
+        }
+        $cache = common_memcache();
+
+        if ($cache) {
+            $cache->delete(common_cache_key('user:notices_with_friends:' . $user->id));
+        }
+
+        subs_notify($other, $user);
+    }
+
+    return true;
+}
+ 
 function subs_notify($listenee, $listener)
 {
     # XXX: add other notifications (Jabber, SMS) here
     # XXX: queue this and handle it offline
     # XXX: Whatever happens, do it in Twitter-like API, too
+    //TODO frank: notification emails should reflect if subscription is pending or approved
     subs_notify_email($listenee, $listener);
 }
 

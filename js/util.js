@@ -155,6 +155,48 @@ $(document).ready(function(){
 	$(".form_user_unsubscribe").ajaxForm(UnSubscribe);
 	$(".form_user_subscribe").each(addAjaxHidden);
 	$(".form_user_unsubscribe").each(addAjaxHidden);
+    
+    var Allow = { dataType: 'xml',
+                      beforeSubmit: function(formData, jqForm, options) { $(".form_user_allow input[type=submit]").attr("disabled", "disabled");
+                                                                          $(".form_user_allow input[type=submit]").addClass("disabled");
+                                                                        },
+                      success: function(xml) { var form_disallow = document._importNode($('form', xml).get(0), true);
+                                               var form_disallow_id = form_disallow.id;
+                                               var form_allow_id = form_disallow_id.replace('disallow', 'allow');
+                                               
+                                               $("form#"+form_allow_id).replaceWith(form_disallow);
+                                               $("form#"+form_disallow_id).ajaxForm(Disallow).each(addAjaxHidden);
+                                               
+                                               $("dd.subscribers").text(parseInt($("dd.subscribers").text())+1);
+                                               $(".form_user_allow input[type=submit]").removeAttr("disabled");
+                                               $(".form_user_allow input[type=submit]").removeClass("disabled");
+                                             }
+                    };
+
+    var Disallow = { dataType: 'xml',
+                        beforeSubmit: function(formData, jqForm, options) { $(".form_user_disallow input[type=submit]").attr("disabled", "disabled");
+                                                                            $(".form_user_disallow input[type=submit]").addClass("disabled");
+                                                                          },
+                        success: function(xml) { var form_allow = document._importNode($('form', xml).get(0), true);
+                                                 var form_allow_id = form_allow.id;
+                                                 var form_disallow_id = form_allow_id.replace('allow', 'disallow');
+                                                 
+                                                 $("form#"+form_disallow_id).replaceWith(form_allow);
+                                                 $("form#"+form_allow_id).ajaxForm(Allow).each(addAjaxHidden);
+                                                 
+                                                 $("#profile_send_a_new_message").remove();
+                                                 $("#profile_nudge").remove();
+                                                 
+                                                 $("dd.subscribers").text(parseInt($("dd.subscribers").text())-1);
+                                                 $(".form_user_disallow input[type=submit]").removeAttr("disabled");
+                                                 $(".form_user_disallow input[type=submit]").removeClass("disabled");
+                                               }
+                      };
+
+    $(".form_user_allow").ajaxForm(Allow);
+    $(".form_user_disallow").ajaxForm(Disallow);
+    $(".form_user_allow").each(addAjaxHidden);
+    $(".form_user_disallow").each(addAjaxHidden);
 
 	var PostNotice = { dataType: 'xml',
 					   beforeSubmit: function(formData, jqForm, options) { if ($("#notice_data-text").get(0).value.length == 0) {

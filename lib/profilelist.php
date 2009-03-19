@@ -194,10 +194,28 @@ class ProfileList extends Widget
         $this->out->elementStart('div', 'entity_actions');
 
         $this->out->elementStart('ul');
+        
+        $this->showActionForm($user);
 
+        $this->out->elementEnd('ul');
+
+        $this->out->elementEnd('div');
+
+        $this->out->elementEnd('li');
+    }
+    
+    
+    function showActionForm($user = null) {
+        
+        if ($user == null) {
+            $user = common_current_user();
+        }
+        
         //For adding users to groups
         if (common_config('profile', 'enable_dating') && $this->action->privateGroup) {
 
+            //TODO frank: should the code inside this block be moved to overriden showActionForm() methods in group classes? 
+            
             $this->out->elementStart('li', 'entity_subscribe');
 
             switch (true) {
@@ -240,12 +258,6 @@ class ProfileList extends Widget
                 $this->out->elementEnd('li');
             }
         }
-
-        $this->out->elementEnd('ul');
-
-        $this->out->elementEnd('div');
-
-        $this->out->elementEnd('li');
     }
 
     /* Override this in subclasses. */

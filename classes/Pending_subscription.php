@@ -29,6 +29,6 @@ class Pending_subscription extends Memcached_DataObject
     
     function &pkeyGet($kv)
     {
-        return Memcached_DataObject::pkeyGet('Subscription', $kv);
+        return Memcached_DataObject::pkeyGet('Pending_subscription', $kv);
     }
 }

@@ -93,6 +93,24 @@ class Notice extends Memcached_DataObject
         if (!$count) {
             return true;
         }
+        
+        /*
+         * If a post is private, then remove the tags and do not enter then in the db
+         */
+        if ($this->is_private) {
+
+            $content = preg_replace('/(?:^|\s)#([A-Za-z0-9]{1,64})/',
+                        '',
+                        strtolower($this->content),
+                        -1,
+                        $count);
+            if ($count > 0) {
+                $this->content = common_shorten_links(trim($content));
+                $this->rendered = common_render_content($this->content, $this);
+                $this->update();
+            }
+            return true;
+        }
 
         /* Add them to the database */
         foreach(array_unique($match[1]) as $hashtag) {
@@ -712,8 +730,10 @@ class Notice extends Memcached_DataObject
                 }
                 $result = $inbox->query($qry);
                 
-                //If the post was made to a private group (is private), then remove the groupname from the notice so followers
-                //do not know which groups they are in
+                /*
+                 * If the post was made to a private group (is private), then remove the groupname from the notice so followers
+                 * do not know which groups they are in
+                 */
                 if ($this->is_private) {
 
                     $content = preg_replace('/(?:^|\s)!([A-Za-z0-9]{1,64})/',

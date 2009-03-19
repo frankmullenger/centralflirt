@@ -1,4 +1,6 @@
 <?php
+if (!defined('LACONICA')) { exit(1); }
+
 /**
  * Table Definition for dating_profile
  */
@@ -139,6 +141,13 @@ class Dating_profile extends Memcached_DataObject
             }
         }
         return $search_engine;
+    }
+    
+    /*
+     * Dating profiles use the same key as the profile and user accounts
+     */
+    function sequenceKey() {
+        return array(false,false);
     }
     
 }
