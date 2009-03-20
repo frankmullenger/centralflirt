@@ -178,18 +178,14 @@ class Notice extends Memcached_DataObject
         //Set the privacy of the notice if dating site is enabled
         if (common_config('profile', 'enable_dating')) {
             
+            //Need to check the notice for @public and set notice privacy accordingly - if a message is to a public group it must have @public.
+            $cnt = preg_match_all('/(?:^|\s)@public(?:$|\s)+/i', $notice->content, $match);
             
-            /**
-             * TODO frank: is there a better approach? using the hidden form elements? or will that add complexity that is hard to map to other devices?
-             * TODO frank: should @public be stripped out of the content field? Does it matter?
-             */
-            //Need to check the notice for @public and set notice privacy accordingly - if a message is to a public group it must have @public!
-            //$cnt = preg_match_all('/(?:^|\s)@public\s/i', $notice->content, $match);
-            
-            if (stristr($notice->content, '@public ')) {
+            if ($cnt) {
                 $notice->is_private = 0;
                 $notice->isPublicSet = true;
-                $notice->content = str_ireplace('@public ', '', $notice->content);
+                //So that when it gets passed through addToGroups() will not be posted to a group named '@public'
+                $notice->content = preg_replace('/(^|\s)@public(?:$|\s)+/i', '\\1', $notice->content);
             }
             else {
                 $user = common_current_user();
