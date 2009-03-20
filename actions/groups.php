@@ -80,6 +80,20 @@ class GroupsAction extends Action
         //Passing in nickname of user to display users personal (private) groups
         if (isset($args['usernick'])) {
             $this->privateGroups = true;
+            
+            if (common_config('profile', 'enable_dating')) {
+                
+                //If a user is not logged in then do not show these pages
+                $cur = common_current_user();
+                $usernick = common_canonical_nickname($this->arg('usernick'));
+                $user = User::staticGet('nickname', $usernick);
+                
+                if (!$cur || $cur->id != $user->id) {
+                    
+                    $this->clientError(_('Only logged in users can access this page.'),403);
+                    return;
+                }
+            }
         }
         
         $this->showPage();

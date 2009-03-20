@@ -23,7 +23,7 @@ require_once INSTALLDIR.'/lib/personalgroupnav.php';
 require_once INSTALLDIR.'/lib/noticelist.php';
 require_once INSTALLDIR.'/lib/feedlist.php';
 
-class AllAction extends Action
+class AllAction extends RestrictedAction
 {
     var $user = null;
     var $page = null;

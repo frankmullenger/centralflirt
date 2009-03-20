@@ -45,7 +45,7 @@ require_once INSTALLDIR.'/lib/feedlist.php';
  * @link     http://laconi.ca/
  */
 
-class RepliesAction extends Action
+class RepliesAction extends RestrictedAction
 {
     var $user = null;
     var $page = null;
