@@ -83,6 +83,15 @@ class GalleryAction extends Action
     function handle($args)
     {
         parent::handle($args);
+        
+        //If a user is not logged in then do not show these pages
+        $cur = common_current_user();
+
+        if (!$cur || $cur->id != $this->user->id) {
+            $this->clientError(_('Only logged in users can access this page.'),
+                403);
+            return;
+        }
 
 		# Post from the tag dropdown; redirect to a GET
 

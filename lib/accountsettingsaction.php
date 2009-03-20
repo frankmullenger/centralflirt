@@ -77,7 +77,7 @@ class AccountSettingsAction extends SettingsAction
     }
     
     /*
-     * TODO need to decide how to  layout the account pages, remove styling from here and apply custom ids to the
+     * TODO frank: need to decide how to  layout the account pages, remove styling from here and apply custom ids to the
      * divs instead in order to style from the css entirely
      */
     
