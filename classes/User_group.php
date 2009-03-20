@@ -77,7 +77,7 @@ class User_group extends Memcached_DataObject
 
     function allowedNickname($nickname)
     {
-        static $blacklist = array('new');
+        static $blacklist = array('new', 'public');
         return !in_array($nickname, $blacklist);
     }
 
