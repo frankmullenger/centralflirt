@@ -48,6 +48,7 @@ class TagrssAction extends Rss10Action
         }
 
         $notice = Notice_tag::getStream($tag->tag, 0, ($limit == 0) ? NOTICES_PER_PAGE : $limit);
+        $notices = array();
         while ($notice->fetch()) {
             $notices[] = clone($notice);
         }

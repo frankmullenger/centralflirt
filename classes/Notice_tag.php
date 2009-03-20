@@ -41,6 +41,11 @@ class Notice_tag extends Memcached_DataObject
           'FROM notice JOIN notice_tag ON notice.id = notice_tag.notice_id ' .
           'WHERE notice_tag.tag = "%s" ';
 
+        //Returning only public notices on dating enabled sites for now
+        if (common_config('profile', 'enable_dating')) {
+            $qry .= 'AND notice.is_private = 0 ';
+        }
+        
         return Notice::getStream(sprintf($qry, $tag),
                                  'notice_tag:notice_stream:' . common_keyize($tag),
                                  $offset, $limit);

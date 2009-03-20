@@ -58,7 +58,13 @@ class AllrssAction extends Rss10Action
      */
     function prepare($args)
     {
+        //Disabling RSS for dating sites where messages are private   
+        if (common_config('profile', 'enable_dating')) {
+            return false;
+        }
+        
         parent::prepare($args);
+        
         $nickname   = $this->trimmed('nickname');
         $this->user = User::staticGet('nickname', $nickname);
 
@@ -81,7 +87,7 @@ class AllrssAction extends Rss10Action
     {
         $user   = $this->user;
         $notice = $user->noticesWithFriends(0, $limit);
-                                            
+        $notices = array();                                    
         while ($notice->fetch()) {
             $notices[] = clone($notice);
         }

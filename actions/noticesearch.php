@@ -97,6 +97,15 @@ class NoticesearchAction extends SearchAction
         if (false === $search_engine->query($q)) {
             $cnt = 0;
         } else {
+            
+            /*
+             * TODO frank: need to sort out the notice search for private post searching
+             * If dating site is enabled only want to return public notices that meet the criteria atm
+             */
+            if (common_config('profile', 'enable_dating')) {
+                $notice->whereAdd('is_private = 0');
+            }
+            
             $cnt = $notice->find();
         }
         if ($cnt > 0) {

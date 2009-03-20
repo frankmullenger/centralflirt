@@ -71,6 +71,12 @@ class NoticesearchrssAction extends Rss10Action
         if (!$limit) $limit = 20;
         $search_engine->limit(0, $limit, true);
         $search_engine->query($q);
+        
+        //If dating site is enabled only want to return public notices that meet the criteria in the RSS feed
+        if (common_config('profile', 'enable_dating')) {
+            $notice->whereAdd('is_private = 0');
+        }
+        
         $notice->find();
 
         while ($notice->fetch()) {

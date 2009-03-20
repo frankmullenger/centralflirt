@@ -97,28 +97,16 @@ class groupRssAction extends Rss10Action
             return false;
         }
 
+        
         $this->group = User_group::staticGet('nickname', $nickname);
         
-        //To retrieve the correct private group if necessary:
+        //Need to retrieve only public group notices for the RSS feed
         if (common_config('profile', 'enable_dating')) {
-            
-            $usernick = $this->arg('usernick');
-
-            if (isset($usernick)) {
-                $this->group = new User_group();
-                $this->group->whereAdd('is_private = 1');
-                $this->group->whereAdd("admin_nickname = '$usernick'");
-                $this->group->whereAdd("nickname = '$nickname'");
-                $this->group->find();
-                $this->group->fetch();
-            }
-            else {
-                $this->group = new User_group();
-                $this->group->whereAdd('is_private = 0');
-                $this->group->whereAdd("nickname = '$nickname'");
-                $this->group->find();
-                $this->group->fetch();
-            }
+            $this->group = new User_group();
+            $this->group->whereadd("nickname = '$nickname'");
+            $this->group->whereadd('is_private = 0');
+            $this->group->find();
+            $this->group->fetch();
         }
 
         if (!$this->group) {
@@ -139,7 +127,7 @@ class groupRssAction extends Rss10Action
         }
         
         $notice = $group->getNotices(0, ($limit == 0) ? NOTICES_PER_PAGE : $limit);
-        
+        $notices = array();
         while ($notice->fetch()) {
             $notices[] = clone($notice);
         }
