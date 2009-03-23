@@ -91,6 +91,8 @@ class DatingsearchAction extends SearchAction
         $partner_sex = $this->trimmed('partner_sex');
         $age_lower = $this->trimmed('age_lower');
         $age_upper = $this->trimmed('age_upper');
+        $city = $this->trimmed('city');
+        $country = $this->trimmed('country');
         
         //TODO validation needs to be done here!!
         
@@ -123,17 +125,32 @@ class DatingsearchAction extends SearchAction
         $this->dropdown('age_upper', _('And'),
                          $this->getNiceAgeList(), null, false, (empty($age_upper))?35:$age_upper);
         $this->elementEnd('li');
-        $this->elementEnd('ul');
-        $this->submit('search', 'Search');
         
+        $this->elementStart('li');
+        $this->input('city', _('City'), $city);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('country', _('Country'),
+                     get_nice_country_list(), null, true, $country);
+        $this->elementEnd('li');
+        
+        $this->elementEnd('ul');
+        
+        $this->submit('search', 'Search');
         $this->elementEnd('fieldset');
         $this->elementEnd('form');
         
-        //TODO check for all the search options here
-        if ($sex || $partner_sex || $age_lower || $age_upper) {
+        //TODO frank: check for all the search options here
+        if ($sex || $partner_sex || $age_lower || $age_upper || $city || $country) {
             
-            //TODO make array keys constants in Dating Profile object?
-            $q = array('sex' => $sex, 'partner_sex' => $partner_sex, 'age_lower' => $age_lower, 'age_upper' => $age_upper);
+            //TODO frank: make array keys constants in Dating Profile object?
+            $q = array('sex' => $sex, 
+                       'partner_sex' => $partner_sex, 
+                       'age_lower' => $age_lower, 
+                       'age_upper' => $age_upper,
+                       'city' => $city,
+                       'country' => $country);
             $this->showResults($q, $page);
         }
     }

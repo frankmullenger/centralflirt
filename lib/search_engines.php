@@ -118,8 +118,6 @@ class MySQLSearch extends SearchEngine
             
         if ('identica_dating' === $this->table) {
 
-            //common_debug(implode(', ', $q));
-            
             //TODO frank: need to look into this date range search its not accurate
             
             //Compile a query based on the array of values passed in $q
@@ -143,6 +141,18 @@ class MySQLSearch extends SearchEngine
                         $dateUpper =  new DateTime('now');
                         $dateUpper->modify("-".$value." years");
                         $this->target->whereAdd('birthdate >= \'' . $dateUpper->format('Y-m-d') . '\'');
+                        break;
+                        
+                   case 'city' :
+                        if (!empty($value)) {
+                            $this->target->whereAdd("city = '$value'");
+                        }
+                        break;
+                        
+                   case 'country' :
+                        if (!empty($value)) {
+                            $this->target->whereAdd('country = ' . $value);
+                        }
                         break;
                 }
             }
