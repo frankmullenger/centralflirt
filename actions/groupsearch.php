@@ -71,6 +71,11 @@ class GroupsearchAction extends SearchAction
         foreach ($wheres as $where) {
             $where_q = "$where like '%" . trim($user_group->escape($q), '\'') . '%\'';
             $user_group->whereAdd($where_q, 'OR');
+            
+            //Limit searches to public groups
+            if (common_config('profile', 'enable_dating')) {
+                $user_group->whereAdd('is_private = 0');
+            }
         }
         $cnt = $user_group->find();
         if ($cnt > 0) {

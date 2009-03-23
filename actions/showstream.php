@@ -59,6 +59,7 @@ class ShowstreamAction extends Action
     var $user = null;
     var $page = null;
     var $profile = null;
+    var $cur = null;
 
     function isReadOnly()
     {
@@ -79,6 +80,8 @@ class ShowstreamAction extends Action
     function prepare($args)
     {
         parent::prepare($args);
+        
+        $this->cur = common_current_user();
 
         $nickname_arg = $this->arg('nickname');
         $nickname = common_canonical_nickname($nickname_arg);
@@ -131,7 +134,17 @@ class ShowstreamAction extends Action
     function showContent()
     {
         $this->showProfile();
-        $this->showNotices();
+
+        if (common_config('profile', 'enable_dating')) {
+            
+            if ($this->cur && $this->cur->isSubscribed($this->user)) {
+                $this->showDatingProfile();
+                $this->showNotices();
+            }
+        }
+        else {
+            $this->showNotices();
+        }
     }
 
     function showLocalNav()
@@ -157,46 +170,74 @@ class ShowstreamAction extends Action
 
     function showExportData()
     {
-        $fl = new FeedList($this);
-        $fl->show(array(0=>array('href'=>common_local_url('userrss',
-                                                          array('nickname' => $this->user->nickname)),
-                                 'type' => 'rss',
-                                 'version' => 'RSS 1.0',
-                                 'item' => 'notices'),
-                        1=>array('href'=>common_local_url('usertimeline',
-                                                          array('nickname' => $this->user->nickname)),
-                                 'type' => 'atom',
-                                 'version' => 'Atom 1.0',
-                                 'item' => 'usertimeline'),
-                        2=>array('href'=>common_local_url('foaf',
-                                                          array('nickname' => $this->user->nickname)),
-                                 'type' => 'rdf',
-                                 'version' => 'FOAF',
-                                 'item' => 'foaf')));
+        if (!common_config('profile', 'enable_dating')) {
+
+            $fl = new FeedList($this);
+            $fl->show(array(0=>array('href'=>common_local_url('userrss',
+                                                              array('nickname' => $this->user->nickname)),
+                                     'type' => 'rss',
+                                     'version' => 'RSS 1.0',
+                                     'item' => 'notices'),
+                            1=>array('href'=>common_local_url('usertimeline',
+                                                              array('nickname' => $this->user->nickname)),
+                                     'type' => 'atom',
+                                     'version' => 'Atom 1.0',
+                                     'item' => 'usertimeline'),
+                            2=>array('href'=>common_local_url('foaf',
+                                                              array('nickname' => $this->user->nickname)),
+                                     'type' => 'rdf',
+                                     'version' => 'FOAF',
+                                     'item' => 'foaf')));    
+        }
     }
 
     function showFeeds()
     {
-        $this->element('link', array('rel' => 'alternate',
-                        'type' => 'application/rss+xml',
-                        'href' => common_local_url('userrss',
-                         array('nickname' => $this->user->nickname)),
-                               'title' => sprintf(_('Notice feed for %s (RSS)'),
-                                 $this->user->nickname)));
+        if (common_config('profile', 'enable_dating')) {
 
-         $this->element('link',
-             array('rel' => 'alternate',
-                   'href' => common_local_url('api',
-                     array('apiaction' => 'statuses',
-                           'method' => 'user_timeline.atom',
-                           'argument' => $this->user->nickname)),
-                           'type' => 'application/atom+xml',
-                           'title' => sprintf(_('Notice feed for %s (Atom)'),
-                             $this->user->nickname)));
+            if ($this->cur) {
+                $this->element('link', array('rel' => 'alternate',
+                                'type' => 'application/rss+xml',
+                                'href' => common_local_url('userrss',
+                                 array('nickname' => $this->user->nickname)),
+                                       'title' => sprintf(_('Notice feed for %s (RSS)'),
+                                         $this->user->nickname)));
+        
+                 $this->element('link',
+                     array('rel' => 'alternate',
+                           'href' => common_local_url('api',
+                             array('apiaction' => 'statuses',
+                                   'method' => 'user_timeline.atom',
+                                   'argument' => $this->user->nickname)),
+                                   'type' => 'application/atom+xml',
+                                   'title' => sprintf(_('Notice feed for %s (Atom)'),
+                                     $this->user->nickname)));
+            }
+        }
+        else {
+            $this->element('link', array('rel' => 'alternate',
+                            'type' => 'application/rss+xml',
+                            'href' => common_local_url('userrss',
+                             array('nickname' => $this->user->nickname)),
+                                   'title' => sprintf(_('Notice feed for %s (RSS)'),
+                                     $this->user->nickname)));
+    
+             $this->element('link',
+                 array('rel' => 'alternate',
+                       'href' => common_local_url('api',
+                         array('apiaction' => 'statuses',
+                               'method' => 'user_timeline.atom',
+                               'argument' => $this->user->nickname)),
+                               'type' => 'application/atom+xml',
+                               'title' => sprintf(_('Notice feed for %s (Atom)'),
+                                 $this->user->nickname)));
+        }
     }
 
     function extraHead()
     {
+        //TODO frank: need to look into headers being generated and stop users accessing this info
+        
         // FOAF
         $this->element('link', array('rel' => 'meta',
                                      'href' => common_local_url('foaf', array('nickname' =>
@@ -376,10 +417,6 @@ class ShowstreamAction extends Action
         }
         $this->elementEnd('ul');
         $this->elementEnd('div');
-        
-        if (common_config('profile', 'enable_dating')) {
-            $this->showDatingProfile();
-        }
     }
     
     function showDatingProfile() {
@@ -495,12 +532,25 @@ class ShowstreamAction extends Action
 
     function showSections()
     {
-        $this->showSubscriptions();
-        $this->showSubscribers();
-        $this->showGroups();
-        $this->showStatistics();
-        $cloud = new PersonalTagCloudSection($this, $this->user);
-        $cloud->show();
+        if (common_config('profile', 'enable_dating')) {
+
+            if ($this->cur) {
+                $this->showSubscriptions();
+                $this->showSubscribers();
+                $this->showGroups();
+                $this->showStatistics();
+                $cloud = new PersonalTagCloudSection($this, $this->user);
+                $cloud->show();
+            }
+        }
+        else {
+            $this->showSubscriptions();
+            $this->showSubscribers();
+            $this->showGroups();
+            $this->showStatistics();
+            $cloud = new PersonalTagCloudSection($this, $this->user);
+            $cloud->show();
+        }
     }
 
     function showSubscriptions()

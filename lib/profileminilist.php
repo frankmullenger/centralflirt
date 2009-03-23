@@ -74,7 +74,7 @@ class ProfileMiniList extends ProfileList
                                        'rel' => 'contact member',
                                        'class' => 'url'));
         $avatar = $this->profile->getAvatar(AVATAR_MINI_SIZE);
-        $this->out->element('img', array('src' => (($avatar) ? $avatar->displayUrl() :  Avatar::defaultImage(AVATAR_MINI_SIZE)),
+        $this->out->element('img', array('src' => (($avatar) ? $avatar->displayUrl() :  Avatar::defaultImage(AVATAR_STREAM_SIZE)),
                                     'width' => AVATAR_MINI_SIZE,
                                     'height' => AVATAR_MINI_SIZE,
                                     'class' => 'avatar photo',
