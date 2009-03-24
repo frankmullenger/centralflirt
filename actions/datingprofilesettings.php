@@ -142,6 +142,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->dropdown('partner_sex', _('Looking For'),
                      $datingProfile->getNiceSexList(), null, false, $datingProfile->partner_sex);
         $this->elementEnd('li');
+
         $this->elementStart('li');
         $this->dropdown('birthdate_year', _('Year'),
                      $datingProfile->getNiceYearList(), null, false, $datingProfile->getBirthdate('Y'));
@@ -154,10 +155,12 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->dropdown('birthdate_day', _('Day'),
                      $datingProfile->getNiceMonthDayList(), null, false, $datingProfile->getBirthdate('d'));          
         $this->elementEnd('li');
+        
         $this->elementStart('li');
         $this->dropdown('interested_in', _('Interested In'),
                      $datingProfile->getNiceInterestList(), null, false, $datingProfile->interested_in);
         $this->elementEnd('li');
+        
         $this->elementEnd('ul');
         $this->submit('save', _('Save'));
 

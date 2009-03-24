@@ -533,13 +533,17 @@ class ShowstreamAction extends Action
     function showSections()
     {
         if (common_config('profile', 'enable_dating')) {
+            
+            /*
+             * check if user logged in, user logged in not subscriber, user logged in subscriber or subscribed to...
+             */
 
             if ($this->cur) {
                 $this->showSubscriptions();
                 $this->showSubscribers();
                 $this->showGroups();
                 $this->showStatistics();
-                $cloud = new PersonalTagCloudSection($this, $this->user);
+                $cloud = new PersonalTagCloudSection($this, $this->user, true);
                 $cloud->show();
             }
         }
@@ -666,7 +670,7 @@ class ShowstreamAction extends Action
 
     function showGroups()
     {
-        $groups = $this->user->getGroups(0, GROUPS_PER_MINILIST + 1);
+        $groups = $this->user->getGroups(0, GROUPS_PER_MINILIST + 1, true);
 
         $this->elementStart('div', array('id' => 'entity_groups',
                                          'class' => 'section'));

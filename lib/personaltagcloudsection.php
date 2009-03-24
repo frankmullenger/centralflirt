@@ -44,11 +44,13 @@ if (!defined('LACONICA')) {
 class PersonalTagCloudSection extends TagCloudSection
 {
     var $user = null;
+    private $public = false;
 
-    function __construct($out=null, $user=null)
+    function __construct($out=null, $user=null, $public = false)
     {
         parent::__construct($out);
         $this->user = $user;
+        $this->public = $public;
     }
 
     function title()
@@ -66,6 +68,19 @@ class PersonalTagCloudSection extends TagCloudSection
           'GROUP BY notice_tag.tag ' .
           'ORDER BY weight DESC ';
 
+        if ($this->public) {
+            $qry = <<<EOS
+SELECT notice_tag.tag, 
+sum(exp(-(now() - notice_tag.created)/%s)) as weight 
+FROM notice_tag JOIN notice 
+ON notice_tag.notice_id = notice.id 
+WHERE notice.profile_id = %d 
+AND notice.is_private = 0 
+GROUP BY notice_tag.tag 
+ORDER BY weight DESC 
+EOS;
+        }
+        
         $limit = TAGS_PER_SECTION;
         $offset = 0;
 

@@ -78,29 +78,68 @@ class PublictagcloudAction extends Action
 
     function showContent()
     {
-        # This should probably be cached rather than recalculated
-        $tags = new Notice_tag();
+        
+        if (!common_config('profile', 'enable_dating')) {
+                
+            # This should probably be cached rather than recalculated
+            $tags = new Notice_tag();
+    
+            #Need to clear the selection and then only re-add the field
+            #we are grouping by, otherwise it's not a valid 'group by'
+            #even though MySQL seems to let it slide...
+            $tags->selectAdd();
+            $tags->selectAdd('tag');
+    
+            #Add the aggregated columns...
+            $tags->selectAdd('max(notice_id) as last_notice_id');
+            if(common_config('db','type')=='pgsql') {
+                $calc='sum(exp(-extract(epoch from (now()-created))/%s)) as weight';
+            } else {
+                $calc='sum(exp(-(now() - created)/%s)) as weight';
+            }
+            $tags->selectAdd(sprintf($calc, common_config('tag', 'dropoff')));
+            $tags->groupBy('tag');
+            $tags->orderBy('weight DESC');
+    
+            $tags->limit(TAGS_PER_PAGE);
+            
+            $cnt = $tags->find();
 
-        #Need to clear the selection and then only re-add the field
-        #we are grouping by, otherwise it's not a valid 'group by'
-        #even though MySQL seems to let it slide...
-        $tags->selectAdd();
-        $tags->selectAdd('tag');
-
-        #Add the aggregated columns...
-        $tags->selectAdd('max(notice_id) as last_notice_id');
-        if(common_config('db','type')=='pgsql') {
-            $calc='sum(exp(-extract(epoch from (now()-created))/%s)) as weight';
-        } else {
-            $calc='sum(exp(-(now() - created)/%s)) as weight';
         }
-        $tags->selectAdd(sprintf($calc, common_config('tag', 'dropoff')));
-        $tags->groupBy('tag');
-        $tags->orderBy('weight DESC');
+        else {   
+            /**
+             * TODO frank: look into links.ini file and use joinAdd() to avoid porblems with $cnt below
+             * $notices = new Notice();
+             * $tags->joinAdd($notices);
+             * $tags->whereAdd('notice.is_private = 0');
+             */
+            
+            $tags = new Notice_tag();
+            $qry = <<<EOS
+SELECT notice_tag.tag, 
+sum(exp(-(now() - notice_tag.created)/%s)) as weight 
+FROM notice_tag JOIN notice 
+ON notice_tag.notice_id = notice.id 
+WHERE notice.is_private = 0 
+GROUP BY notice_tag.tag 
+ORDER BY weight DESC 
+EOS;
 
-        $tags->limit(TAGS_PER_PAGE);
+            $limit = TAGS_PER_PAGE;
+            $offset = 0;
+    
+            if (common_config('db','type') == 'pgsql') {
+                $qry .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
+            } else {
+                $qry .= ' LIMIT ' . $offset . ', ' . $limit;
+            }
 
-        $cnt = $tags->find();
+            $qry = sprintf($qry, common_config('tag', 'dropoff'));
+            $tags->query($qry);
+            
+            //TODO frank: this is not good practice, what happens when there are no public tags at all? divide by zero warning...
+            $cnt = 1;
+        }
 
         if ($cnt > 0) {
             $this->elementStart('div', array('id' => 'tagcloud',
