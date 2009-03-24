@@ -88,6 +88,12 @@ class GroupmembersAction extends Action
             if (isset($usernick)) {
                 $this->privateGroup = true;
                 
+                $cur = common_current_user();
+                if ($usernick != $cur->nickname) {
+                    $this->clientError(_('Only the owner of this group can access this page.'), 403);
+                    return;
+                }
+                
                 $this->group = new User_group();
                 $this->group->whereAdd('is_private = 1');
                 $this->group->whereAdd("admin_nickname = '$usernick'");
