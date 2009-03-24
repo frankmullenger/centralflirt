@@ -23,22 +23,76 @@ if (!defined('LACONICA')) {
 
 class RestrictedAction extends Action
 {
-
-    function handle($args)
+    public $cur = null;
+    public $user = null;
+    protected $auth = 0;
+    
+    function prepare($args)
     {
-        parent::handle($args);
+        parent::prepare($args);
 
         if (common_config('profile', 'enable_dating')) {
             
-            //If a user is not logged in then do not show these pages
-            $cur = common_current_user();
+            //Set current user
+            $this->cur = common_current_user();
             
-            if (!$cur || $cur->id != $this->user->id) {
-                
-                $this->clientError(_('Only logged in users can access this page.'),403);
-                return;
-            }
+            //Set user we are accessing data on
+            $nickname = common_canonical_nickname($this->arg('nickname'));
+            $this->user = User::staticGet('nickname', $nickname);
+            
+            //Set authorisation
+            $this->setAuthorisation();
+
+            //Handle authorisation
+            $this->handleAuthorisation();
+            
         }
+    }
+    
+    /**
+     * This should be overwritten in child classes to provide more appropriate error messages.
+     */
+    public function handleAuthorisation() 
+    {
+        switch ($this->auth) {
+            case 0:
+                $this->clientError(_('Only logged in users can access this page.'),403);
+                break;
+            case 1:
+                $this->clientError(_('Only users which are subscribed to or from this user can access this page.'),403);
+                break;
+            case 2:
+                $this->clientError(_('Only the user who owns this page may access it.'),403);
+                break;
+            case 3:
+                break;
+        }
+        return;
+    }
+    
+    protected function setAuthorisation()
+    {
+        if (!$this->cur) {
+            $this->auth = 0;
+            return;
+        }
+        if ($this->cur 
+                && !$this->cur->isSubscribed($this->user)               //you are not subscribed to this user
+                && !$this->cur->isSubscriber($this->user)               //this user is not subscribed to you
+                && !$this->cur->isPendingSubscription($this->user)) {   //this user is not pending subscription to you
+            $this->auth = 1;
+            return;
+        }
+        if ($this->cur 
+                && ($this->cur->isSubscribed($this->user)                   //you are subscribed to this user
+                    || $this->cur->isSubscriber($this->user)                //or this user is subscribed to you
+                    || $this->cur->isPendingSubscription($this->user))) {   //or this user is pending subscription to you
+            $this->auth = 2;
+        }
+        if ($this->cur->id == $this->user->id) {
+            $this->auth = 3;
+        }
+        return;
     }
 
 }

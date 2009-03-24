@@ -59,6 +59,22 @@ class AllAction extends RestrictedAction
 
         $this->showPage();
     }
+    
+    public function handleAuthorisation() 
+    {
+        switch ($this->auth) {
+            case 0:
+                $this->clientError(_('Only logged in users can access this page.'),403);
+                break;
+            case 1:
+                $this->clientError(_('Only users which are subscribed to or from this user can access this page.'),403);
+                break;
+            case 2:
+            case 3:
+                break;
+        }
+        return;
+    }
 
     function title()
     {
@@ -95,6 +111,12 @@ class AllAction extends RestrictedAction
 
     function showContent()
     {
+        /*
+         * if user subscribed, just show the messages they should be able to view
+         * if user is owner then show all messages
+         */
+        
+        
         $notice = $this->user->noticesWithFriends(($this->page-1)*NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
 
         $nl = new NoticeList($notice, $this);

@@ -152,8 +152,63 @@ class Profile extends Memcached_DataObject
         return null;
     }
 
+    /**
+     * Get notices for this profile. A user must be logged in to access notices.
+     * If the current logged in user is not the owner of the profile then filter the messages 
+     * to only those that the logged in user can view.
+     *
+     * @param unknown_type $offset
+     * @param unknown_type $limit
+     * @param unknown_type $since_id
+     * @param unknown_type $before_id
+     * @return unknown
+     */
     function getNotices($offset=0, $limit=NOTICES_PER_PAGE, $since_id=0, $before_id=0)
     {
+        if (common_config('profile', 'enable_dating')) {
+            $cur = common_current_user();
+            
+            //Belt and braces - this is checked in action files.
+            if (!$cur) {
+                $this->clientError(_('Only logged in users can access notices.'),403);
+                return;
+            }
+
+            if ($cur->id !== $this->id) {
+
+                $enabled = common_config('inboxes', 'enabled');
+    
+                //TODO frank: this is not going to work if inboxes are disabled, so that can never be the case on dating enabled sites
+                
+                # Complicated code, depending on whether we support inboxes yet
+                # XXX: make this go away when inboxes become mandatory
+        
+                if ($enabled === false ||
+                    ($enabled == 'transitional' && $cur->inboxed == 0)) {
+                        
+                    $qry =
+                      'SELECT notice.* ' .
+                      'FROM notice JOIN subscription ON notice.profile_id = subscription.subscribed ' .
+                      'WHERE subscription.subscriber = %d ' . 
+                      'AND notice.profile_id = %d';
+                    $order = null;
+                } else if ($enabled === true ||
+                       ($enabled == 'transitional' && $cur->inboxed == 1)) {
+                           
+                    $qry =
+                      'SELECT notice.* ' .
+                      'FROM notice JOIN notice_inbox ON notice.id = notice_inbox.notice_id ' .
+                      'WHERE notice_inbox.user_id = %d ' . 
+                      'AND notice.profile_id = %d';
+                    # NOTE: we override ORDER
+                    $order = null;
+                }
+                return Notice::getStream(sprintf($qry, $cur->id, $this->id),
+                                     'profile:notices:'.$this->id,
+                                     $offset, $limit, $since_id, $before_id);
+            }
+        }
+    
         $qry =
           'SELECT * ' .
           'FROM notice ' .

@@ -54,13 +54,10 @@ require_once INSTALLDIR.'/lib/feedlist.php';
  * @link     http://laconi.ca/
  */
 
-class ShowstreamAction extends Action
+class ShowstreamAction extends RestrictedAction
 {
-    var $user = null;
     var $page = null;
     var $profile = null;
-    var $cur = null;
-    private $auth = 0;
 
     function isReadOnly()
     {
@@ -81,14 +78,11 @@ class ShowstreamAction extends Action
     function prepare($args)
     {
         parent::prepare($args);
-        
-        $this->cur = common_current_user();
 
         $nickname_arg = $this->arg('nickname');
         $nickname = common_canonical_nickname($nickname_arg);
 
         // Permanent redirect on non-canonical nickname
-
         if ($nickname_arg != $nickname) {
             $args = array('nickname' => $nickname);
             if ($this->arg('page') && $this->arg('page') != 1) {
@@ -104,8 +98,6 @@ class ShowstreamAction extends Action
             $this->clientError(_('No such user.'), 404);
             return false;
         }
-        
-        $this->setAuthorisation();
 
         $this->profile = $this->user->getProfile();
 
@@ -123,15 +115,25 @@ class ShowstreamAction extends Action
 
     function handle($args)
     {
-
+        //TODO frank: why does this not have a call to parent::handle() I wonder
+        
         // Looks like we're good; start output
-
         // For YADIS discovery, we also have a <meta> tag
-
         header('X-XRDS-Location: '. common_local_url('xrds', array('nickname' =>
                                                                    $this->user->nickname)));
-
         $this->showPage();
+    }
+    
+    public function handleAuthorisation() 
+    {
+        switch ($this->auth) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                break;
+        }
+        return;
     }
 
     function showContent()
@@ -164,29 +166,6 @@ class ShowstreamAction extends Action
         }
     }
     
-    private function setAuthorisation()
-    {
-    
-        if (!$this->cur) {
-            $this->auth = 0;
-        }
-        else if ($this->cur 
-                && !$this->cur->isSubscribed($this->user)               //you are not subscribed to this user
-                && !$this->cur->isSubscriber($this->user)               //this user is not subscribed to you
-                && !$this->cur->isPendingSubscription($this->user)) {   //this user is not pending subscription to you
-            $this->auth = 1;
-        }
-        else if ($this->cur 
-                && ($this->cur->isSubscribed($this->user)                   //you are subscribed to this user
-                    || $this->cur->isSubscriber($this->user)                //or this user is subscribed to you
-                    || $this->cur->isPendingSubscription($this->user))) {   //or this user is pending subscription to you
-            $this->auth = 2;
-        }
-        else if ($this->cur == $this->user) {
-            $this->auth = 3;
-        }
-    }
-
     function showLocalNav()
     {
         $nav = new PersonalGroupNav($this);
