@@ -175,6 +175,17 @@ class FavoritedAction extends Action
           'GROUP BY fave.notice_id ' .
           'ORDER BY weight DESC';
 
+        if (common_config('profile', 'enable_dating')) {
+            $qry = <<<EOS
+SELECT notice.*, 
+sum(exp(-(now() - fave.modified) / %s)) as weight 
+FROM notice JOIN fave ON notice.id = fave.notice_id 
+WHERE notice.is_private = 0 
+GROUP BY fave.notice_id 
+ORDER BY weight DESC
+EOS;
+        }
+        
         $offset = ($this->page - 1) * NOTICES_PER_PAGE;
         $limit  = NOTICES_PER_PAGE + 1;
 
