@@ -60,6 +60,7 @@ class ShowstreamAction extends Action
     var $page = null;
     var $profile = null;
     var $cur = null;
+    private $auth = 0;
 
     function isReadOnly()
     {
@@ -103,6 +104,8 @@ class ShowstreamAction extends Action
             $this->clientError(_('No such user.'), 404);
             return false;
         }
+        
+        $this->setAuthorisation();
 
         $this->profile = $this->user->getProfile();
 
@@ -136,14 +139,51 @@ class ShowstreamAction extends Action
         $this->showProfile();
 
         if (common_config('profile', 'enable_dating')) {
-            
-            if ($this->cur && $this->cur->isSubscribed($this->user)) {
-                $this->showDatingProfile();
-                $this->showNotices();
+
+            /*
+             * If user is logged out show profile
+             * If user is logged in but not subscriber show dating profile
+             * If user is logged in is subscriber or subscribed to show dating profile and notices
+             * If user is logged in and owner of the profile
+             */
+            switch ($this->auth) {
+                case 0:
+                    break;
+                case 1:
+                    $this->showDatingProfile();
+                    break;
+                case 2:
+                case 3:
+                    $this->showDatingProfile();
+                    $this->showNotices();
+                    break;
             }
         }
         else {
             $this->showNotices();
+        }
+    }
+    
+    private function setAuthorisation()
+    {
+    
+        if (!$this->cur) {
+            $this->auth = 0;
+        }
+        else if ($this->cur 
+                && !$this->cur->isSubscribed($this->user)               //you are not subscribed to this user
+                && !$this->cur->isSubscriber($this->user)               //this user is not subscribed to you
+                && !$this->cur->isPendingSubscription($this->user)) {   //this user is not pending subscription to you
+            $this->auth = 1;
+        }
+        else if ($this->cur 
+                && ($this->cur->isSubscribed($this->user)                   //you are subscribed to this user
+                    || $this->cur->isSubscriber($this->user)                //or this user is subscribed to you
+                    || $this->cur->isPendingSubscription($this->user))) {   //or this user is pending subscription to you
+            $this->auth = 2;
+        }
+        else if ($this->cur == $this->user) {
+            $this->auth = 3;
         }
     }
 
@@ -504,9 +544,7 @@ class ShowstreamAction extends Action
             $this->element('dd', 'interested_in', $interestedinList[$datingProfile->interested_in]);
             $this->elementEnd('dl');
         }
-        
-        //$this->element('pre', null, print_r($this->user, false));
-        
+
         $this->elementEnd('div');
     }
 
@@ -535,16 +573,30 @@ class ShowstreamAction extends Action
         if (common_config('profile', 'enable_dating')) {
             
             /*
-             * check if user logged in, user logged in not subscriber, user logged in subscriber or subscribed to...
+             * Only show parts of the profile page to the current user depending on their authorisation.
              */
-
-            if ($this->cur) {
-                $this->showSubscriptions();
-                $this->showSubscribers();
-                $this->showGroups();
-                $this->showStatistics();
-                $cloud = new PersonalTagCloudSection($this, $this->user, true);
-                $cloud->show();
+            switch ($this->auth) {
+                case 0:
+                case 1:
+                    $this->showGroups();
+                    $this->showStatistics();
+                    $cloud = new PersonalTagCloudSection($this, $this->user, true);
+                    $cloud->show();
+                    break;
+                case 2:
+                    $this->showGroups();
+                    $this->showStatistics();
+                    $cloud = new PersonalTagCloudSection($this, $this->user, true);
+                    $cloud->show();
+                    break;
+                case 3:
+                    $this->showSubscriptions();
+                    $this->showSubscribers();
+                    $this->showGroups();
+                    $this->showStatistics();
+                    $cloud = new PersonalTagCloudSection($this, $this->user, false);
+                    $cloud->show();
+                    break;
             }
         }
         else {
@@ -644,18 +696,28 @@ class ShowstreamAction extends Action
 
         $this->elementStart('dl', 'entity_subscriptions');
         $this->elementStart('dt');
-        $this->element('a', array('href' => common_local_url('subscriptions',
+        if ($this->auth === 3) {
+            $this->element('a', array('href' => common_local_url('subscriptions',
                                                              array('nickname' => $this->profile->nickname))),
-                       _('Subscriptions'));
+                           _('Subscriptions'));
+        }
+        else {
+            $this->element('span', null, _('Subscriptions'));
+        }        
         $this->elementEnd('dt');
         $this->element('dd', null, (is_int($subs_count)) ? $subs_count : '0');
         $this->elementEnd('dl');
 
         $this->elementStart('dl', 'entity_subscribers');
         $this->elementStart('dt');
-        $this->element('a', array('href' => common_local_url('subscribers',
+        if ($this->auth === 3) {
+            $this->element('a', array('href' => common_local_url('subscribers',
                                                              array('nickname' => $this->profile->nickname))),
                        _('Subscribers'));
+        }
+        else {
+            $this->element('span', null, _('Subscribers'));
+        }
         $this->elementEnd('dt');
         $this->element('dd', 'subscribers', (is_int($subbed_count)) ? $subbed_count : '0');
         $this->elementEnd('dl');
@@ -699,10 +761,19 @@ class ShowstreamAction extends Action
 
     function showAnonymousMessage()
     {
+
 		$m = sprintf(_('**%s** has an account on %%%%site.name%%%%, a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service ' .
                        'based on the Free Software [Laconica](http://laconi.ca/) tool. ' .
                        '[Join now](%%%%action.register%%%%) to follow **%s**\'s notices and many more! ([Read more](%%%%doc.help%%%%))'),
                      $this->user->nickname, $this->user->nickname);
+        
+        if (common_config('profile', 'enable_dating')) {             
+            $m = sprintf(_('You are viewing **%s**\'s account on %%%%site.name%%%%, a dating site which incorporates micro blogging. ' .
+                           'Because you are not logged in you can only see part of **%s**\'s account and not dating information. ' .
+                           '[Join now](%%%%action.register%%%%) to follow **%s**\'s notices and flirt! ([Read more](%%%%doc.help%%%%))'),
+                         $this->user->nickname, $this->user->nickname, $this->user->nickname);
+        }
+                     
         $this->elementStart('div', array('id' => 'anon_notice'));
         $this->raw(common_markup_to_html($m));
         $this->elementEnd('div');
