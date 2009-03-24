@@ -131,14 +131,15 @@ class RepliesAction extends RestrictedAction
 
     function showFeeds()
     {
-        $rssurl   = common_local_url('repliesrss',
-                                     array('nickname' => $this->user->nickname));
-        $rsstitle = sprintf(_('Feed for replies to %s'), $this->user->nickname);
-
-        $this->element('link', array('rel' => 'alternate',
-                                     'href' => $rssurl,
-                                     'type' => 'application/rss+xml',
-                                     'title' => $rsstitle));
+        if (!common_config('profile', 'enable_dating')) {
+            $rssurl   = common_local_url('repliesrss',
+                                         array('nickname' => $this->user->nickname));
+            $rsstitle = sprintf(_('Feed for replies to %s'), $this->user->nickname);
+            $this->element('link', array('rel' => 'alternate',
+                                         'href' => $rssurl,
+                                         'type' => 'application/rss+xml',
+                                         'title' => $rsstitle));
+        }
     }
 
     /**
@@ -161,15 +162,15 @@ class RepliesAction extends RestrictedAction
 
     function showExportData()
     {
-        $fl = new FeedList($this);
-
-        $rssurl = common_local_url('repliesrss',
-                                   array('nickname' => $this->user->nickname));
-
-        $fl->show(array(0=>array('href'=> $rssurl,
-                                 'type' => 'rss',
-                                 'version' => 'RSS 1.0',
-                                 'item' => 'repliesrss')));
+        if (!common_config('profile', 'enable_dating')) {
+            $fl = new FeedList($this);
+            $rssurl = common_local_url('repliesrss',
+                                       array('nickname' => $this->user->nickname));
+            $fl->show(array(0=>array('href'=> $rssurl,
+                                     'type' => 'rss',
+                                     'version' => 'RSS 1.0',
+                                     'item' => 'repliesrss')));
+        }
     }
 
     /**

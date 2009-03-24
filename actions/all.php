@@ -87,11 +87,13 @@ class AllAction extends RestrictedAction
 
     function showFeeds()
     {
-        $this->element('link', array('rel' => 'alternate',
-                                     'href' => common_local_url('allrss', array('nickname' =>
-                                                                                $this->user->nickname)),
-                                     'type' => 'application/rss+xml',
-                                     'title' => sprintf(_('Feed for friends of %s'), $this->user->nickname)));
+        if (!common_config('profile', 'enable_dating')) {
+            $this->element('link', array('rel' => 'alternate',
+                                         'href' => common_local_url('allrss', array('nickname' =>
+                                                                                    $this->user->nickname)),
+                                         'type' => 'application/rss+xml',
+                                         'title' => sprintf(_('Feed for friends of %s'), $this->user->nickname)));
+        }
     }
 
     function showLocalNav()
@@ -102,25 +104,20 @@ class AllAction extends RestrictedAction
 
     function showExportData()
     {
-        $fl = new FeedList($this);
-        $fl->show(array(0=>array('href'=>common_local_url('allrss', array('nickname' => $this->user->nickname)),
-                                 'type' => 'rss',
-                                 'version' => 'RSS 1.0',
-                                 'item' => 'allrss')));
+        if (!common_config('profile', 'enable_dating')) {
+            $fl = new FeedList($this);
+            $fl->show(array(0=>array('href'=>common_local_url('allrss', array('nickname' => $this->user->nickname)),
+                                     'type' => 'rss',
+                                     'version' => 'RSS 1.0',
+                                     'item' => 'allrss')));
+        }
     }
 
     function showContent()
     {
-        /*
-         * if user subscribed, just show the messages they should be able to view
-         * if user is owner then show all messages
-         */
-        
-        
         $notice = $this->user->noticesWithFriends(($this->page-1)*NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
 
         $nl = new NoticeList($notice, $this);
-
         $cnt = $nl->show();
 
         $this->pagination($this->page > 1, $cnt > NOTICES_PER_PAGE,

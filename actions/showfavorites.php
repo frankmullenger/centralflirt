@@ -141,16 +141,17 @@ class ShowfavoritesAction extends RestrictedAction
 
     function showFeeds()
     {
-        $feedurl   = common_local_url('favoritesrss',
-                                      array('nickname' =>
-                                            $this->user->nickname));
-        $feedtitle = sprintf(_('Feed for favorites of %s'),
-                             $this->user->nickname);
-
-        $this->element('link', array('rel' => 'alternate',
-                                     'href' => $feedurl,
-                                     'type' => 'application/rss+xml',
-                                     'title' => $feedtitle));
+        if (!common_config('profile', 'enable_dating')) {
+            $feedurl   = common_local_url('favoritesrss',
+                                          array('nickname' =>
+                                                $this->user->nickname));
+            $feedtitle = sprintf(_('Feed for favorites of %s'),
+                                 $this->user->nickname);
+            $this->element('link', array('rel' => 'alternate',
+                                         'href' => $feedurl,
+                                         'type' => 'application/rss+xml',
+                                         'title' => $feedtitle));
+        }
     }
 
     /**
@@ -173,18 +174,19 @@ class ShowfavoritesAction extends RestrictedAction
 
     function showExportData()
     {
-        $feedurl = common_local_url('favoritesrss',
-                                    array('nickname' =>
-                                          $this->user->nickname));
-
-        $fl = new FeedList($this);
-
-        // XXX: I18N
-
-        $fl->show(array(0=>array('href'=> $feedurl,
-                                 'type' => 'rss',
-                                 'version' => 'RSS 1.0',
-                                 'item' => 'Favorites')));
+        if (!common_config('profile', 'enable_dating')) {
+            $feedurl = common_local_url('favoritesrss',
+                                        array('nickname' =>
+                                              $this->user->nickname));
+            $fl = new FeedList($this);
+    
+            // XXX: I18N
+    
+            $fl->show(array(0=>array('href'=> $feedurl,
+                                     'type' => 'rss',
+                                     'version' => 'RSS 1.0',
+                                     'item' => 'Favorites')));
+        }
     }
 
     /**
