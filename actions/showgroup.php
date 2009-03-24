@@ -334,12 +334,14 @@ class ShowgroupAction extends Action
 
     function showExportData()
     {
-        $fl = new FeedList($this);
-        $fl->show(array(0=>array('href'=>common_local_url('grouprss',
-                                                          array('nickname' => $this->group->nickname)),
-                                 'type' => 'rss',
-                                 'version' => 'RSS 1.0',
-                                 'item' => 'notices')));
+        if (!$this->privateGroup) {
+            $fl = new FeedList($this);
+            $fl->show(array(0=>array('href'=>common_local_url('grouprss',
+                                                              array('nickname' => $this->group->nickname)),
+                                     'type' => 'rss',
+                                     'version' => 'RSS 1.0',
+                                     'item' => 'notices')));
+        }
     }
 
     /**
@@ -350,15 +352,16 @@ class ShowgroupAction extends Action
 
     function showFeeds()
     {
-        $url =
-          common_local_url('grouprss',
-                           array('nickname' => $this->group->nickname));
-
-        $this->element('link', array('rel' => 'alternate',
-                                     'href' => $url,
-                                     'type' => 'application/rss+xml',
-                                     'title' => sprintf(_('Notice feed for %s group'),
-                                                        $this->group->nickname)));
+        if (!$this->privateGroup) {
+            $url = common_local_url('grouprss',
+                                    array('nickname' => $this->group->nickname));
+    
+            $this->element('link', array('rel' => 'alternate',
+                                         'href' => $url,
+                                         'type' => 'application/rss+xml',
+                                         'title' => sprintf(_('Notice feed for %s group'),
+                                                            $this->group->nickname)));
+        }
     }
 
     /**

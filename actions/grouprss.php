@@ -102,15 +102,21 @@ class groupRssAction extends Rss10Action
         
         //Need to retrieve only public group notices for the RSS feed
         if (common_config('profile', 'enable_dating')) {
+            
             $this->group = new User_group();
             $this->group->whereadd("nickname = '$nickname'");
             $this->group->whereadd('is_private = 0');
             $this->group->find();
-            $this->group->fetch();
+            $result = $this->group->fetch();
+            
+            if (!$result) {
+                $this->clientError(_('No such public group.'), 404);
+                return false;
+            }
         }
 
         if (!$this->group) {
-            $this->clientError(_('No such group'), 404);
+            $this->clientError(_('No such public group.'), 404);
             return false;
         }
 
