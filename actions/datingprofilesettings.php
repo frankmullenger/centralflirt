@@ -161,6 +161,118 @@ class DatingprofilesettingsAction extends AccountSettingsAction
                      $datingProfile->getNiceInterestList(), null, false, $datingProfile->interested_in);
         $this->elementEnd('li');
         
+        
+        
+        
+        $this->elementStart('li');
+        $this->input('profession', _('Profession'),
+                     ($this->arg('profession')) ? $this->arg('profession') : $datingProfile->profession);
+        $this->elementEnd('li');
+        $this->elementStart('li');
+        $this->input('headline', _('Headline'),
+                     ($this->arg('headline')) ? $this->arg('headline') : $datingProfile->headline);
+        $this->elementEnd('li');
+        $this->elementStart('li');
+        $this->input('interests', _('Interests'),
+                     ($this->arg('interests')) ? $this->arg('interests') : $datingProfile->interests);
+        $this->elementEnd('li');
+        
+        
+        $this->elementStart('li');
+        $this->dropdown('height', _('Height'),
+                     $datingProfile->getNiceHeightList(), null, true, $datingProfile->height);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('hair', _('Hair'),
+                     $datingProfile->getNiceHairList(), null, true, $datingProfile->hair);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('body_type', _('Body Type'),
+                     $datingProfile->getNiceBodytypeList(), null, true, $datingProfile->body_type);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('ethnicity', _('Ethnicity'),
+                     $datingProfile->getNiceEthnicityList(), null, true, $datingProfile->ethnicity);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('eye_colour', _('Eye Colour'),
+                     $datingProfile->getNiceEyeColourList(), null, true, $datingProfile->eye_colour);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('marital_status', _('Marital Status'),
+                     $datingProfile->getNiceMaritalStatusList(), null, true, $datingProfile->marital_status);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('have_children', _('Do you have Children?'),
+                     $datingProfile->getNiceHaveChildrenStatusList(), null, true, $datingProfile->have_children);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('smoke', _('Do you smoke?'),
+                     $datingProfile->getNiceDoYouStatusList(), null, true, $datingProfile->smoke);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('drink', _('Do you drink'),
+                     $datingProfile->getNiceDoYouStatusList(), null, true, $datingProfile->drink);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('religion', _('Religion'),
+                     $datingProfile->getNiceReligionStatusList(), null, true, $datingProfile->religion);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('language', _('language'),
+                     $datingProfile->getNiceLanguageStatusList(), null, true, $datingProfile->language);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('education', _('Education'),
+                     $datingProfile->getNiceEducationStatusList(), null, true, $datingProfile->education);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('politics', _('Politics'),
+                     $datingProfile->getNicePoliticsStatusList(), null, true, $datingProfile->politics);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('best_feature', _('Best feature'),
+                     $datingProfile->getNiceBestFeatureStatusList(), null, true, $datingProfile->best_feature);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('body_art', _('Body Art'),
+                     $datingProfile->getNiceBodyArtStatusList(), null, true, $datingProfile->body_art);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->textarea('fun', _('What do you do for fun?'),
+                     ($this->arg('fun')) ? $this->arg('fun') : $datingProfile->fun);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->textarea('fav_spot', _('What is your favourite spot?'),
+                     ($this->arg('fav_spot')) ? $this->arg('fav_spot') : $datingProfile->fav_spot);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->textarea('fav_media', _('Favourite books/movies?'),
+                     ($this->arg('fav_media')) ? $this->arg('fav_media') : $datingProfile->fav_media);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->textarea('first_date', _('What would you do/like to do on a first date?'),
+                     ($this->arg('first_date')) ? $this->arg('first_date') : $datingProfile->first_date);
+        $this->elementEnd('li');
+        
         $this->elementEnd('ul');
         $this->submit('save', _('Save'));
 
