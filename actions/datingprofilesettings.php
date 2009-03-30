@@ -174,7 +174,8 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementEnd('li');
         $this->elementStart('li');
         $this->input('interests', _('Interests'),
-                     ($this->arg('interests')) ? $this->arg('interests') : $datingProfile->interests);
+                     ($this->arg('interests')) ? $this->arg('interests') : implode(', ', $datingProfile->getInterestTags()),
+                     _('Tags for yourself, must be comma separated'));
         $this->elementEnd('li');
         
         
@@ -313,7 +314,46 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $interested_in = $this->trimmed('interested_in');
         $birthdate = $this->trimmed('birthdate_year') .'-'. $this->trimmed('birthdate_month') .'-'. $this->trimmed('birthdate_day');
         
-        //TODO frank: validation needs to go here !!!
+        $profession = $this->trimmed('profession');
+        $headline = $this->trimmed('headline');
+        $height = $this->trimmed('height');
+        $hair = $this->trimmed('hair');
+        $body_type = $this->trimmed('body_type');
+        $ethnicity = $this->trimmed('ethnicity');
+        $eye_colour = $this->trimmed('eye_colour');
+        $marital_status = $this->trimmed('marital_status');
+        $have_children = $this->trimmed('have_children');
+        $smoke = $this->trimmed('smoke');
+        $drink = $this->trimmed('drink');
+        $religion = $this->trimmed('religion');
+        $education = $this->trimmed('education');
+        $politics = $this->trimmed('politics');
+        $best_feature = $this->trimmed('best_feature');
+        $body_art = $this->trimmed('body_art');
+        $fun = $this->trimmed('fun');
+        $fav_spot = $this->trimmed('fav_spot');
+        $fav_media = $this->trimmed('fav_media');
+        $first_date = $this->trimmed('first_date');
+        
+        /*
+         * These need to be treated differently
+         */
+        $language = $this->trimmed('language');
+        $interests = $this->trimmed('interests');
+
+        if ($interests) {
+            $interest_tags = array_map('common_canonical_interest_tag', preg_split('/[,]+/', $interests));
+        } else {
+            $interest_tags = array();
+        }
+        foreach ($interest_tags as $tag) {
+            if (!preg_match('/^[A-Za-z0-9_\-\.\s]{1,64}$/', $tag)) {
+                $this->showForm(sprintf(_('Invalid tag: "%s"'), $tag));
+                return;
+            }
+        }
+
+        //TODO frank: validation needs to be done here!
 
         $user = common_current_user();
         $datingProfile = $user->getDatingProfile();
@@ -338,25 +378,78 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $datingProfile->sex = $sex;
         $datingProfile->partner_sex = $partner_sex;
         $datingProfile->interested_in = $interested_in;
+        
+        $datingProfile->profession = $profession;
+        $datingProfile->headline = $headline;
+        $datingProfile->height = $height;
+        $datingProfile->hair = $hair;
+        $datingProfile->body_type = $body_type;
+        $datingProfile->ethnicity = $ethnicity;
+        $datingProfile->eye_colour = $eye_colour;
+        $datingProfile->marital_status = $marital_status;
+        $datingProfile->have_children = $have_children;
+        $datingProfile->smoke = $smoke;
+        $datingProfile->drink = $drink;
+        $datingProfile->religion = $religion;
+        $datingProfile->education = $education;
+        $datingProfile->politics = $politics;
+        $datingProfile->best_feature = $best_feature;
+        $datingProfile->body_art = $body_art;
+        $datingProfile->fun = $fun;
+        $datingProfile->fav_spot = $fav_spot;
+        $datingProfile->fav_media = $fav_media;
+        $datingProfile->first_date = $first_date;
 
         common_debug('Old profile: ' . common_log_objstring($orig_datingProfile), __FILE__);
         common_debug('New profile: ' . common_log_objstring($datingProfile), __FILE__);
+        
+        
+        $datingProfile->query('BEGIN');
 
-        if (empty($orig_datingProfile->id)) {
+        try {
+            if (empty($orig_datingProfile->id)) {
+                
+                $datingProfile->url = common_profile_url($nickname);
+                $datingProfile->created = common_sql_now();
+                $result = $datingProfile->insert();
+                
+                if (!$result) {
+                    common_log_db_error($datingProfile, 'UPDATE', __FILE__);
+                    $this->serverError(_('Could not save the profile.'));
+                    throw new Exception('Could not save profile.');
+                }
+                
+                $tagsresult = $datingProfile->setInterestTags($interest_tags);
+                if (!$tagsresult) {
+                    $this->serverError(_('Couldn\'t save interests on new profile..'));
+                    throw new Exception('Could not save interests.');
+                }
+            }
+            else {
+                
+                $tagsresult = $datingProfile->setInterestTags($interest_tags);
+                if (!$tagsresult) {
+                    $this->serverError(_('Couldn\'t save interests.'));
+                    throw new Exception('Could not save interests.');
+                }
             
-            $datingProfile->url = common_profile_url($nickname);
-            $datingProfile->created = common_sql_now();
-            $result = $datingProfile->insert();
+                $result = $datingProfile->update($orig_datingProfile);
+                
+                if (!$result && !$tagsresult) {
+                    common_log_db_error($datingProfile, 'UPDATE', __FILE__);
+                    $this->serverError(_('Did not update the profile.'));
+                    throw new Exception('Could not update profile.');
+                }
+            }
+            
+            $datingProfile->query('COMMIT');
+            
         }
-        else {
-            $result = $datingProfile->update($orig_datingProfile);
-        }
-
-        if (!$result) {
-            common_log_db_error($datingProfile, 'UPDATE', __FILE__);
-            $this->serverError(_('Couldn\'t save dating profile.'));
+        catch (Exception $e) {
+            $datingProfile->query('ROLLBACK');
             return;
         }
+
 
         common_broadcast_profile($datingProfile);
 

@@ -586,6 +586,10 @@ function common_canonical_tag($tag)
 {
     return strtolower(str_replace(array('-', '_', '.'), '', $tag));
 }
+function common_canonical_interest_tag($tag)
+{
+    return strtolower(str_replace(array('-', '_', '.'), '', trim($tag)));
+}
 
 function common_valid_profile_tag($str)
 {

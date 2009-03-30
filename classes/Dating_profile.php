@@ -26,6 +26,26 @@ class Dating_profile extends Memcached_DataObject
     public $partner_sex;                     // int(11)  
     public $interested_in;                   // int(11)  
     public $url;                             // string(255)  
+    public $profession;                      // string(255)  not_null binary
+    public $headline;                        // string(255)  not_null binary
+    public $height;                          // int(11)  
+    public $hair;                            // int(11)  
+    public $body_type;                       // int(11)  
+    public $ethnicity;                       // int(11)  
+    public $eye_colour;                      // int(11)  
+    public $marital_status;                  // int(11)  
+    public $have_children;                   // int(11)  
+    public $smoke;                           // int(11)  
+    public $drink;                           // int(11)  
+    public $religion;                        // int(11)  
+    public $education;                       // int(11)  
+    public $politics;                        // int(11)  
+    public $best_feature;                    // int(11)  
+    public $body_art;                        // int(11)  
+    public $fun;                             // blob(65535)  not_null blob binary
+    public $fav_spot;                        // blob(65535)  not_null blob binary
+    public $fav_media;                       // blob(65535)  not_null blob binary
+    public $first_date;                      // blob(65535)  not_null blob binary
     public $created;                         // datetime(19)  not_null binary
     public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
@@ -189,6 +209,16 @@ class Dating_profile extends Memcached_DataObject
     function getProfile()
     {
         return Profile::staticGet('id', $this->id);
+    }
+    
+    function setInterestTags($newInterests) 
+    {
+        return Dating_profile_tag::setTags($this->id, $this->id, $newInterests);
+    }
+    
+    function getInterestTags()
+    {
+        return Dating_profile_tag::getTags($this->id, $this->id);
     }
     
     function getBirthdate($format='Y-m-d') 
@@ -438,7 +468,6 @@ class Dating_profile extends Memcached_DataObject
                     );
     }
     
-    
     function getNiceMonthDayList() {
         $monthDays = array();
         for ($i=1; $i<=31; $i++) {
@@ -446,7 +475,6 @@ class Dating_profile extends Memcached_DataObject
         }
         return $monthDays;
     }
-    
     
     /**
      * Overriding function to limit database queries to MySQL
