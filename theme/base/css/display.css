@@ -170,6 +170,7 @@ margin-bottom:11px;
 .form_settings input.checkbox {
 margin-top:3px;
 margin-left:0;
+clear: left;
 }
 .form_settings label.checkbox {
 font-weight:normal;
@@ -177,7 +178,7 @@ margin-top:0;
 margin-right:0;
 margin-left:11px;
 float:left;
-width:90%;
+/* width:90%; */
 }
 
 

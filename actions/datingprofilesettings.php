@@ -177,8 +177,6 @@ class DatingprofilesettingsAction extends AccountSettingsAction
                      ($this->arg('interests')) ? $this->arg('interests') : implode(', ', $datingProfile->getInterestTags()),
                      _('Tags for yourself, must be comma separated'));
         $this->elementEnd('li');
-        
-        
         $this->elementStart('li');
         $this->dropdown('height', _('Height'),
                      $datingProfile->getNiceHeightList(), null, true, $datingProfile->height);
@@ -230,8 +228,18 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementEnd('li');
         
         $this->elementStart('li');
-        $this->dropdown('language', _('language'),
-                     $datingProfile->getNiceLanguageStatusList(), null, true, $datingProfile->language);
+        $this->elementStart('fieldset');
+        $this->element('legend', null, 'Languages');
+        $languageList = $datingProfile->getNiceLanguageStatusList();
+        $languageIds = $datingProfile->getLanguages();
+        foreach ($languageList as $languageId => $language) {
+            $checked = false;
+            if (in_array($languageId, $languageIds)) {
+                $checked = true;
+            }
+            $this->checkbox("language[$languageId]", _($language), $checked, $instructions=null, $value=$languageId);
+        }
+        $this->elementEnd('fieldset');
         $this->elementEnd('li');
         
         $this->elementStart('li');
@@ -336,9 +344,10 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $first_date = $this->trimmed('first_date');
         
         /*
-         * These need to be treated differently
+         * Languages and interests need to be treated differently
          */
-        $language = $this->trimmed('language');
+        $languages = implode(';', $this->arg('language'));
+        
         $interests = $this->trimmed('interests');
 
         if ($interests) {
@@ -399,6 +408,8 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $datingProfile->fav_spot = $fav_spot;
         $datingProfile->fav_media = $fav_media;
         $datingProfile->first_date = $first_date;
+        
+        $datingProfile->languages = $languages;
 
         common_debug('Old profile: ' . common_log_objstring($orig_datingProfile), __FILE__);
         common_debug('New profile: ' . common_log_objstring($datingProfile), __FILE__);

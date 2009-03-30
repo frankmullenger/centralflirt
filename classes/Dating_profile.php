@@ -38,6 +38,7 @@ class Dating_profile extends Memcached_DataObject
     public $smoke;                           // int(11)  
     public $drink;                           // int(11)  
     public $religion;                        // int(11)  
+    public $languages;                       // string(100)  binary
     public $education;                       // int(11)  
     public $politics;                        // int(11)  
     public $best_feature;                    // int(11)  
@@ -219,6 +220,11 @@ class Dating_profile extends Memcached_DataObject
     function getInterestTags()
     {
         return Dating_profile_tag::getTags($this->id, $this->id);
+    }
+    
+    function getLanguages()
+    {
+        return explode(';', $this->languages);
     }
     
     function getBirthdate($format='Y-m-d') 
