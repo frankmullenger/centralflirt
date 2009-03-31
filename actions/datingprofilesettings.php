@@ -356,7 +356,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
             $interest_tags = array();
         }
         foreach ($interest_tags as $tag) {
-            if (!preg_match('/^[A-Za-z0-9_\-\.\s]{1,64}$/', $tag)) {
+            if (!common_valid_profile_interest($tag)) {
                 $this->showForm(sprintf(_('Invalid tag: "%s"'), $tag));
                 return;
             }

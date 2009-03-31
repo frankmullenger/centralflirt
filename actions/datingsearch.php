@@ -239,7 +239,7 @@ class DatingSearchResults extends ProfileList
     }
 
     /**
-     * TODO decide which profile to link to, dating or ordinary and the visibility of such profiles regarding the messages posted
+     * TODO frank: decide which profile to link to, dating or ordinary and the visibility of such profiles regarding the messages posted
      *
      */
     function showProfile()
@@ -287,22 +287,11 @@ class DatingSearchResults extends ProfileList
             $this->out->elementEnd('dd');
             $this->out->elementEnd('dl');
         }
-        if ($this->profile->homepage) {
-            $this->out->elementStart('dl', 'entity_url');
-            $this->out->element('dt', null, _('URL'));
-            $this->out->elementStart('dd');
-            $this->out->elementStart('a', array('href' => $this->profile->homepage,
-                                                'class' => 'url'));
-            $this->out->raw($this->highlight($this->profile->homepage));
-            $this->out->elementEnd('a');
-            $this->out->elementEnd('dd');
-            $this->out->elementEnd('dl');
-        }
-        if ($this->profile->bio) {
+        if ($this->datingProfile->bio) {
             $this->out->elementStart('dl', 'entity_note');
             $this->out->element('dt', null, _('Note'));
             $this->out->elementStart('dd', 'note');
-            $this->out->raw($this->highlight($this->profile->bio));
+            $this->out->raw($this->highlight($this->datingProfile->bio));
             $this->out->elementEnd('dd');
             $this->out->elementEnd('dl');
         }
@@ -311,18 +300,19 @@ class DatingSearchResults extends ProfileList
 
         if ($this->owner) {
             # Get tags
-            $tags = Profile_tag::getTags($this->owner->id, $this->profile->id);
+            $tags = Dating_profile_tag::getTags($this->owner->id, $this->profile->id);
 
             $this->out->elementStart('dl', 'entity_tags');
             $this->out->elementStart('dt');
             if ($user->id == $this->owner->id) {
                 $this->out->element('a', array('href' => common_local_url('tagother',
                                                                           array('id' => $this->profile->id))),
-                                    _('Tags'));
+                                    _('Interests'));
             } else {
-                $this->out->text(_('Tags'));
+                $this->out->text(_('Interests'));
             }
             $this->out->elementEnd('dt');
+            
             $this->out->elementStart('dd');
             if ($tags) {
                 $this->out->elementStart('ul', 'tags xoxo');
@@ -330,9 +320,8 @@ class DatingSearchResults extends ProfileList
                     $this->out->elementStart('li');
                     $this->out->element('span', 'mark_hash', '#');
                     $this->out->element('a', array('rel' => 'tag',
-                                                   'href' => common_local_url($this->action->trimmed('action'),
-                                                                              array('nickname' => $this->owner->nickname,
-                                                                                    'tag' => $tag))),
+                                                   'href' => common_local_url('interesttag',
+                                                                              array('tag' => $tag))),
                                         $tag);
                     $this->out->elementEnd('li');
                 }

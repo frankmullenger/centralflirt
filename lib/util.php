@@ -595,6 +595,10 @@ function common_valid_profile_tag($str)
 {
     return preg_match('/^[A-Za-z0-9_\-\.]{1,64}$/', $str);
 }
+function common_valid_profile_interest($str)
+{
+    return preg_match('/^[A-Za-z0-9_\-\.\s]{1,64}$/', $str);
+}    
 
 function common_at_link($sender_id, $nickname)
 {

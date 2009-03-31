@@ -19,9 +19,9 @@
 
 if (!defined('LACONICA')) { exit(1); }
 
-require_once INSTALLDIR.'/lib/profilelist.php';
+require_once INSTALLDIR.'/lib/datingprofilelist.php';
 
-class PeopletagAction extends Action
+class InteresttagAction extends Action
 {
     
     var $tag = null;
@@ -35,8 +35,8 @@ class PeopletagAction extends Action
 
         $this->tag = $this->trimmed('tag');
         
-        if (!common_valid_profile_tag($this->tag)) {
-            $this->clientError(sprintf(_('Not a valid people tag: %s'), $this->tag));
+        if (!common_valid_profile_interest($this->tag)) {
+            $this->clientError(sprintf(_('Not a valid interest tag: %s'), $this->tag));
             return;
         }
 
@@ -66,15 +66,15 @@ class PeopletagAction extends Action
         # XXX: memcached this
         
         $qry =  'SELECT profile.* ' .
-                'FROM profile JOIN profile_tag ' .
-                'ON profile.id = profile_tag.tagger ' .
-                'WHERE profile_tag.tagger = profile_tag.tagged ' .
+                'FROM profile JOIN dating_profile_tag ' .
+                'ON profile.id = dating_profile_tag.tagger ' .
+                'WHERE dating_profile_tag.tagger = dating_profile_tag.tagged ' .
                 'AND tag = "%s" ' .
-                'ORDER BY profile_tag.modified DESC';
+                'ORDER BY dating_profile_tag.modified DESC';
         
         $profile->query(sprintf($qry, $this->tag, $lim));
 
-        $pl = new ProfileList($profile, null, $this);
+        $pl = new DatingProfileList($profile, null, $this);
         $cnt = $pl->show();
                 
         $this->pagination($this->page > 1,
@@ -86,7 +86,7 @@ class PeopletagAction extends Action
     
     function title() 
     {
-        return sprintf( _('Users self-tagged with %s - page %d'), $this->tag, $this->page);
+        return sprintf( _('Users with interest: %s - page %d'), $this->tag, $this->page);
     }
     
 }
