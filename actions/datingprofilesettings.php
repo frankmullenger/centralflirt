@@ -45,7 +45,7 @@ require_once INSTALLDIR.'/lib/accountsettingsaction.php';
  * @link     http://laconi.ca/
  */
 
-//TODO need to test whether the dating is enabled before processing any of this action
+//TODO frank: need to test whether the dating is enabled before processing any of this action
 
 class DatingprofilesettingsAction extends AccountSettingsAction
 {
@@ -68,8 +68,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
 
     function getInstructions()
     {
-        return _('You can update your dating profile here '.
-                  'so people know more about you.');
+        return _('You can update your dating profile here so people know more about you.');
     }
 
     /**
