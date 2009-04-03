@@ -243,6 +243,9 @@ class Action extends HTMLOutputter // lawsuit
     function extraHead()
     {
         // does nothing by default
+        $this->element('link', array('rel' => 'shortcut icon',
+                                     'type' => 'image/x-icon',
+                                     'href' => '/favicon.ico'));
     }
 
     /**

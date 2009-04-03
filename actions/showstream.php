@@ -523,6 +523,176 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'interested_in', $interestedinList[$datingProfile->interested_in]);
             $this->elementEnd('dl');
         }
+        
+        if ($datingProfile->profession) {
+            $this->elementStart('dl', 'profession');
+            $this->element('dt', null, _('Profession'));
+            $this->element('dd', 'profession', $datingProfile->profession);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->headline) {
+            $this->elementStart('dl', 'headline');
+            $this->element('dt', null, _('Headline'));
+            $this->element('dd', 'headline', $datingProfile->headline);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->height) {
+            $heightList = $datingProfile->getNiceHeightList();
+            $this->elementStart('dl', 'height');
+            $this->element('dt', null, _('Height'));
+            $this->element('dd', 'height', $heightList[$datingProfile->height]);
+            $this->elementEnd('dl');
+        }
+        
+        if ($datingProfile->hair) {
+            $hairList = $datingProfile->getNiceHairList();
+            $this->elementStart('dl', 'hair');
+            $this->element('dt', null, _('Hair'));
+            $this->element('dd', 'hair', $hairList[$datingProfile->hair]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->body_type) {
+            $bodyTypeList = $datingProfile->getNiceBodytypeList();
+            $this->elementStart('dl', 'body_type');
+            $this->element('dt', null, _('Body Type'));
+            $this->element('dd', 'body_type', $bodyTypeList[$datingProfile->body_type]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->ethnicity) {
+            $ethnicityList = $datingProfile->getNiceEthnicityList();
+            $this->elementStart('dl', 'ethnicity');
+            $this->element('dt', null, _('Ethnicity'));
+            $this->element('dd', 'ethnicity', $ethnicityList[$datingProfile->ethnicity]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->eye_colour) {
+            $eyecolourList = $datingProfile->getNiceEyeColourList();
+            $this->elementStart('dl', 'eye_colour');
+            $this->element('dt', null, _('Eye Colour'));
+            $this->element('dd', 'eye_colour', $eyecolourList[$datingProfile->eye_colour]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->marital_status) {
+            $maritalStatusList = $datingProfile->getNiceMaritalStatusList();
+            $this->elementStart('dl', 'marital_status');
+            $this->element('dt', null, _('Marital Status'));
+            $this->element('dd', 'marital_status', $maritalStatusList[$datingProfile->marital_status]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->have_children) {
+            $childrenList = $datingProfile->getNiceHaveChildrenStatusList();
+            $this->elementStart('dl', 'have_children');
+            $this->element('dt', null, _('Has Children'));
+            $this->element('dd', 'have_children', $childrenList[$datingProfile->have_children]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->smoke) {
+            $smokeList = $datingProfile->getNiceDoYouStatusList();
+            $this->elementStart('dl', 'smoke');
+            $this->element('dt', null, _('Smoke'));
+            $this->element('dd', 'smoke', $smokeList[$datingProfile->smoke]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->drink) {
+            $drinkList = $datingProfile->getNiceDoYouStatusList();
+            $this->elementStart('dl', 'drink');
+            $this->element('dt', null, _('Drink'));
+            $this->element('dd', 'drink', $drinkList[$datingProfile->drink]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->religion) {
+            $religionList = $datingProfile->getNiceReligionStatusList();
+            $this->elementStart('dl', 'religion');
+            $this->element('dt', null, _('Religion'));
+            $this->element('dd', 'religion', $religionList[$datingProfile->religion]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->education) {
+            $educationList = $datingProfile->getNiceEducationStatusList();
+            $this->elementStart('dl', 'education');
+            $this->element('dt', null, _('Education'));
+            $this->element('dd', 'education', $educationList[$datingProfile->education]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->politics) {
+            $politicsList = $datingProfile->getNicePoliticsStatusList();
+            $this->elementStart('dl', 'politics');
+            $this->element('dt', null, _('Politics'));
+            $this->element('dd', 'politics', $politicsList[$datingProfile->politics]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->best_feature) {
+            $featureList = $datingProfile->getNiceBestFeatureStatusList();
+            $this->elementStart('dl', 'best_feature');
+            $this->element('dt', null, _('Best Feature'));
+            $this->element('dd', 'best_feature', $featureList[$datingProfile->best_feature]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->body_art) {
+            $bodyArtList = $datingProfile->getNiceBodyArtStatusList();
+            $this->elementStart('dl', 'body_art');
+            $this->element('dt', null, _('Body Art'));
+            $this->element('dd', 'body_art', $bodyArtList[$datingProfile->body_art]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->fun) {
+            $this->elementStart('dl', 'fun');
+            $this->element('dt', null, _('What I do for fun'));
+            $this->element('dd', 'fun', $datingProfile->fun);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->fav_spot) {
+            $this->elementStart('dl', 'fav_spot');
+            $this->element('dt', null, _('Favourite spot'));
+            $this->element('dd', 'fav_spot', $datingProfile->fav_spot);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->fav_media) {
+            $this->elementStart('dl', 'fav_media');
+            $this->element('dt', null, _('Favourite books/movies'));
+            $this->element('dd', 'fav_media', $datingProfile->fav_media);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->first_date) {
+            $this->elementStart('dl', 'first_date');
+            $this->element('dt', null, _('My idea of a good first date'));
+            $this->element('dd', 'first_date', $datingProfile->first_date);
+            $this->elementEnd('dl');
+        }
+        $languages = $datingProfile->getLanguages();
+        $languageList = $datingProfile->getNiceLanguageStatusList();
+        if (!empty($languages)) {
+            $this->elementStart('dl', 'first_date');
+            $this->element('dt', null, _('Languages'));
+            foreach ($languages as $language) {
+                $this->element('dd', 'language', $languageList[$language]);
+            }
+            $this->elementEnd('dl');
+        }
+        
+        
+        $tags = Dating_profile_tag::getTags($datingProfile->id, $datingProfile->id);
+        if (count($tags) > 0) {
+            $this->elementStart('dl', 'entity_interests');
+            $this->element('dt', null, _('Interests'));
+            $this->elementStart('dd');
+            $this->elementStart('ul', 'tags xoxo');
+            foreach ($tags as $tag) {
+                $this->elementStart('li');
+                $this->element('span', 'mark_hash', '#');
+                $this->element('a', array('rel' => 'tag',
+                                          'href' => common_local_url('interesttag',
+                                                                     array('tag' => $tag))),
+                               $tag);
+                $this->elementEnd('li');
+            }
+            $this->elementEnd('ul');
+            $this->elementEnd('dd');
+            $this->elementEnd('dl');
+        }
+        
 
         $this->elementEnd('div');
     }

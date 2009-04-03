@@ -127,9 +127,10 @@ class Dating_profile extends Memcached_DataObject
     const BEST_FEATURE_NECK = 11;
     const BEST_FEATURE_HANDS = 12;
     
-    const TATS_PIERCINGS_WANT = 1;
-    const TATS_PIERCINGS_SOME = 2;
-    const TATS_PIERCINGS_MANY = 3;
+    const TATS_PIERCINGS_DONT_WANT = 1;
+    const TATS_PIERCINGS_WANT = 2;
+    const TATS_PIERCINGS_SOME = 3;
+    const TATS_PIERCINGS_MANY = 4;
     
     const FAITH_AGNOSTIC = 1;
     const FAITH_ATHIEST = 2;
@@ -441,7 +442,8 @@ class Dating_profile extends Memcached_DataObject
     
     function getNiceBodyArtStatusList()
     {
-        return array(self::TATS_PIERCINGS_WANT => _('I would like some peircings/tattos'),
+        return array(self::TATS_PIERCINGS_DONT_WANT => _('I don\'t want any peircings/tattoos'),
+                        self::TATS_PIERCINGS_WANT => _('I would like some peircings/tattos'),
                         self::TATS_PIERCINGS_SOME => _('I have a few piercings/tattos'),
                         self::TATS_PIERCINGS_MANY => _('I have many piercings/tattos'),
                     );
