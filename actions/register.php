@@ -181,34 +181,36 @@ class RegisterAction extends Action
             return;
         } else if ($password != $confirm) {
             $this->showForm(_('Passwords don\'t match.'));
-        } else if ($user = User::register(array('nickname' => $nickname,
-                                                'password' => $password,
+        } else {
+
+            if ($user = User::register(array('nickname' => $nickname,
                                                 'email' => $email,
                                                 'fullname' => $fullname,
                                                 'homepage' => $homepage,
                                                 'bio' => $bio,
                                                 'location' => $location,
                                                 'code' => $code))) {
-            if (!$user) {
+                if (!$user) {
+                    $this->showForm(_('Invalid username or password.'));
+                    return;
+                }
+                // success!
+                if (!common_set_user($user)) {
+                    $this->serverError(_('Error setting user.'));
+                    return;
+                }
+                // this is a real login
+                common_real_login(true);
+                if ($this->boolean('rememberme')) {
+                    common_debug('Adding rememberme cookie for ' . $nickname);
+                    common_rememberme($user);
+                }
+                // Re-init language env in case it changed (not yet, but soon)
+                common_init_language();
+                $this->showSuccess();
+            } else {
                 $this->showForm(_('Invalid username or password.'));
-                return;
             }
-            // success!
-            if (!common_set_user($user)) {
-                $this->serverError(_('Error setting user.'));
-                return;
-            }
-            // this is a real login
-            common_real_login(true);
-            if ($this->boolean('rememberme')) {
-                common_debug('Adding rememberme cookie for ' . $nickname);
-                common_rememberme($user);
-            }
-            // Re-init language env in case it changed (not yet, but soon)
-            common_init_language();
-            $this->showSuccess();
-        } else {
-            $this->showForm(_('Invalid username or password.'));
         }
     }
 

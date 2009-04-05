@@ -96,7 +96,11 @@ class DatingregisterAction extends Action
             
             //Show the next form in the series for the dating registration.
             $this->formsection = $this->trimmed('formsection');
-            if ($this->formsection !== DatingregisterAction::FORM_PERSONAL_PROFILE) {
+            
+            common_debug($this->formsection);
+            common_debug(DatingregisterAction::FORM_PERSONAL_PROFILE);
+            
+            if ($this->formsection != DatingregisterAction::FORM_PERSONAL_PROFILE) {
                 $this->saveDataToSession();
                 $this->showForm();
             }
@@ -125,21 +129,16 @@ class DatingregisterAction extends Action
             return;
         }
         
-        $nickname = $this->trimmed('nickname');
-        $email    = $this->trimmed('email');
-        $fullname = $this->trimmed('fullname');
-        $homepage = $this->trimmed('homepage');
-        $bio      = $this->trimmed('bio');
-        $location = $this->trimmed('location');
-
-        // We don't trim these... whitespace is OK in a password!
-
-        $password = $this->arg('password');
-        $confirm  = $this->arg('confirm');
+        //TODO frank: what is the point of this - how will this function interact on the API? if at all?
+        //Belt and braces, this was also checked in handle()
+        if ($this->formsection != DatingregisterAction::FORM_PERSONAL_PROFILE) {
+            $this->showForm(_('You must fill out all forms in the registration process.'));
+            return;
+        }
+        
 
         // invitation code, if any
-
-        $code = $this->trimmed('code');
+        $code = $_SESSION['RegisterData']['User']['code'];
 
         if ($code) {
             $invite = Invitation::staticGet($code);
@@ -149,18 +148,24 @@ class DatingregisterAction extends Action
             $this->clientError(_('Sorry, only invited people can register.'));
             return;
         }
-
+        
+        $nickname           = $this->trimmed('nickname');
+        $headline           = $this->trimmed('headline');
+        $bio                = $this->trimmed('bio');
+        $fun                = $this->trimmed('fun');
+        $fav_spot           = $this->trimmed('fav_spot');
+        $fav_media          = $this->trimmed('fav_media');
+        $first_date         = $this->trimmed('first_date');
+        
+        // Whitespace is OK in a password!
+        $password = $this->arg('password');
+        $confirm  = $this->arg('confirm');
+        
         // Input scrubbing
-
         $nickname = common_canonical_nickname($nickname);
-        $email    = common_canonical_email($email);
-
-        if (!$this->boolean('license')) {
-            $this->showForm(_('You can\'t register if you don\'t '.
-                              'agree to the license.'));
-        } else if ($email && !Validate::email($email, true)) {
-            $this->showForm(_('Not a valid email address.'));
-        } else if (!Validate::string($nickname, array('min_length' => 1,
+        
+        //Validation
+        if (!Validate::string($nickname, array('min_length' => 1,
                                                       'max_length' => 64,
                                                       'format' => NICKNAME_FMT))) {
             $this->showForm(_('Nickname must have only lowercase letters '.
@@ -169,36 +174,27 @@ class DatingregisterAction extends Action
             $this->showForm(_('Nickname already in use. Try another one.'));
         } else if (!User::allowed_nickname($nickname)) {
             $this->showForm(_('Not a valid nickname.'));
-        } else if ($this->emailExists($email)) {
-            $this->showForm(_('Email address already exists.'));
-        } else if (!is_null($homepage) && (strlen($homepage) > 0) &&
-                   !Validate::uri($homepage,
-                                  array('allowed_schemes' =>
-                                        array('http', 'https')))) {
-            $this->showForm(_('Homepage is not a valid URL.'));
-            return;
-        } else if (!is_null($fullname) && strlen($fullname) > 255) {
-            $this->showForm(_('Full name is too long (max 255 chars).'));
-            return;
-        } else if (!is_null($bio) && strlen($bio) > 140) {
-            $this->showForm(_('Bio is too long (max 140 chars).'));
-            return;
-        } else if (!is_null($location) && strlen($location) > 255) {
-            $this->showForm(_('Location is too long (max 255 chars).'));
-            return;
         } else if (strlen($password) < 6) {
             $this->showForm(_('Password must be 6 or more characters.'));
             return;
         } else if ($password != $confirm) {
             $this->showForm(_('Passwords don\'t match.'));
-        } else if ($user = User::register(array('nickname' => $nickname,
-                                                'password' => $password,
-                                                'email' => $email,
-                                                'fullname' => $fullname,
-                                                'homepage' => $homepage,
-                                                'bio' => $bio,
-                                                'location' => $location,
-                                                'code' => $code))) {
+        } else {
+            $registerData = array();
+            $registerData['User'] = array('nickname' => $nickname,
+                                            'password' => $password);
+            $registerData['DatingProfile'] = array('headline' => $headline,
+                                                    'bio' => $bio,
+                                                    'fun' => $fun,
+                                                    'fav_spot' => $fav_spot,
+                                                    'fav_media' => $fav_media,
+                                                    'first_date' => $first_date);
+            common_ensure_session();
+            $registerData['User'] = array_merge($_SESSION['registerData']['User'] ,$registerData['User']);
+            $registerData['DatingProfile'] = array_merge($_SESSION['registerData']['DatingProfile'] ,$registerData['DatingProfile']);
+        }
+        
+        if ($user = User::datingRegister($registerData)) {
             if (!$user) {
                 $this->showForm(_('Invalid username or password.'));
                 return;
@@ -223,13 +219,127 @@ class DatingregisterAction extends Action
     }
     
     /*
-     * TODO frank: validate data and save whatever data is passed to session
+     * TODO frank: validate data and save whatever data is passed to session, need to sort out session hijacking, prefill form with data in session? or does token passing take care of it?
      */
     function saveDataToSession() {
-        return;
+
+        $token = $this->trimmed('token');
+        if (!$token || $token != common_session_token()) {
+            $this->showForm(_('There was a problem with your session token. '.
+                              'Try again, please.'));
+            return;
+        }
         
-        common_ensure_session();
-        $_SESSION['userid'] = $user->id;
+        // invitation code, if any
+        $code = $this->trimmed('code');
+
+        if ($code) {
+            $invite = Invitation::staticGet($code);
+        }
+
+        if (common_config('site', 'inviteonly') && !($code && $invite)) {
+            $this->clientError(_('Sorry, only invited people can register.'));
+            return;
+        }
+        
+        switch ($this->formsection) {
+
+            case  DatingregisterAction::FORM_ACCOUNT_INFO:
+
+                $email              = $this->trimmed('email');
+                $country            = $this->trimmed('country');
+                $sex                = $this->trimmed('sex');
+                $partner_sex        = $this->trimmed('partner_sex');
+                $interested_in      = $this->trimmed('interested_in');
+                $birthdate          = $this->trimmed('birthdate_year') .'-'. $this->trimmed('birthdate_month') .'-'. $this->trimmed('birthdate_day');
+                
+                //Input scrubbing
+                $email    = common_canonical_email($email);
+                
+                // Validation
+                if (!Validate::string($email, array('min_length' => 1))) {
+                    $this->showForm(_('An email address must be supplied.'));
+                } else if ($email && !Validate::email($email, false)) {
+                    $this->showForm(_('Not a valid email address.'));
+                } else if ($this->emailExists($email)) {
+                    $this->showForm(_('Email address already exists.'));
+                } else {
+                    $registerData = array();
+                    $registerData['User'] = array('email' => $email,
+                                                    'code' => $code);
+                    $registerData['DatingProfile'] = array('country' => $country,
+                                                            'sex' => $sex,
+                                                            'partner_sex' => $partner_sex,
+                                                            'interested_in' => $interested_in,
+                                                            'birthdate' => $birthdate);
+                    common_ensure_session();
+                    $_SESSION['registerData'] = $registerData;
+                }
+                break;
+
+            case DatingregisterAction::FORM_PERSONAL_DETAILS:
+                
+                $city = $this->trimmed('city');
+                $state = $this->trimmed('state');
+                $postcode = $this->trimmed('postcode');
+                $profession = $this->trimmed('profession');
+                $height = $this->trimmed('height');
+                $hair = $this->trimmed('hair');
+                $body_type = $this->trimmed('body_type');
+                $ethnicity = $this->trimmed('ethnicity');
+                $eye_colour = $this->trimmed('eye_colour');
+                $marital_status = $this->trimmed('marital_status');
+                $have_children = $this->trimmed('have_children');
+                $smoke = $this->trimmed('smoke');
+                $drink = $this->trimmed('drink');
+                $religion = $this->trimmed('religion');
+                $education = $this->trimmed('education');
+                $politics = $this->trimmed('politics');
+                $best_feature = $this->trimmed('best_feature');
+                $body_art = $this->trimmed('body_art');
+                
+                $languages = '';
+                if ($this->arg('language')) {
+                    $languages = implode(';', $this->arg('language'));
+                }
+
+                $registerData = array();
+                $registerData['User'] = array();
+                $registerData['DatingProfile'] = array('city' => $city,
+                                                        'state' => $state,
+                                                        'postcode' => $postcode,
+                                                        'profession' => $profession,
+                                                        'height' => $height,
+                                                        'hair' => $hair,
+                                                        'body_type' => $body_type,
+                                                        'ethnicity' => $ethnicity,
+                                                        'eye_colour' => $eye_colour,
+                                                        'marital_status' => $marital_status,
+                                                        'have_children' => $have_children,
+                                                        'smoke' => $smoke,
+                                                        'drink' => $drink,
+                                                        'religion' => $religion,
+                                                        'education' => $education,
+                                                        'politics' => $politics,
+                                                        'best_feature' => $best_feature,
+                                                        'body_art' => $body_art,
+                                                        'languages' => $languages);
+                common_ensure_session();
+                $registerData['User'] = array_merge($_SESSION['registerData']['User'], $registerData['User']);
+                $registerData['DatingProfile'] = array_merge($_SESSION['registerData']['DatingProfile'], $registerData['DatingProfile']);
+                $_SESSION['registerData'] = $registerData;
+                break;
+                
+            case DatingregisterAction::FORM_PERSONAL_PROFILE:
+                //Belt and braces, handle() should have called tryRegister() instead
+                $this->showForm(_('Something has gone wrong with the registration process.'));
+                break;
+                
+            default:
+                break;
+        }
+                
+        
         
         /*
          * switch case through the different forms and perform error checking
@@ -329,6 +439,10 @@ class DatingregisterAction extends Action
      */
     function showForm($error=null)
     {
+        if ($error != null) {
+            $this->formsection = --$this->formsection;
+        }
+        
         $this->error = $error;
         $this->showPage();
     }
@@ -357,6 +471,11 @@ class DatingregisterAction extends Action
      */
     function showFormContent()
     {
+        //common_debug(implode('; ', $_SESSION));
+        echo '<pre>';
+        print_r($_SESSION);
+        echo '</pre>';
+        
         $code = $this->trimmed('code');
 
         if ($code) {
@@ -511,6 +630,20 @@ class DatingregisterAction extends Action
                 //Pass the number of the form here
                 $this->hidden('formsection', DatingregisterAction::FORM_PERSONAL_PROFILE);
                 $this->elementStart('ul', 'form_data');
+                
+                $this->elementStart('li');
+                $this->input('nickname', _('Nickname'), $this->trimmed('nickname'),
+                             _('1-64 lowercase letters or numbers, '.
+                               'no punctuation or spaces. Required.'));
+                $this->elementEnd('li');
+                $this->elementStart('li');
+                $this->password('password', _('Password'),
+                                _('6 or more characters. Required.'));
+                $this->elementEnd('li');
+                $this->elementStart('li');
+                $this->password('confirm', _('Confirm'),
+                                _('Same as password above. Required.'));
+                $this->elementEnd('li');
                                 
                 $this->elementStart('li');
                 $this->input('headline', _('Headline'),
@@ -558,19 +691,7 @@ class DatingregisterAction extends Action
                 $this->hidden('formsection', DatingregisterAction::FORM_ACCOUNT_INFO);
         
                 $this->elementStart('ul', 'form_data');
-                $this->elementStart('li');
-                $this->input('nickname', _('Nickname'), $this->trimmed('nickname'),
-                             _('1-64 lowercase letters or numbers, '.
-                               'no punctuation or spaces. Required.'));
-                $this->elementEnd('li');
-                $this->elementStart('li');
-                $this->password('password', _('Password'),
-                                _('6 or more characters. Required.'));
-                $this->elementEnd('li');
-                $this->elementStart('li');
-                $this->password('confirm', _('Confirm'),
-                                _('Same as password above. Required.'));
-                $this->elementEnd('li');
+                
                 $this->elementStart('li');
                 if ($invite && $invite->address_type == 'email') {
                     $this->input('email', _('Email'), $invite->address,
@@ -596,6 +717,11 @@ class DatingregisterAction extends Action
                 $this->elementStart('li');
                 $this->dropdown('partner_sex', _('Looking For'),
                              $datingProfile->getNiceSexList(), null, false, Dating_profile::SEX_FEMALE);
+                $this->elementEnd('li');
+                
+                $this->elementStart('li');
+                $this->dropdown('interested_in', _('Interested In'),
+                             $datingProfile->getNiceInterestList(), null, false, $datingProfile->interested_in);
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
