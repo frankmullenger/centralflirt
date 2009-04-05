@@ -471,11 +471,6 @@ class DatingregisterAction extends Action
      */
     function showFormContent()
     {
-        //common_debug(implode('; ', $_SESSION));
-        echo '<pre>';
-        print_r($_SESSION);
-        echo '</pre>';
-        
         $code = $this->trimmed('code');
 
         if ($code) {
