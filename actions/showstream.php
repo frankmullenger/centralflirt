@@ -138,8 +138,6 @@ class ShowstreamAction extends RestrictedAction
 
     function showContent()
     {
-        $this->showProfile();
-
         if (common_config('profile', 'enable_dating')) {
 
             /*
@@ -148,6 +146,8 @@ class ShowstreamAction extends RestrictedAction
              * If user is logged in is subscriber or subscribed to show dating profile and notices
              * If user is logged in and owner of the profile
              */
+            $this->showDatingProfileBlurb();
+            
             switch ($this->auth) {
                 case 0:
                     break;
@@ -162,6 +162,7 @@ class ShowstreamAction extends RestrictedAction
             }
         }
         else {
+            $this->showProfile();
             $this->showNotices();
         }
     }
@@ -438,7 +439,150 @@ class ShowstreamAction extends RestrictedAction
         $this->elementEnd('div');
     }
     
-    function showDatingProfile() {
+    function showDatingProfileBlurb()
+    {
+        $datingProfile = $this->user->getDatingProfile();
+        
+        //Belt and braces
+        if ($datingProfile == false) {
+            //TODO frank: throw an error here as it seems dating profiles are not enabled
+            $this->clientError(_('Dating profiles are not enabled.'));
+        }
+        
+        $this->elementStart('div', 'entity_profile vcard author');
+        $this->element('h2', null, _('User profile'));
+
+        $avatar = $this->profile->getAvatar(AVATAR_PROFILE_SIZE);
+        $this->elementStart('dl', 'entity_depiction');
+        $this->element('dt', null, _('Photo'));
+        $this->elementStart('dd');
+        $this->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_PROFILE_SIZE),
+                                    'class' => 'photo avatar',
+                                    'width' => AVATAR_PROFILE_SIZE,
+                                    'height' => AVATAR_PROFILE_SIZE,
+                                    'alt' => $this->profile->nickname));
+        $this->elementEnd('dd');
+        $this->elementEnd('dl');
+
+        $this->elementStart('dl', 'entity_nickname');
+        $this->element('dt', null, _('Nickname'));
+        $this->elementStart('dd');
+        $hasFN = ($this->profile->fullname) ? 'nickname url uid' : 'fn nickname url uid';
+        $this->element('a', array('href' => $this->profile->profileurl,
+                                  'rel' => 'me', 'class' => $hasFN),
+                            $this->profile->nickname);
+        $this->elementEnd('dd');
+        $this->elementEnd('dl');
+
+        if ($datingProfile->firstname) {
+            $this->elementStart('dl', 'entity_fn');
+            $this->element('dt', null, _('Full name'));
+            $this->elementStart('dd');
+            $this->element('span', 'fn', ($datingProfile->lastname)?$datingProfile->firstname.' '.$datingProfile->lastname:$datingProfile->firstname);
+            $this->elementEnd('dd');
+            $this->elementEnd('dl');
+        }
+
+        $countryList = get_nice_country_list();
+        $country = $countryList[$datingProfile->country];
+        $this->elementStart('dl', 'entity_location');
+        $this->element('dt', null, _('Location'));
+        $this->element('dd', 'location', ($datingProfile->city)?$datingProfile->city.', '.$country:$country);
+        $this->elementEnd('dl');
+
+        if ($datingProfile->bio) {
+            $this->elementStart('dl', 'entity_note');
+            $this->element('dt', null, _('Note'));
+            $this->element('dd', 'note', $datingProfile->bio);
+            $this->elementEnd('dl');
+        }
+
+        $tags = Dating_profile_tag::getTags($this->profile->id, $this->profile->id);
+        if (count($tags) > 0) {
+            $this->elementStart('dl', 'entity_tags');
+            $this->element('dt', null, _('Tags'));
+            $this->elementStart('dd');
+            $this->elementStart('ul', 'tags xoxo');
+            foreach ($tags as $tag) {
+                $this->elementStart('li');
+                $this->element('span', 'mark_hash', '#');
+                $this->element('a', array('rel' => 'tag',
+                                          'href' => common_local_url('peopletag',
+                                                                     array('tag' => $tag))),
+                               $tag);
+                $this->elementEnd('li');
+            }
+            $this->elementEnd('ul');
+            $this->elementEnd('dd');
+            $this->elementEnd('dl');
+        }
+        $this->elementEnd('div');
+
+        $this->elementStart('div', 'entity_actions');
+        $this->element('h2', null, _('User actions'));
+        $this->elementStart('ul');
+        $cur = common_current_user();
+
+        if ($cur && $cur->id == $this->profile->id) {
+            $this->elementStart('li', 'entity_edit');
+            $this->element('a', array('href' => common_local_url('profilesettings'),
+                                      'title' => _('Edit profile settings')),
+                                      _('Edit'));
+            $this->elementEnd('li');
+        }
+
+        if ($cur) {
+            if ($cur->id != $this->profile->id) {
+                $this->elementStart('li', 'entity_subscribe');
+                if ($cur->isSubscribed($this->profile)) {
+                    $usf = new UnsubscribeForm($this, $this->profile);
+                    $usf->show();
+                } else {
+                    $sf = new SubscribeForm($this, $this->profile);
+                    $sf->show();
+                }
+                $this->elementEnd('li');
+            }
+        } else {
+            $this->elementStart('li', 'entity_subscribe');
+            $this->showRemoteSubscribeLink();
+            $this->elementEnd('li');
+        }
+
+        $user = User::staticGet('id', $this->profile->id);
+        if ($cur && $cur->id != $user->id && $cur->mutuallySubscribed($user)) {
+           $this->elementStart('li', 'entity_send-a-message');
+            $this->element('a', array('href' => common_local_url('newmessage', array('to' => $user->id)),
+                                      'title' => _('Send a direct message to this user')),
+                           _('Message'));
+            $this->elementEnd('li');
+
+            if ($user->email && $user->emailnotifynudge) {
+                $this->elementStart('li', 'entity_nudge');
+                $nf = new NudgeForm($this, $user);
+                $nf->show();
+                $this->elementEnd('li');
+            }
+        }
+
+        if ($cur && $cur->id != $this->profile->id) {
+            $blocked = $cur->hasBlocked($this->profile);
+            $this->elementStart('li', 'entity_block');
+            if ($blocked) {
+                $ubf = new UnblockForm($this, $this->profile);
+                $ubf->show();
+            } else {
+                $bf = new BlockForm($this, $this->profile);
+                $bf->show();
+            }
+            $this->elementEnd('li');
+        }
+        $this->elementEnd('ul');
+        $this->elementEnd('div');
+    }
+    
+    function showDatingProfile() 
+    {
         
         $datingProfile = $this->user->getDatingProfile();
         
