@@ -315,6 +315,57 @@ class Action extends HTMLOutputter // lawsuit
      */
     function showPrimaryNav()
     {
+        if (common_config('profile', 'enable_dating')) {
+            $this->showDatingPrimaryNav();
+        }
+        else {
+        
+            $this->elementStart('dl', array('id' => 'site_nav_global_primary'));
+            $this->element('dt', null, _('Primary site navigation'));
+            $this->elementStart('dd');
+            $user = common_current_user();
+            $this->elementStart('ul', array('class' => 'nav'));
+            if ($user) {
+                $this->menuItem(common_local_url('all', array('nickname' => $user->nickname)),
+                                _('Home'), _('Personal profile and friends timeline'), false, 'nav_home');
+            }
+            $this->menuItem(common_local_url('peoplesearch'),
+                        _('Search'), _('Search for people or text'), false, 'nav_search');
+    
+            if ($user) {
+                $this->menuItem(common_local_url('profilesettings'),
+                                _('Account'), _('Change your email, avatar, password, profile'), false, 'nav_account');
+    
+                if (common_config('xmpp', 'enabled')) {
+                    $this->menuItem(common_local_url('imsettings'),
+                                _('Connect'), _('Connect to IM, SMS, Twitter'), false, 'nav_connect');
+                } else {
+                    $this->menuItem(common_local_url('smssettings'),
+                                _('Connect'), _('Connect to SMS, Twitter'), false, 'nav_connect');
+                }
+                $this->menuItem(common_local_url('logout'),
+                                _('Logout'), _('Logout from the site'), false, 'nav_logout');
+            } else {
+                $this->menuItem(common_local_url('login'),
+                                _('Login'), _('Login to the site'), false, 'nav_login');
+                                
+                if (!common_config('site', 'closed')) {
+                    $this->menuItem(common_local_url('register'),
+                                _('Register'), _('Create an account'), false, 'nav_register');
+                }
+                $this->menuItem(common_local_url('openidlogin'),
+                            _('OpenID'), _('Login with OpenID'), false, 'nav_openid');
+            }
+            $this->menuItem(common_local_url('doc', array('title' => 'help')),
+                            _('Help'), _('Help me!'), false, 'nav_help');
+            $this->elementEnd('ul');
+            $this->elementEnd('dd');
+            $this->elementEnd('dl');
+        }
+    }
+    
+    function showDatingPrimaryNav()
+    {
         $this->elementStart('dl', array('id' => 'site_nav_global_primary'));
         $this->element('dt', null, _('Primary site navigation'));
         $this->elementStart('dd');
@@ -324,8 +375,11 @@ class Action extends HTMLOutputter // lawsuit
             $this->menuItem(common_local_url('all', array('nickname' => $user->nickname)),
                             _('Home'), _('Personal profile and friends timeline'), false, 'nav_home');
         }
-        $this->menuItem(common_local_url('peoplesearch'),
-                        _('Search'), _('Search for people or text'), false, 'nav_search');
+
+        $this->menuItem(common_local_url('datingsearch'),
+                    _('Search'), _('Search for people or text'), false, 'nav_search');
+
+        
         if ($user) {
             $this->menuItem(common_local_url('profilesettings'),
                             _('Account'), _('Change your email, avatar, password, profile'), false, 'nav_account');
@@ -333,28 +387,22 @@ class Action extends HTMLOutputter // lawsuit
             if (common_config('xmpp', 'enabled')) {
                 $this->menuItem(common_local_url('imsettings'),
                             _('Connect'), _('Connect to IM, SMS, Twitter'), false, 'nav_connect');
-            } else {
+            } 
+            else {
                 $this->menuItem(common_local_url('smssettings'),
                             _('Connect'), _('Connect to SMS, Twitter'), false, 'nav_connect');
             }
             $this->menuItem(common_local_url('logout'),
                             _('Logout'), _('Logout from the site'), false, 'nav_logout');
-        } else {
+        } 
+        else {
             $this->menuItem(common_local_url('login'),
                             _('Login'), _('Login to the site'), false, 'nav_login');
+                            
             if (!common_config('site', 'closed')) {
-                
-                if (common_config('profile', 'enable_dating')) {
-                    $this->menuItem(common_local_url('datingregister'),
-                                _('Register'), _('Create your account'), false, 'nav_register');
-                }
-                else {
-                    $this->menuItem(common_local_url('register'),
-                                _('Register'), _('Create an account'), false, 'nav_register');
-                }
+                $this->menuItem(common_local_url('datingregister'),
+                            _('Register'), _('Create your account'), false, 'nav_register');
             }
-            $this->menuItem(common_local_url('openidlogin'),
-                            _('OpenID'), _('Login with OpenID'), false, 'nav_openid');
         }
         $this->menuItem(common_local_url('doc', array('title' => 'help')),
                         _('Help'), _('Help me!'), false, 'nav_help');

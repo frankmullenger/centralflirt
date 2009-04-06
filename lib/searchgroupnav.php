@@ -71,22 +71,47 @@ class SearchGroupNav extends Widget
 
     function show()
     {
+        
+        if (common_config('profile', 'enable_dating')) {
+            $this->showDatingNav();
+        }
+        else {
+            $action_name = $this->action->trimmed('action');
+            $this->action->elementStart('ul', array('class' => 'nav'));
+            $args = array();
+            if ($this->q) {
+                $args['q'] = $this->q;
+            }
+            
+            $this->out->menuItem(common_local_url('peoplesearch', $args), _('People'),
+                _('Find people on this site'), $action_name == 'peoplesearch', 'nav_search_people');
+                
+            if (common_config('profile', 'enable_dating')) {
+                $this->out->menuItem(common_local_url('datingsearch', $args), _('Dating'),
+                    _('Find dates on this site'), $action_name == 'datingsearch', 'nav_search_dating');
+            }
+                
+            $this->out->menuItem(common_local_url('noticesearch', $args), _('Notice'),
+                _('Find content of notices'), $action_name == 'noticesearch', 'nav_search_notice');
+                
+            $this->out->menuItem(common_local_url('groupsearch', $args), _('Group'),
+                _('Find groups on this site'), $action_name == 'groupsearch', 'nav_search_group');
+            $this->action->elementEnd('ul');
+        }
+
+    }
+    
+    function showDatingNav()
+    {
         $action_name = $this->action->trimmed('action');
         $this->action->elementStart('ul', array('class' => 'nav'));
         $args = array();
         if ($this->q) {
             $args['q'] = $this->q;
         }
-        $this->out->menuItem(common_local_url('peoplesearch', $args), _('People'),
-            _('Find people on this site'), $action_name == 'peoplesearch', 'nav_search_people');
-            
-        if (common_config('profile', 'enable_dating')) {
-            $this->out->menuItem(common_local_url('datingsearch', $args), _('Dating'),
-                _('Find dates on this site'), $action_name == 'datingsearch', 'nav_search_dating');
-        }
-            
-        $this->out->menuItem(common_local_url('noticesearch', $args), _('Notice'),
-            _('Find content of notices'), $action_name == 'noticesearch', 'nav_search_notice');
+        $this->out->menuItem(common_local_url('datingsearch', $args), _('Dating'),
+            _('Find dates on this site'), $action_name == 'datingsearch', 'nav_search_dating');
+
         $this->out->menuItem(common_local_url('groupsearch', $args), _('Group'),
             _('Find groups on this site'), $action_name == 'groupsearch', 'nav_search_group');
         $this->action->elementEnd('ul');

@@ -25,6 +25,12 @@ class OpenidloginAction extends Action
 {
     function handle($args)
     {
+        
+        //TODO frank: enable open id registration, redirect to dating registration for now
+        if (common_config('profile', 'enable_dating')) {
+            common_redirect(common_local_url('datingregister'), 301);
+        }
+        
         parent::handle($args);
         if (common_is_real_login()) {
             $this->clientError(_('Already logged in.'));

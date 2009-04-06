@@ -81,6 +81,17 @@ class LoginGroupNav extends Widget
                 array(_('OpenID'),
                       _('Login or register with OpenID')));
 
+        //Restricting the menu if it is a dating enabled site
+        if (common_config('profile', 'enable_dating')) {
+            $menu =
+            array('login' =>
+                    array(_('Login'),
+                          _('Login with a username and password')),
+                    'datingregister' =>
+                    array(_('Register'),
+                          _('Sign up for a new account')));
+        }
+
         $action_name = $this->action->trimmed('action');
         $this->action->elementStart('ul', array('class' => 'nav'));
 
