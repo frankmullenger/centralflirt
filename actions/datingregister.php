@@ -161,6 +161,20 @@ class DatingregisterAction extends Action
         $password = $this->arg('password');
         $confirm  = $this->arg('confirm');
         
+        //Grab the interests into an array
+        $interests = $this->trimmed('interests');
+        if ($interests) {
+            $interest_tags = array_map('common_canonical_interest_tag', preg_split('/[,]+/', $interests));
+        } else {
+            $interest_tags = array();
+        }
+        foreach ($interest_tags as $tag) {
+            if (!common_valid_profile_interest($tag)) {
+                $this->showForm(sprintf(_('Invalid tag: "%s"'), $tag));
+                return;
+            }
+        }
+        
         // Input scrubbing
         $nickname = common_canonical_nickname($nickname);
         
@@ -188,33 +202,34 @@ class DatingregisterAction extends Action
                                                     'fun' => $fun,
                                                     'fav_spot' => $fav_spot,
                                                     'fav_media' => $fav_media,
-                                                    'first_date' => $first_date);
+                                                    'first_date' => $first_date,
+                                                    'interests' => $interest_tags);
             common_ensure_session();
             $registerData['User'] = array_merge($_SESSION['registerData']['User'] ,$registerData['User']);
             $registerData['DatingProfile'] = array_merge($_SESSION['registerData']['DatingProfile'] ,$registerData['DatingProfile']);
-        }
-        
-        if ($user = User::datingRegister($registerData)) {
-            if (!$user) {
+            
+            if ($user = User::datingRegister($registerData)) {
+                if (!$user) {
+                    $this->showForm(_('Invalid username or password.'));
+                    return;
+                }
+                // success!
+                if (!common_set_user($user)) {
+                    $this->serverError(_('Error setting user.'));
+                    return;
+                }
+                // this is a real login
+                common_real_login(true);
+                if ($this->boolean('rememberme')) {
+                    common_debug('Adding rememberme cookie for ' . $nickname);
+                    common_rememberme($user);
+                }
+                // Re-init language env in case it changed (not yet, but soon)
+                common_init_language();
+                $this->showSuccess();
+            } else {
                 $this->showForm(_('Invalid username or password.'));
-                return;
             }
-            // success!
-            if (!common_set_user($user)) {
-                $this->serverError(_('Error setting user.'));
-                return;
-            }
-            // this is a real login
-            common_real_login(true);
-            if ($this->boolean('rememberme')) {
-                common_debug('Adding rememberme cookie for ' . $nickname);
-                common_rememberme($user);
-            }
-            // Re-init language env in case it changed (not yet, but soon)
-            common_init_language();
-            $this->showSuccess();
-        } else {
-            $this->showForm(_('Invalid username or password.'));
         }
     }
     
@@ -648,6 +663,13 @@ class DatingregisterAction extends Action
                 $this->textarea('bio', _('Bio'),
                              ($this->arg('bio')) ? $this->arg('bio') : $datingProfile->bio);
                 $this->elementEnd('li');
+                
+                $this->elementStart('li');
+                $this->input('interests', _('Interests'),
+                             $this->arg('interests'),
+                             _('Tags for yourself, must be comma separated'));
+                $this->elementEnd('li');
+                
                 $this->elementStart('li');
                 $this->textarea('fun', _('What do you do for fun?'),
                              ($this->arg('fun')) ? $this->arg('fun') : $datingProfile->fun);
