@@ -343,8 +343,15 @@ class Action extends HTMLOutputter // lawsuit
             $this->menuItem(common_local_url('login'),
                             _('Login'), _('Login to the site'), false, 'nav_login');
             if (!common_config('site', 'closed')) {
-                $this->menuItem(common_local_url('register'),
+                
+                if (common_config('profile', 'enable_dating')) {
+                    $this->menuItem(common_local_url('datingregister'),
+                                _('Register'), _('Create your account'), false, 'nav_register');
+                }
+                else {
+                    $this->menuItem(common_local_url('register'),
                                 _('Register'), _('Create an account'), false, 'nav_register');
+                }
             }
             $this->menuItem(common_local_url('openidlogin'),
                             _('OpenID'), _('Login with OpenID'), false, 'nav_openid');
