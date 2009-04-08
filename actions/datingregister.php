@@ -234,7 +234,7 @@ class DatingregisterAction extends Action
     }
     
     /*
-     * TODO frank: validate data and save whatever data is passed to session, need to sort out session hijacking, prefill form with data in session? or does token passing take care of it?
+     * TODO frank: need to sort out session hijacking, prefill form with data in session? or does token passing take care of it?
      */
     function saveDataToSession() {
 
@@ -430,12 +430,7 @@ class DatingregisterAction extends Action
         } else {
             $instr =
               common_markup_to_html(_('With this form you can create '.
-                                      ' a new account. ' .
-                                      'You can then post notices and '.
-                                      'link up to friends and colleagues. '.
-                                      '(Have an [OpenID](http://openid.net/)? ' .
-                                      'Try our [OpenID registration]'.
-                                      '(%%action.openidlogin%%)!)'));
+                                      ' a new account. '));
 
             $this->elementStart('div', 'instructions');
             $this->raw($instr);

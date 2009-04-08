@@ -654,7 +654,9 @@ class Action extends HTMLOutputter // lawsuit
     {
         $this->elementStart('dl', array('id' => 'licenses'));
         $this->showLaconicaLicense();
-        $this->showContentLicense();
+        if (!common_config('profile', 'enable_dating')) {
+            $this->showContentLicense();
+        }
         $this->elementEnd('dl');
     }
 

@@ -269,21 +269,31 @@ class DatingSearchResults extends ProfileList
         $this->out->elementEnd('span');
         $this->out->elementEnd('a');
 
-        if ($this->profile->fullname) {
+        if ($this->datingProfile->firstname) {
+            $name = ($this->datingProfile->lastname)?$this->datingProfile->firstname.' '.$this->datingProfile->lastname:$this->datingProfile->firstname;
             $this->out->elementStart('dl', 'entity_fn');
             $this->out->element('dt', null, 'Full name');
             $this->out->elementStart('dd');
             $this->out->elementStart('span', 'fn');
-            $this->out->raw($this->highlight($this->profile->fullname));
+            $this->out->raw($this->highlight($name));
             $this->out->elementEnd('span');
             $this->out->elementEnd('dd');
             $this->out->elementEnd('dl');
         }
-        if ($this->profile->location) {
-            $this->out->elementStart('dl', 'entity_location');
-            $this->out->element('dt', null, _('Location'));
-            $this->out->elementStart('dd', 'location');
-            $this->out->raw($this->highlight($this->profile->location));
+        
+        $countryList = get_nice_country_list();
+        $this->out->elementStart('dl', 'entity_location');
+        $this->out->element('dt', null, _('Location'));
+        $this->out->elementStart('dd', 'location');
+        $this->out->raw($this->highlight(($this->datingProfile->city)?$this->datingProfile->city.', '.$countryList[$this->datingProfile->country]:$countryList[$this->datingProfile->country]));
+        $this->out->elementEnd('dd');
+        $this->out->elementEnd('dl');
+        
+        if ($this->datingProfile->headline) {
+            $this->out->elementStart('dl', 'entity_note');
+            $this->out->element('dt', null, _('Note'));
+            $this->out->elementStart('dd', 'note');
+            $this->out->raw($this->highlight($this->datingProfile->headline));
             $this->out->elementEnd('dd');
             $this->out->elementEnd('dl');
         }
@@ -302,19 +312,18 @@ class DatingSearchResults extends ProfileList
             # Get tags
             $tags = Dating_profile_tag::getTags($this->owner->id, $this->profile->id);
 
-            $this->out->elementStart('dl', 'entity_tags');
-            $this->out->elementStart('dt');
-            if ($user->id == $this->owner->id) {
-                $this->out->element('a', array('href' => common_local_url('tagother',
-                                                                          array('id' => $this->profile->id))),
-                                    _('Interests'));
-            } else {
-                $this->out->text(_('Interests'));
-            }
-            $this->out->elementEnd('dt');
-            
-            $this->out->elementStart('dd');
             if ($tags) {
+                $this->out->elementStart('dl', 'entity_tags');
+                $this->out->elementStart('dt');
+                if ($user->id == $this->owner->id) {
+                    $this->out->element('span', array(), _('Interests'));
+                } else {
+                    $this->out->text(_('Interests'));
+                }
+                $this->out->elementEnd('dt');
+                
+                $this->out->elementStart('dd');
+    
                 $this->out->elementStart('ul', 'tags xoxo');
                 foreach ($tags as $tag) {
                     $this->out->elementStart('li');
@@ -326,11 +335,10 @@ class DatingSearchResults extends ProfileList
                     $this->out->elementEnd('li');
                 }
                 $this->out->elementEnd('ul');
-            } else {
-                $this->out->text(_('(none)'));
+    
+                $this->out->elementEnd('dd');
+                $this->out->elementEnd('dl');
             }
-            $this->out->elementEnd('dd');
-            $this->out->elementEnd('dl');
         }
 
         if ($user && $user->id == $this->owner->id) {

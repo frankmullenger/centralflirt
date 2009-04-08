@@ -195,15 +195,24 @@ class PublicAction extends Action
 
     function showExportData()
     {
-        $fl = new FeedList($this);
-        $fl->show(array(0 => array('href' => common_local_url('publicrss'),
-                                   'type' => 'rss',
-                                   'version' => 'RSS 1.0',
-                                   'item' => 'publicrss'),
-                        1 => array('href' => common_local_url('publicatom'),
-                                   'type' => 'atom',
-                                   'version' => 'Atom 1.0',
-                                   'item' => 'publicatom')));
+        if (common_config('profile', 'enable_dating')) {
+            $fl = new FeedList($this);
+            $fl->show(array(0 => array('href' => common_local_url('publicrss'),
+                                       'type' => 'rss',
+                                       'version' => 'RSS 1.0',
+                                       'item' => 'publicrss')));
+        }
+        else {
+            $fl = new FeedList($this);
+            $fl->show(array(0 => array('href' => common_local_url('publicrss'),
+                                       'type' => 'rss',
+                                       'version' => 'RSS 1.0',
+                                       'item' => 'publicrss'),
+                            1 => array('href' => common_local_url('publicatom'),
+                                       'type' => 'atom',
+                                       'version' => 'Atom 1.0',
+                                       'item' => 'publicatom')));
+        }
     }
 
     function showSections()
@@ -220,11 +229,21 @@ class PublicAction extends Action
 
     function showAnonymousMessage()
     {
-		$m = _('This is %%site.name%%, a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service ' .
-               'based on the Free Software [Laconica](http://laconi.ca/) tool. ' .
-               '[Join now](%%action.register%%) to share notices about yourself with friends, family, and colleagues! ([Read more](%%doc.help%%))');
-        $this->elementStart('div', array('id' => 'anon_notice'));
-        $this->raw(common_markup_to_html($m));
-        $this->elementEnd('div');
+        if (!common_config('profile', 'enable_dating')) {
+    		$m = _('This is %%site.name%%, a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service ' .
+                   'based on the Free Software [Laconica](http://laconi.ca/) tool. ' .
+                   '[Join now](%%action.register%%) to share notices about yourself with friends, family, and colleagues! ([Read more](%%doc.help%%))');
+            $this->elementStart('div', array('id' => 'anon_notice'));
+            $this->raw(common_markup_to_html($m));
+            $this->elementEnd('div');
+        }
+        else {
+            $m = _('Welcome to %%site.name%%. Its a bit like a dating site mixed with twitter. ' .
+                   '[Register](%%action.datingregister%%) for an account, post messages privately to your admirers, or publicly to the web and to twitter. ' .
+                   'Flirt with everyone, centrally, from your cellphone or laptop.');
+            $this->elementStart('div', array('id' => 'anon_notice'));
+            $this->raw(common_markup_to_html($m));
+            $this->elementEnd('div');
+        }
     }
 }

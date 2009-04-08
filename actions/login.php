@@ -246,6 +246,13 @@ class LoginAction extends Action
                      'user name and password ' .
                      'before changing your settings.');
         } else {
+            
+            if (common_config('profile', 'enable_dating')) {
+                return _('Login with your username and password. ' .
+                     'Don\'t have a username yet? ' .
+                     '[Register](%%action.register%%) a new account.');
+            }
+            
             return _('Login with your username and password. ' .
                      'Don\'t have a username yet? ' .
                      '[Register](%%action.register%%) a new account, or ' .

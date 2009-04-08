@@ -32,18 +32,17 @@ if (!defined('LACONICA')) {
     exit(1);
 }
 
+function country_cmp($a, $b)
+{
+    return strcmp($a["name"], $b["name"]);
+}
 
 function get_nice_country_list()
 {
     $nice_country = array();
 
     $all_countries = get_all_countries();
-    
-    function cmp($a, $b)
-    {
-        return strcmp($a["name"], $b["name"]);
-    }
-    usort($all_countries, "cmp");
+    usort($all_countries, "country_cmp");
 
     foreach ($all_countries as $country) {
         $nice_country = $nice_country + array($country['iso_numeric'] => $country['name']);
