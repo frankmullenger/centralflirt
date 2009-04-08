@@ -102,7 +102,6 @@ class DatingregisterAction extends Action
             
             if ($this->formsection != DatingregisterAction::FORM_PERSONAL_PROFILE) {
                 $this->saveDataToSession();
-                $this->showForm();
             }
             else {
                 $this->tryRegister();
@@ -190,9 +189,12 @@ class DatingregisterAction extends Action
             $this->showForm(_('Not a valid nickname.'));
         } else if (strlen($password) < 6) {
             $this->showForm(_('Password must be 6 or more characters.'));
-            return;
         } else if ($password != $confirm) {
             $this->showForm(_('Passwords don\'t match.'));
+        } else if (strlen($headline) < 50) {
+            $this->showForm(_('Headline must be at least 50 characters long.'));
+        } else if (strlen($bio) < 100) {
+            $this->showForm(_('Bio must be at least 100 characters long.'));
         } else {
             $registerData = array();
             $registerData['User'] = array('nickname' => $nickname,
@@ -289,6 +291,7 @@ class DatingregisterAction extends Action
                                                             'birthdate' => $birthdate);
                     common_ensure_session();
                     $_SESSION['registerData'] = $registerData;
+                    $this->showForm();
                 }
                 break;
 
@@ -317,49 +320,51 @@ class DatingregisterAction extends Action
                 if ($this->arg('language')) {
                     $languages = implode(';', $this->arg('language'));
                 }
-
-                $registerData = array();
-                $registerData['User'] = array();
-                $registerData['DatingProfile'] = array('city' => $city,
-                                                        'state' => $state,
-                                                        'postcode' => $postcode,
-                                                        'profession' => $profession,
-                                                        'height' => $height,
-                                                        'hair' => $hair,
-                                                        'body_type' => $body_type,
-                                                        'ethnicity' => $ethnicity,
-                                                        'eye_colour' => $eye_colour,
-                                                        'marital_status' => $marital_status,
-                                                        'have_children' => $have_children,
-                                                        'smoke' => $smoke,
-                                                        'drink' => $drink,
-                                                        'religion' => $religion,
-                                                        'education' => $education,
-                                                        'politics' => $politics,
-                                                        'best_feature' => $best_feature,
-                                                        'body_art' => $body_art,
-                                                        'languages' => $languages);
-                common_ensure_session();
-                $registerData['User'] = array_merge($_SESSION['registerData']['User'], $registerData['User']);
-                $registerData['DatingProfile'] = array_merge($_SESSION['registerData']['DatingProfile'], $registerData['DatingProfile']);
-                $_SESSION['registerData'] = $registerData;
+                
+                // Validation
+                if (!Validate::string($city, array('min_length' => 1))) {
+                    $this->showForm(_('You must supply a city to help other users find you.'));
+                }
+                else {
+                    $registerData = array();
+                    $registerData['User'] = array();
+                    $registerData['DatingProfile'] = array('city' => $city,
+                                                            'state' => $state,
+                                                            'postcode' => $postcode,
+                                                            'profession' => $profession,
+                                                            'height' => $height,
+                                                            'hair' => $hair,
+                                                            'body_type' => $body_type,
+                                                            'ethnicity' => $ethnicity,
+                                                            'eye_colour' => $eye_colour,
+                                                            'marital_status' => $marital_status,
+                                                            'have_children' => $have_children,
+                                                            'smoke' => $smoke,
+                                                            'drink' => $drink,
+                                                            'religion' => $religion,
+                                                            'education' => $education,
+                                                            'politics' => $politics,
+                                                            'best_feature' => $best_feature,
+                                                            'body_art' => $body_art,
+                                                            'languages' => $languages);
+                    common_ensure_session();
+                    $registerData['User'] = array_merge($_SESSION['registerData']['User'], $registerData['User']);
+                    $registerData['DatingProfile'] = array_merge($_SESSION['registerData']['DatingProfile'], $registerData['DatingProfile']);
+                    $_SESSION['registerData'] = $registerData;
+                    $this->showForm();
+                }
                 break;
                 
             case DatingregisterAction::FORM_PERSONAL_PROFILE:
                 //Belt and braces, handle() should have called tryRegister() instead
-                $this->showForm(_('Something has gone wrong with the registration process.'));
+                $this->showForm(_('Something has gone wrong with the registration process. Please start again.'));
                 break;
                 
             default:
+                $this->showForm();
                 break;
+            return;
         }
-                
-        
-        
-        /*
-         * switch case through the different forms and perform error checking
-         * alright to pass the hashed password in the session at this point?
-         */
     }
 
     /**
@@ -516,78 +521,76 @@ class DatingregisterAction extends Action
                 $this->elementStart('ul', 'form_data');
                 
                 $this->elementStart('li');
-                $this->input('city', _('City'),
-                             ($this->arg('city')) ? $this->arg('city') : $datingProfile->city);
-                $this->elementEnd('li');
-                $this->elementStart('li');
-                $this->input('state', _('State'),
-                             ($this->arg('state')) ? $this->arg('state') : $datingProfile->state);
-                $this->elementEnd('li');
-                $this->elementStart('li');
-                $this->input('postcode', _('Postcode'),
-                             ($this->arg('postcode')) ? $this->arg('postcode') : $datingProfile->postcode);
+                $this->input('city', _('City'), $this->arg('city'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->input('profession', _('Profession'),
-                             ($this->arg('profession')) ? $this->arg('profession') : $datingProfile->profession);
+                $this->input('state', _('State'), $this->arg('state'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li');
+                $this->input('postcode', _('Postcode'), $this->arg('postcode'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li');
+                $this->input('profession', _('Profession'), $this->arg('profession'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('height', _('Height'),
-                             $datingProfile->getNiceHeightList(), null, true, $datingProfile->height);
+                             $datingProfile->getNiceHeightList(), null, true, $this->arg('height'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('hair', _('Hair'),
-                             $datingProfile->getNiceHairList(), null, true, $datingProfile->hair);
+                             $datingProfile->getNiceHairList(), null, true, $this->arg('hair'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('body_type', _('Body Type'),
-                             $datingProfile->getNiceBodytypeList(), null, true, $datingProfile->body_type);
+                             $datingProfile->getNiceBodytypeList(), null, true, $this->arg('body_type'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('ethnicity', _('Ethnicity'),
-                             $datingProfile->getNiceEthnicityList(), null, true, $datingProfile->ethnicity);
+                             $datingProfile->getNiceEthnicityList(), null, true, $this->arg('ethnicity'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('eye_colour', _('Eye Colour'),
-                             $datingProfile->getNiceEyeColourList(), null, true, $datingProfile->eye_colour);
+                             $datingProfile->getNiceEyeColourList(), null, true, $this->arg('eye_colour'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('marital_status', _('Marital Status'),
-                             $datingProfile->getNiceMaritalStatusList(), null, true, $datingProfile->marital_status);
+                             $datingProfile->getNiceMaritalStatusList(), null, true, $this->arg('marital_status'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('have_children', _('Do you have Children?'),
-                             $datingProfile->getNiceHaveChildrenStatusList(), null, true, $datingProfile->have_children);
+                             $datingProfile->getNiceHaveChildrenStatusList(), null, true, $this->arg('have_children'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('smoke', _('Do you smoke?'),
-                             $datingProfile->getNiceDoYouStatusList(), null, true, $datingProfile->smoke);
+                             $datingProfile->getNiceDoYouStatusList(), null, true, $this->arg('smoke'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('drink', _('Do you drink'),
-                             $datingProfile->getNiceDoYouStatusList(), null, true, $datingProfile->drink);
+                             $datingProfile->getNiceDoYouStatusList(), null, true, $this->arg('drink'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('religion', _('Religion'),
-                             $datingProfile->getNiceReligionStatusList(), null, true, $datingProfile->religion);
+                             $datingProfile->getNiceReligionStatusList(), null, true, $this->arg('religion'));
                 $this->elementEnd('li');
-                
+
                 $this->elementStart('li');
                 $this->elementStart('fieldset');
                 $this->element('legend', null, 'Languages');
                 $languageList = $datingProfile->getNiceLanguageStatusList();
-                $languageIds = $datingProfile->getLanguages();
+                $languageIds = (is_array($this->arg('language')))?$this->arg('language'):array();
                 foreach ($languageList as $languageId => $language) {
                     $checked = false;
                     if (in_array($languageId, $languageIds)) {
@@ -600,22 +603,22 @@ class DatingregisterAction extends Action
                 
                 $this->elementStart('li');
                 $this->dropdown('education', _('Education'),
-                             $datingProfile->getNiceEducationStatusList(), null, true, $datingProfile->education);
+                             $datingProfile->getNiceEducationStatusList(), null, true, $this->arg('education'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('politics', _('Politics'),
-                             $datingProfile->getNicePoliticsStatusList(), null, true, $datingProfile->politics);
+                             $datingProfile->getNicePoliticsStatusList(), null, true, $this->arg('politics'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('best_feature', _('Best feature'),
-                             $datingProfile->getNiceBestFeatureStatusList(), null, true, $datingProfile->best_feature);
+                             $datingProfile->getNiceBestFeatureStatusList(), null, true, $this->arg('best_feature'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('body_art', _('Body Art'),
-                             $datingProfile->getNiceBodyArtStatusList(), null, true, $datingProfile->body_art);
+                             $datingProfile->getNiceBodyArtStatusList(), null, true, $this->arg('body_art'));
                 $this->elementEnd('li');
                 
                 $this->elementEnd('ul');
@@ -637,9 +640,7 @@ class DatingregisterAction extends Action
                 $this->elementStart('ul', 'form_data');
                 
                 $this->elementStart('li');
-                $this->input('nickname', _('Nickname'), $this->trimmed('nickname'),
-                             _('1-64 lowercase letters or numbers, '.
-                               'no punctuation or spaces. Required.'));
+                $this->input('nickname', _('Nickname'), $this->trimmed('nickname'), _('1-64 lowercase letters or numbers, no punctuation or spaces. Required.'));
                 $this->elementEnd('li');
                 $this->elementStart('li');
                 $this->password('password', _('Password'),
@@ -651,38 +652,30 @@ class DatingregisterAction extends Action
                 $this->elementEnd('li');
                                 
                 $this->elementStart('li');
-                $this->input('headline', _('Headline'),
-                             ($this->arg('headline')) ? $this->arg('headline') : $datingProfile->headline);
+                $this->input('headline', _('Headline'), $this->arg('headline'));
                 $this->elementEnd('li');
                 $this->elementStart('li');
-                $this->textarea('bio', _('Bio'),
-                             ($this->arg('bio')) ? $this->arg('bio') : $datingProfile->bio);
+                $this->textarea('bio', _('Bio'), $this->arg('bio'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->input('interests', _('Interests'),
-                             $this->arg('interests'),
-                             _('Tags for yourself, must be comma separated'));
+                $this->input('interests', _('Interests'), $this->arg('interests'), _('Tags for yourself, must be comma separated'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->textarea('fun', _('What do you do for fun?'),
-                             ($this->arg('fun')) ? $this->arg('fun') : $datingProfile->fun);
+                $this->textarea('fun', _('What do you do for fun?'), $this->arg('fun'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->textarea('fav_spot', _('What is your favourite spot?'),
-                             ($this->arg('fav_spot')) ? $this->arg('fav_spot') : $datingProfile->fav_spot);
+                $this->textarea('fav_spot', _('What is your favourite spot?'), $this->arg('fav_spot'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->textarea('fav_media', _('Favourite books/movies?'),
-                             ($this->arg('fav_media')) ? $this->arg('fav_media') : $datingProfile->fav_media);
+                $this->textarea('fav_media', _('Favourite books/movies?'), $this->arg('fav_media'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->textarea('first_date', _('What would you do/like to do on a first date?'),
-                             ($this->arg('first_date')) ? $this->arg('first_date') : $datingProfile->first_date);
+                $this->textarea('first_date', _('What would you do/like to do on a first date?'), $this->arg('first_date'));
                 $this->elementEnd('li');
                 
                 $this->elementEnd('ul');
@@ -718,35 +711,35 @@ class DatingregisterAction extends Action
                 
                 $this->elementStart('li');
                 $this->dropdown('country', _('Country'),
-                             get_nice_country_list(), null, false, $datingProfile->country);
+                             get_nice_country_list(), null, false, ($this->arg('country'))?$this->arg('country'):826); //581 for United States
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('sex', _('Sex'),
-                             $datingProfile->getNiceSexList(), null, false, Dating_profile::SEX_MALE);
+                             $datingProfile->getNiceSexList(), null, false, ($this->arg('sex'))?$this->arg('sex'):Dating_profile::SEX_MALE);
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('partner_sex', _('Looking For'),
-                             $datingProfile->getNiceSexList(), null, false, Dating_profile::SEX_FEMALE);
+                             $datingProfile->getNiceSexList(), null, false, ($this->arg('partner_sex'))?$this->arg('partner_sex'):Dating_profile::SEX_FEMALE);
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('interested_in', _('Interested In'),
-                             $datingProfile->getNiceInterestList(), null, false, $datingProfile->interested_in);
+                             $datingProfile->getNiceInterestList(), null, false, ($this->arg('interested_in'))?$this->arg('interested_in'):null);
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
                 $this->dropdown('birthdate_day', _('Day'),
-                             $datingProfile->getNiceMonthDayList(), null, false, $datingProfile->getBirthdate('d'));          
+                             $datingProfile->getNiceMonthDayList(), null, false, ($this->arg('birthdate_day'))?$this->arg('birthdate_day'):null);          
                 $this->elementEnd('li');
                 $this->elementStart('li');
                 $this->dropdown('birthdate_month', _('Month'),
-                             $datingProfile->getNiceMonthList(), null, false, $datingProfile->getBirthdate('m'));  
+                             $datingProfile->getNiceMonthList(), null, false, ($this->arg('birthdate_month'))?$this->arg('birthdate_month'):null);
                 $this->elementEnd('li');
                 $this->elementStart('li');
                 $this->dropdown('birthdate_year', _('Year'),
-                             $datingProfile->getNiceYearList(), null, false, $datingProfile->getBirthdate('Y'));
+                             $datingProfile->getNiceYearList(), null, false, ($this->arg('birthdate_year'))?$this->arg('birthdate_year'):1978);
                 $this->elementEnd('li');
                 
                 
