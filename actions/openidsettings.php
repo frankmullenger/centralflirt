@@ -48,6 +48,17 @@ require_once INSTALLDIR.'/lib/openid.php';
 
 class OpenidsettingsAction extends AccountSettingsAction
 {
+    function handle($args)
+    {
+        if (common_config('profile', 'enable_dating')) {
+            $this->clientError(_('Open id is not currently supported.'), 403);
+            return;
+        }
+        else {
+            parent::handle($args);
+        }
+    }
+        
     /**
      * Title of the page
      *

@@ -80,6 +80,11 @@ class ProfilesettingsAction extends AccountSettingsAction
 
     function showContent()
     {
+        if (common_config('profile', 'enable_dating')) {
+            $this->showAccountContent();
+            return;
+        }
+        
         $user = common_current_user();
         $profile = $user->getProfile();
 
@@ -162,6 +167,67 @@ class ProfilesettingsAction extends AccountSettingsAction
         $this->elementEnd('fieldset');
         $this->elementEnd('form');
 
+    }
+    
+    private function showAccountContent()
+    {
+        $user = common_current_user();
+        $profile = $user->getProfile();
+
+        $this->elementStart('form', array('method' => 'post',
+                                           'id' => 'form_settings_profile',
+                                           'class' => 'form_settings',
+                                           'action' => common_local_url('profilesettings')));
+        $this->elementStart('fieldset');
+        $this->element('legend', null, _('Profile information'));
+        $this->hidden('token', common_session_token());
+
+        # too much common patterns here... abstractable?
+
+        $this->elementStart('ul', 'form_data');
+        $this->elementStart('li');
+        $this->input('nickname', _('Nickname'),
+                     ($this->arg('nickname')) ? $this->arg('nickname') : $profile->nickname,
+                     _('1-64 lowercase letters or numbers, no punctuation or spaces'));
+        $this->elementEnd('li');
+        $this->elementStart('li');
+        $language = common_language();
+        $this->dropdown('language', _('Language'),
+                        get_nice_language_list(), _('Preferred language'),
+                        true, $language);
+        $this->elementEnd('li');
+        $timezone = common_timezone();
+        $timezones = array();
+        foreach(DateTimeZone::listIdentifiers() as $k => $v) {
+            $timezones[$v] = $v;
+        }
+        $this->elementStart('li');
+        $this->dropdown('timezone', _('Timezone'),
+                        $timezones, _('What timezone are you normally in?'),
+                        true, $timezone);
+        $this->elementEnd('li');
+        $this->elementStart('li');
+        $this->checkbox('autosubscribe',
+                        _('Automatically subscribe to whoever '.
+                          'subscribes to me (best for non-humans)'),
+                        ($this->arg('autosubscribe')) ?
+                        $this->boolean('autosubscribe') : $user->autosubscribe);
+        $this->elementEnd('li');
+        
+        
+        $this->elementStart('li');
+        $this->checkbox('post_privately',
+                        _('Posts are private for your subscribers only.'),
+                        ($this->arg('post_privately')) ?
+                        $this->boolean('post_privately') : $user->post_privately);
+        $this->elementEnd('li');
+        
+        
+        $this->elementEnd('ul');
+        $this->submit('save', _('Save'));
+
+        $this->elementEnd('fieldset');
+        $this->elementEnd('form');
     }
 
     /**

@@ -160,12 +160,12 @@ class AccountSettingsNav extends Widget
         if (common_config('profile', 'enable_dating')) {
             
             $menu =
-              array('profilesettings' =>
+              array('datingprofilesettings' =>
                     array(_('Profile'),
-                          _('Change your profile settings')),
-                    'datingprofilesettings' =>
-                    array(_('Dating Profile'),
                           _('Change your dating profile settings')),
+                    'profilesettings' =>
+                    array(_('Account'),
+                          _('Change your account settings')),
                     'avatarsettings' =>
                     array(_('Avatar'),
                           _('Upload an avatar')),
@@ -175,9 +175,6 @@ class AccountSettingsNav extends Widget
                     'emailsettings' =>
                     array(_('Email'),
                           _('Change email handling')),
-                    'openidsettings' =>
-                    array(_('OpenID'),
-                          _('Add or remove OpenIDs')),
                     'othersettings' =>
                     array(_('Other'),
                           _('Other options')));

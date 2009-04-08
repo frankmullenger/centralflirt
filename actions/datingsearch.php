@@ -263,23 +263,14 @@ class DatingSearchResults extends ProfileList
                                          'alt' =>
                                          ($this->profile->fullname) ? $this->profile->fullname :
                                          $this->profile->nickname));
+                                         
         $hasFN = ($this->profile->fullname) ? 'nickname' : 'fn nickname';
         $this->out->elementStart('span', $hasFN);
         $this->out->raw($this->highlight($this->profile->nickname));
         $this->out->elementEnd('span');
         $this->out->elementEnd('a');
-
-        if ($this->datingProfile->firstname) {
-            $name = ($this->datingProfile->lastname)?$this->datingProfile->firstname.' '.$this->datingProfile->lastname:$this->datingProfile->firstname;
-            $this->out->elementStart('dl', 'entity_fn');
-            $this->out->element('dt', null, 'Full name');
-            $this->out->elementStart('dd');
-            $this->out->elementStart('span', 'fn');
-            $this->out->raw($this->highlight($name));
-            $this->out->elementEnd('span');
-            $this->out->elementEnd('dd');
-            $this->out->elementEnd('dl');
-        }
+        
+        $age = $this->datingProfile->getAge();
         
         $countryList = get_nice_country_list();
         $this->out->elementStart('dl', 'entity_location');
@@ -290,8 +281,8 @@ class DatingSearchResults extends ProfileList
         $this->out->elementEnd('dl');
         
         if ($this->datingProfile->headline) {
-            $this->out->elementStart('dl', 'entity_note');
-            $this->out->element('dt', null, _('Note'));
+            $this->out->elementStart('dl', 'entity_headline');
+            $this->out->element('dt', null, _('Headline'));
             $this->out->elementStart('dd', 'note');
             $this->out->raw($this->highlight($this->datingProfile->headline));
             $this->out->elementEnd('dd');
@@ -299,7 +290,7 @@ class DatingSearchResults extends ProfileList
         }
         if ($this->datingProfile->bio) {
             $this->out->elementStart('dl', 'entity_note');
-            $this->out->element('dt', null, _('Note'));
+            $this->out->element('dt', null, _('Bio'));
             $this->out->elementStart('dd', 'note');
             $this->out->raw($this->highlight($this->datingProfile->bio));
             $this->out->elementEnd('dd');

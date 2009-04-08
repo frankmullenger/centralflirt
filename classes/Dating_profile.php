@@ -237,7 +237,21 @@ class Dating_profile extends Memcached_DataObject
         else {
             return null;
         }
-        
+    }
+    
+    function getAge()
+    {
+        if (!empty($this->birthdate)) {
+            $birthdate = new DateTime($this->birthdate);
+            $now = new DateTime();
+            
+            //TODO frank: sort this out to use the dateTime diff() function instead, not accurate
+            $diff = $now->format('Y-m-d') - $birthdate->format('Y-m-d');
+            return $diff;
+        }
+        else {
+            return null;
+        }
     }
     
     function getNiceSexList() 
@@ -500,7 +514,7 @@ class Dating_profile extends Memcached_DataObject
             if ('mysql' === common_config('db', 'type')) {
                 $search_engine = new MySQLSearch($this, $table);
             } else {
-                //TODO throw an exception here if the db is NOT MySQL
+                //TODO frank: throw an exception here if the db is NOT MySQL
             }
         }
         return $search_engine;

@@ -381,8 +381,8 @@ class Action extends HTMLOutputter // lawsuit
 
         
         if ($user) {
-            $this->menuItem(common_local_url('profilesettings'),
-                            _('Account'), _('Change your email, avatar, password, profile'), false, 'nav_account');
+            $this->menuItem(common_local_url('datingprofilesettings'),
+                            _('Profile'), _('Change your email, avatar, password, profile'), false, 'nav_account');
 
             if (common_config('xmpp', 'enabled')) {
                 $this->menuItem(common_local_url('imsettings'),
