@@ -624,25 +624,49 @@ class Action extends HTMLOutputter // lawsuit
      */
     function showSecondaryNav()
     {
-        $this->elementStart('dl', array('id' => 'site_nav_global_secondary'));
-        $this->element('dt', null, _('Secondary site navigation'));
-        $this->elementStart('dd', null);
-        $this->elementStart('ul', array('class' => 'nav'));
-        $this->menuItem(common_local_url('doc', array('title' => 'help')),
-                        _('Help'));
-        $this->menuItem(common_local_url('doc', array('title' => 'about')),
-                        _('About'));
-        $this->menuItem(common_local_url('doc', array('title' => 'faq')),
-                        _('FAQ'));
-        $this->menuItem(common_local_url('doc', array('title' => 'privacy')),
-                        _('Privacy'));
-        $this->menuItem(common_local_url('doc', array('title' => 'source')),
-                        _('Source'));
-        $this->menuItem(common_local_url('doc', array('title' => 'contact')),
-                        _('Contact'));
-        $this->elementEnd('ul');
-        $this->elementEnd('dd');
-        $this->elementEnd('dl');
+        //Don't show all the footer links for dating sites
+        if (common_config('profile', 'enable_dating')) {
+            $this->elementStart('dl', array('id' => 'site_nav_global_secondary'));
+            $this->element('dt', null, _('Secondary site navigation'));
+            $this->elementStart('dd', null);
+            $this->elementStart('ul', array('class' => 'nav'));
+            $this->menuItem(common_local_url('doc', array('title' => 'help')),
+                            _('Help'));
+            $this->menuItem(common_local_url('doc', array('title' => 'about')),
+                            _('About'));
+            $this->menuItem(common_local_url('doc', array('title' => 'faq')),
+                            _('FAQ'));
+            $this->menuItem(common_local_url('doc', array('title' => 'privacy')),
+                            _('Privacy'));
+            $this->menuItem(common_local_url('doc', array('title' => 'contact')),
+                            _('Contact'));
+            $this->menuItem(common_local_url('doc', array('title' => 'dedication')),
+                            _('Dedication'));
+            $this->elementEnd('ul');
+            $this->elementEnd('dd');
+            $this->elementEnd('dl');
+        }
+        else {
+            $this->elementStart('dl', array('id' => 'site_nav_global_secondary'));
+            $this->element('dt', null, _('Secondary site navigation'));
+            $this->elementStart('dd', null);
+            $this->elementStart('ul', array('class' => 'nav'));
+            $this->menuItem(common_local_url('doc', array('title' => 'help')),
+                            _('Help'));
+            $this->menuItem(common_local_url('doc', array('title' => 'about')),
+                            _('About'));
+            $this->menuItem(common_local_url('doc', array('title' => 'faq')),
+                            _('FAQ'));
+            $this->menuItem(common_local_url('doc', array('title' => 'privacy')),
+                            _('Privacy'));
+            $this->menuItem(common_local_url('doc', array('title' => 'source')),
+                            _('Source'));
+            $this->menuItem(common_local_url('doc', array('title' => 'contact')),
+                            _('Contact'));
+            $this->elementEnd('ul');
+            $this->elementEnd('dd');
+            $this->elementEnd('dl');
+        }
     }
 
     /**
@@ -674,7 +698,7 @@ class Action extends HTMLOutputter // lawsuit
         } else {
             $instr = _('**%%site.name%%** is a microblogging service. ');
         }
-        $instr .= sprintf(_('It runs the [Laconica](http://laconi.ca/) microblogging software, version %s, available under the [GNU Affero General Public License](http://www.fsf.org/licensing/licenses/agpl-3.0.html).'), LACONICA_VERSION);
+        $instr .= sprintf(_('It is based on the [Laconica](http://laconi.ca/) microblogging software, version %s, available under the [GNU Affero General Public License](http://www.fsf.org/licensing/licenses/agpl-3.0.html).'), LACONICA_VERSION);
         $output = common_markup_to_html($instr);
         $this->raw($output);
         $this->elementEnd('dd');

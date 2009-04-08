@@ -4,39 +4,22 @@ some answers.
 What is %%site.name%%?
 ----------------------
 
-%%site.name%% is a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service.
+%%site.name%% is a dating service and a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service 
+rolled into one.
+
 You can use it to write short notices about yourself, where you are,
-and what you're doing, and those notices will be sent to all your friends
-and fans.
+and what you're doing, and those notices will be sent to all your admirers.
 
-How is %%site.name%% different from Twitter, Jaiku, Pownce, Plurk, others?
---------------------------------------------------------------------------
+What is different about %%site.name%% is that you control who can receive your notices, other users
+request to follow you and based on their profile you can allow them to do so.
 
-%%site.name%% is an [Open Network Service](http://opendefinition.org/ossd). Our main
-goal is to provide a fair and transparent service that preserves users' autonomy. In
-particular, all the software used for %%site.name%% is [Free Software](http://en.wikipedia.org/wiki/Free_Software), and all the data is available
-under the [%%license.title%%](%%license.url%%) license, making it Open Data.
+On %%site.name%% you can also sort your followers into groups, you might have a group of prospective dates and
+a group of friends, when you post a notice on %%site.name%% you decide which group you want to send the notice
+to by adding the group name to your notice using ! followed by the group name.
 
-The software also implements the [OpenMicroBlogging](http://openmicroblogging.org/) protocol, meaning that you can have friends on other microblogging services
-that can receive your notices.
+The users in the groups will see your notice but will not know which private group you have sorted them into.
 
-The goal here is *autonomy* -- you deserve the right to manage your own on-line
-presence. If you don't like how %%site.name%% works, you can take your data and the source code and set up your own server (or move your account to another one).
-
-Where is feature X?
--------------------
-
-The software we run, [Laconica](http://laconi.ca/), is still in its early stages,
-and many features people expect from microblogging sites are not yet implemented. Some important ones that are expected "soon":
-
-* More [AJAX](http://en.wikipedia.org/wiki/AJAX)-y interface
-* Maps
-* Cross-post to Pownce, Jaiku, etc.
-* Pull messages from Twitter, Pownce, Jaiku, etc.
-* [Facebook](http://www.facebook.com/) integration
-* Image, video, audio notices
-
-There is [a list of bugs and features](http://laconi.ca/trac/) that you may find
-interesting. New ideas or complaints are very welcome.
-
-
+With %%site.name%% you have ultimate control over who receives your notices, all notices are private by default.
+If you want to post a public message however you can just put @public in the notice body and it will become public.
+This way you can post messages to twitter as well when you want to, or just join in the public discussion in one
+of the public groups for instance.
