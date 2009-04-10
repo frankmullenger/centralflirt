@@ -166,21 +166,46 @@ function subs_unsubscribe_user($user, $other_nickname)
 
 function subs_unsubscribe_to($user, $other)
 {
+    
+    //For the dating site, check pending subscriptions also - must get the $otherUser object to check pending subscriptions
+    $otherUser = User::staticGet('id', $other->id);
+    if (common_config('profile', 'enable_dating')) {
 
-    if (!$user->isSubscribed($other))
-        return _('Not subscribed!.');
+        //If user is not subscribed to other, and other does not have a pending subscription from user
+        if (!$user->isSubscribed($other) && !$otherUser->isPendingSubscription($user)) {
+            return _('Not subscribed!.');
+        }
+    }
+    else {
+        if (!$user->isSubscribed($other))
+            return _('Not subscribed!.');
+    }
 
-    $sub = DB_DataObject::factory('subscription');
+    if ($user->isSubscribed($other)) {
+        $sub = DB_DataObject::factory('subscription');
 
-    $sub->subscriber = $user->id;
-    $sub->subscribed = $other->id;
+        $sub->subscriber = $user->id;
+        $sub->subscribed = $other->id;
+    
+        $sub->find(true);
+    
+        // note we checked for existence above
+        if (!$sub->delete())
+            return _('Couldn\'t delete subscription.');
+    }
+    
+    if ($otherUser->isPendingSubscription($user)) {
+        $sub = DB_DataObject::factory('pending_subscription');
 
-    $sub->find(true);
-
-    // note we checked for existence above
-
-    if (!$sub->delete())
-        return _('Couldn\'t delete subscription.');
+        $sub->subscriber = $user->id;
+        $sub->subscribed = $other->id;
+    
+        $sub->find(true);
+    
+        // note we checked for existence above
+        if (!$sub->delete())
+            return _('Couldn\'t delete pending subscription.');
+    }
 
     $cache = common_memcache();
 
