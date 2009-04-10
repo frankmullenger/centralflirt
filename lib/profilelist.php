@@ -150,7 +150,11 @@ class ProfileList extends Widget
 
         # If we're on a list with an owner (subscriptions or subscribers)...
 
-        if ($this->owner) {
+        /*
+         * TODO frank: show interest tags instead, use filter on subscriptions page to sort by interest tag
+         * Not displaying tags for the dating site
+         */
+        if ($this->owner && !common_config('profile', 'enable_dating')) {
             # Get tags
             $tags = Profile_tag::getTags($this->owner->id, $this->profile->id);
 

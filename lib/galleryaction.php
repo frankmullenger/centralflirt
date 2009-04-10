@@ -114,7 +114,12 @@ class GalleryAction extends Action
 
     function showContent()
     {
-        $this->showTagsDropdown();
+        if (common_config('profile', 'enable_dating')) {
+            $this->showInterestsDropdown();
+        }
+        else {
+            $this->showTagsDropdown();
+        }
     }
 
     function showTagsDropdown()
@@ -155,6 +160,12 @@ class GalleryAction extends Action
             $this->elementEnd('dd');
             $this->elementEnd('dl');
         }
+    }
+    
+    function showInterestsDropdown ()
+    {
+        //TODO frank: implement this for the subscriptions page interest filtering
+        return;
     }
 
     // Get list of tags we tagged other users with

@@ -134,7 +134,7 @@ class UsergroupsAction extends GalleryAction
         $offset = ($this->page-1) * GROUPS_PER_PAGE;
         $limit =  GROUPS_PER_PAGE + 1;
 
-        $groups = $this->user->getGroups($offset, $limit);
+        $groups = $this->user->getGroups($offset, $limit, true);
 
         if ($groups) {
             $gl = new GroupList($groups, $this->user, $this);
