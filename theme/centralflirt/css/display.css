@@ -257,6 +257,34 @@ background-image:url(../images/icons/twotone/green/arrow-right.gif);
 background-position:90% 45%;
 }
 
+/* ADDITIONAL */
+.profile .entity_profile .entity_headline,
+.profile .entity_profile .entity_bio,
+.profile .entity_profile .entity_location {
+margin-left:59px;
+clear:none;
+display:block;
+width:auto;
+}
+
+.profile .entity_profile .entity_headline {
+    font-weight: bold;
+    font-size: 1.1em;
+    text-transform:none;
+    margin-top:8px;
+    font-style: italic;
+    margin-bottom: 0px;
+}
+
+.profile .entity_profile .entity_bio {
+    margin-bottom: 8px;
+}
+
+.profile .entity_profile .entity_location {
+    font-style: italic;   
+    padding-top: 8px;
+}
+
 #content_wide {
     -moz-border-radius-bottomleft:7px;
     -moz-border-radius-bottomright:7px;

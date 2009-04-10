@@ -264,39 +264,25 @@ class DatingSearchResults extends ProfileList
                                          ($this->profile->fullname) ? $this->profile->fullname :
                                          $this->profile->nickname));
                                          
-        $this->out->elementStart('span');
-        $this->out->raw($this->highlight($this->profile->nickname));
+        $this->out->elementStart('span', 'entity_nickname');
+        $this->out->raw($this->profile->nickname);
         $this->out->elementEnd('span');
         $this->out->elementEnd('a');
         
         $age = $this->datingProfile->getAge();
-        $this->out->elementStart('span');
-        $this->out->raw($this->highlight($age));
+        $this->out->elementStart('span', 'entity_age');
+        $this->out->raw($age);
         $this->out->elementEnd('span');
-        
-        $countryList = get_nice_country_list();
-        $this->out->elementStart('dl', 'entity_location');
-        $this->out->element('dt', null, _('Location'));
-        $this->out->elementStart('dd', 'location');
-        $this->out->raw($this->highlight(($this->datingProfile->city)?$this->datingProfile->city.', '.$countryList[$this->datingProfile->country]:$countryList[$this->datingProfile->country]));
-        $this->out->elementEnd('dd');
-        $this->out->elementEnd('dl');
-        
+
         if ($this->datingProfile->headline) {
-            $this->out->elementStart('dl', 'entity_headline');
-            $this->out->element('dt', null, _('Headline'));
-            $this->out->elementStart('dd', 'note');
-            $this->out->raw($this->highlight($this->datingProfile->headline));
-            $this->out->elementEnd('dd');
-            $this->out->elementEnd('dl');
+            $this->out->elementStart('h2', 'entity_headline');
+            $this->out->raw($this->datingProfile->headline);
+            $this->out->elementEnd('h2');
         }
         if ($this->datingProfile->bio) {
-            $this->out->elementStart('dl', 'entity_note');
-            $this->out->element('dt', null, _('Bio'));
-            $this->out->elementStart('dd', 'note');
-            $this->out->raw($this->highlight($this->datingProfile->bio));
-            $this->out->elementEnd('dd');
-            $this->out->elementEnd('dl');
+            $this->out->elementStart('p', 'entity_bio');
+            $this->out->raw($this->datingProfile->getTruncatedBio());
+            $this->out->elementEnd('p');
         }
 
         # If we're on a list with an owner (subscriptions or subscribers)...
@@ -307,24 +293,15 @@ class DatingSearchResults extends ProfileList
 
             if ($tags) {
                 $this->out->elementStart('dl', 'entity_tags');
-                $this->out->elementStart('dt');
-                if ($user->id == $this->owner->id) {
-                    $this->out->element('span', array(), _('Interests'));
-                } else {
-                    $this->out->text(_('Interests'));
-                }
-                $this->out->elementEnd('dt');
-                
                 $this->out->elementStart('dd');
     
                 $this->out->elementStart('ul', 'tags xoxo');
                 foreach ($tags as $tag) {
                     $this->out->elementStart('li');
-                    $this->out->element('span', 'mark_hash', '#');
+                    //$this->out->element('span', 'mark_hash', '#');
                     $this->out->element('a', array('rel' => 'tag',
-                                                   'href' => common_local_url('interesttag',
-                                                                              array('tag' => $tag))),
-                                        $tag);
+                                                   'href' => common_local_url('interesttag', array('tag' => $tag))),
+                                        '#'.$tag);
                     $this->out->elementEnd('li');
                 }
                 $this->out->elementEnd('ul');
@@ -333,6 +310,11 @@ class DatingSearchResults extends ProfileList
                 $this->out->elementEnd('dl');
             }
         }
+    
+        $countryList = get_nice_country_list();
+        $this->out->elementStart('span', 'entity_location');
+        $this->out->raw($this->highlight(ucwords(($this->datingProfile->city)?$this->datingProfile->city.', '.$countryList[$this->datingProfile->country]:$countryList[$this->datingProfile->country])));
+        $this->out->elementEnd('span');
 
         if ($user && $user->id == $this->owner->id) {
             $this->showOwnerControls($this->profile);

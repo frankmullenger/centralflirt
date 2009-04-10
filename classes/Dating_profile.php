@@ -262,6 +262,24 @@ class Dating_profile extends Memcached_DataObject
         return $end_date - $start_date;
     }
     
+    function getTruncatedBio()
+    {
+        if (!empty($this->bio)) {
+            
+            $wrapped = wordwrap($this->bio, 80, "%%%%");
+            $pos = strpos($wrapped, "%%%%");
+            
+            if ($pos) {
+                $bioTruncated = substr($wrapped, 0, $pos);
+                return $bioTruncated.'...';
+            }
+            return $this->bio;
+        }
+        else {
+            return null;
+        }
+    }
+    
     function getNiceSexList() 
     {
         return array(self::SEX_MALE => _('Male'), self::SEX_FEMALE => _('Female'));
