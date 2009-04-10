@@ -264,13 +264,15 @@ class DatingSearchResults extends ProfileList
                                          ($this->profile->fullname) ? $this->profile->fullname :
                                          $this->profile->nickname));
                                          
-        $hasFN = ($this->profile->fullname) ? 'nickname' : 'fn nickname';
-        $this->out->elementStart('span', $hasFN);
+        $this->out->elementStart('span');
         $this->out->raw($this->highlight($this->profile->nickname));
         $this->out->elementEnd('span');
         $this->out->elementEnd('a');
         
         $age = $this->datingProfile->getAge();
+        $this->out->elementStart('span');
+        $this->out->raw($this->highlight($age));
+        $this->out->elementEnd('span');
         
         $countryList = get_nice_country_list();
         $this->out->elementStart('dl', 'entity_location');

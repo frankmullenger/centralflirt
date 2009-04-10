@@ -245,13 +245,21 @@ class Dating_profile extends Memcached_DataObject
             $birthdate = new DateTime($this->birthdate);
             $now = new DateTime();
             
-            //TODO frank: sort this out to use the dateTime diff() function instead, not accurate
-            $diff = $now->format('Y-m-d') - $birthdate->format('Y-m-d');
-            return $diff;
+            //TODO frank: sort this out to use the dateTime diff() function instead when we upgrade to php 5.3
+            $diff = $this->dateDiff($now, $birthdate);
+            return floor($diff/365);
         }
         else {
             return null;
         }
+    }
+    
+    function dateDiff($endDate, $beginDate)
+    {
+        $start_date = gregoriantojd($beginDate->format('n'), $beginDate->format('j'), $beginDate->format('Y'));
+        $end_date = gregoriantojd($endDate->format('n'), $endDate->format('j'), $endDate->format('Y'));
+        
+        return $end_date - $start_date;
     }
     
     function getNiceSexList() 

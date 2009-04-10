@@ -382,8 +382,12 @@ class Action extends HTMLOutputter // lawsuit
         
         if ($user) {
             $this->menuItem(common_local_url('datingprofilesettings'),
-                            _('Profile'), _('Change your email, avatar, password, profile'), false, 'nav_account');
+                            _('Account'), _('Change your email, avatar, password, profile'), false, 'nav_account');
 
+            /*
+             * TODO frank: need to enable texting and xmpp and test
+             */
+            /*
             if (common_config('xmpp', 'enabled')) {
                 $this->menuItem(common_local_url('imsettings'),
                             _('Connect'), _('Connect to IM, SMS, Twitter'), false, 'nav_connect');
@@ -392,6 +396,8 @@ class Action extends HTMLOutputter // lawsuit
                 $this->menuItem(common_local_url('smssettings'),
                             _('Connect'), _('Connect to SMS, Twitter'), false, 'nav_connect');
             }
+            */
+            
             $this->menuItem(common_local_url('logout'),
                             _('Logout'), _('Logout from the site'), false, 'nav_logout');
         } 
