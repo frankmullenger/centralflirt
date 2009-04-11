@@ -579,8 +579,8 @@ class Action extends HTMLOutputter // lawsuit
     {
         $this->elementStart('div', array('id' => 'aside_primary',
                                          'class' => 'aside'));
-        $this->showExportData();
         $this->showSections();
+        $this->showExportData();
         $this->elementEnd('div');
     }
 

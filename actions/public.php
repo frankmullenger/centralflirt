@@ -217,14 +217,17 @@ class PublicAction extends Action
 
     function showSections()
     {
-        // $top = new TopPostersSection($this);
-        // $top->show();
+//        $top = new TopPostersSection($this);
+//        $top->show();
         $pop = new PopularNoticeSection($this);
         $pop->show();
         $gbp = new GroupsByPostsSection($this);
         $gbp->show();
-        $feat = new FeaturedUsersSection($this);
-        $feat->show();
+//        $feat = new FeaturedUsersSection($this);
+//        $feat->show();
+
+        $cloud = new InterestTagCloudSection($this);
+        $cloud->show();
     }
 
     function showAnonymousMessage()
