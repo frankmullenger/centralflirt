@@ -392,7 +392,7 @@ class ShowstreamAction extends RestrictedAction
         if ($cur) {
             if ($cur->id != $this->profile->id) {
                 $this->elementStart('li', 'entity_subscribe');
-                if ($cur->isSubscribed($this->profile)) {
+                if ($cur->isSubscribed($this->profile) || $cur->isPendingSubscriptionTo($this->profile)) {
                     $usf = new UnsubscribeForm($this, $this->profile);
                     $usf->show();
                 } else {
@@ -534,7 +534,7 @@ class ShowstreamAction extends RestrictedAction
         if ($cur) {
             if ($cur->id != $this->profile->id) {
                 $this->elementStart('li', 'entity_subscribe');
-                if ($cur->isSubscribed($this->profile)) {
+                if ($cur->isSubscribed($this->profile) || $cur->isPendingSubscriptionTo($this->profile)) {
                     $usf = new UnsubscribeForm($this, $this->profile);
                     $usf->show();
                 } else {

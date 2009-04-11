@@ -220,7 +220,7 @@ class SubscribersList extends ProfileList
             # XXX: special-case for user looking at own
             # subscriptions page
             $this->out->elementStart('li', 'entity_subscribe');
-            if ($user->isSubscribed($this->profile)) {
+            if ($user->isSubscribed($this->profile) || $user->isPendingSubscriptionTo($this->profile)) {
                 $usf = new UnsubscribeForm($this->out, $this->profile);
                 $usf->show();
             } else {
