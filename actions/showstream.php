@@ -256,7 +256,11 @@ class ShowstreamAction extends RestrictedAction
 
     function extraHead()
     {
-        //TODO frank: need to look into headers being generated and stop users accessing this info
+        //Strip down some of the meta info until it is tested with the dating site
+        if (common_config('profile', 'enable_dating')) {
+            $this->extraHeadStripped();
+            return;
+        }
         
         // FOAF
         $this->element('link', array('rel' => 'meta',
@@ -288,7 +292,20 @@ class ShowstreamAction extends RestrictedAction
         }
 
         // See https://wiki.mozilla.org/Microsummaries
+        $this->element('link', array('rel' => 'microsummary',
+                                     'href' => common_local_url('microsummary',
+                                                                array('nickname' => $this->profile->nickname))));
+    }
+    
+    function extraHeadStripped()
+    {
+        //TODO frank: enable the headers for email and jabber microid once that functionality is tested
+        if ($this->profile->bio) {
+            $this->element('meta', array('name' => 'description',
+                                         'content' => $this->profile->bio));
+        }
 
+        // See https://wiki.mozilla.org/Microsummaries
         $this->element('link', array('rel' => 'microsummary',
                                      'href' => common_local_url('microsummary',
                                                                 array('nickname' => $this->profile->nickname))));
