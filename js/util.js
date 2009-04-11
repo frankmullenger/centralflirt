@@ -160,16 +160,13 @@ $(document).ready(function(){
                       beforeSubmit: function(formData, jqForm, options) { $(".form_user_allow input[type=submit]").attr("disabled", "disabled");
                                                                           $(".form_user_allow input[type=submit]").addClass("disabled");
                                                                         },
-                      success: function(xml) { var form_disallow = document._importNode($('form', xml).get(0), true);
+                      success: function(xml) { 
+                      
+                                               var form_disallow = document._importNode($('form', xml).get(0), true);
                                                var form_disallow_id = form_disallow.id;
-                                               var form_allow_id = form_disallow_id.replace('disallow', 'allow');
                                                
-                                               $("form#"+form_allow_id).replaceWith(form_disallow);
-                                               $("form#"+form_disallow_id).ajaxForm(Disallow).each(addAjaxHidden);
-                                               
-                                               $("dd.subscribers").text(parseInt($("dd.subscribers").text())+1);
-                                               $(".form_user_allow input[type=submit]").removeAttr("disabled");
-                                               $(".form_user_allow input[type=submit]").removeClass("disabled");
+                                               var profile_id = form_disallow_id.replace('disallow', 'profile');
+                                               $('#'+profile_id).slideUp('slow');
                                              }
                     };
 
@@ -179,17 +176,9 @@ $(document).ready(function(){
                                                                           },
                         success: function(xml) { var form_allow = document._importNode($('form', xml).get(0), true);
                                                  var form_allow_id = form_allow.id;
-                                                 var form_disallow_id = form_allow_id.replace('allow', 'disallow');
                                                  
-                                                 $("form#"+form_disallow_id).replaceWith(form_allow);
-                                                 $("form#"+form_allow_id).ajaxForm(Allow).each(addAjaxHidden);
-                                                 
-                                                 $("#profile_send_a_new_message").remove();
-                                                 $("#profile_nudge").remove();
-                                                 
-                                                 $("dd.subscribers").text(parseInt($("dd.subscribers").text())-1);
-                                                 $(".form_user_disallow input[type=submit]").removeAttr("disabled");
-                                                 $(".form_user_disallow input[type=submit]").removeClass("disabled");
+                                                 var profile_id = form_allow_id.replace('allow', 'profile');
+                                                 $('#'+profile_id).slideUp('slow');
                                                }
                       };
 

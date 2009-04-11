@@ -121,12 +121,16 @@ class PendingsubscribersList extends ProfileList
         if ($user && $user->id != $this->profile->id) {
             # XXX: special-case for user looking at own
             # subscriptions page
-            $this->out->elementStart('li', 'entity_subscribe');
-            
-            $sf = new AllowForm($this->out, $this->profile);
-            $sf->show();
-
+            $this->out->elementStart('li', 'entity_allow');
+            $af = new AllowForm($this->out, $this->profile);
+            $af->show();
             $this->out->elementEnd('li');
+            
+            $this->out->elementStart('li', 'entity_disallow');
+            $df = new DisallowForm($this->out, $this->profile);
+            $df->show();
+            $this->out->elementEnd('li');
+            
             $this->out->elementStart('li', 'entity_block');
             if ($user && $user->id == $this->owner->id) {
                 $this->showBlockForm();
