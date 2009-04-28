@@ -97,6 +97,25 @@ class DocAction extends Action
         $output = common_markup_to_html($c);
         $this->raw($output);
     }
+    
+    function showSections()
+    {
+        $output = <<<EOS
+<script type="text/javascript"><!--
+google_ad_client = "pub-8648085348871471";
+/* 200x200, created 4/28/09 */
+google_ad_slot = "0739100966";
+google_ad_width = 200;
+google_ad_height = 200;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>    
+EOS;
+
+        $this->raw($output);
+    }
 
     /**
      * Page title.
