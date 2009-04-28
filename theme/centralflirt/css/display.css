@@ -12,6 +12,15 @@ body,
 a:active {
 background-color:#F0F2F5;
 }
+h1, h2, h3, h4, h5, h6 {
+    color: #3f7085;   
+    font-family: arial;
+    font-size: 1.3em;
+}
+h2 {
+    font-size: 1.1em;
+    font-style: italic;
+}
 body {
 font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 font-size:1em;

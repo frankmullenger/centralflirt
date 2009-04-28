@@ -33,6 +33,8 @@ if (!defined('LACONICA')) {
     exit(1);
 }
 
+require_once INSTALLDIR.'/lib/docgroupnav.php';
+
 /**
  * Documentation class.
  *
@@ -115,6 +117,12 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 EOS;
 
         $this->raw($output);
+    }
+    
+    function showLocalNav()
+    {
+        $nav = new DocGroupNav($this, $this->trimmed('q'));
+        $nav->show();
     }
 
     /**
