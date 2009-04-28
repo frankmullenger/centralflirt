@@ -167,9 +167,14 @@ class PendingsubscribersList extends ProfileList
         $this->out->elementStart('div', 'entity_profile vcard');
 
         $avatar = $this->profile->getAvatar(AVATAR_STREAM_SIZE);
+        
+        //Adding sex for dating default avatars
+        $datingProfile = $this->profile->getDatingProfile();
+        $sex = ($datingProfile)?$datingProfile->sex:null;
+        
         $this->out->elementStart('a', array('href' => $this->profile->profileurl,
                                             'class' => 'url'));
-        $this->out->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_STREAM_SIZE),
+        $this->out->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_STREAM_SIZE, $sex),
                                          'class' => 'photo avatar',
                                          'width' => AVATAR_STREAM_SIZE,
                                          'height' => AVATAR_STREAM_SIZE,

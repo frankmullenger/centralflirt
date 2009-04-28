@@ -72,11 +72,25 @@ class Avatar extends Memcached_DataObject
         }
     }
 
-    static function defaultImage($size)
+    static function defaultImage($size, $sex = null)
     {
         static $sizenames = array(AVATAR_PROFILE_SIZE => 'profile',
                                   AVATAR_STREAM_SIZE => 'stream',
                                   AVATAR_MINI_SIZE => 'mini');
-        return theme_path('default-avatar-'.$sizenames[$size].'.png');
+                                  
+        //For displaying default avatars for different sexes on dating site
+        switch ($sex) {
+            case Dating_profile::SEX_MALE :
+                $sex = '-m';
+                break;
+            case Dating_profile::SEX_FEMALE :
+                $sex = '-f';
+                break;
+            default :
+                $sex = '';
+                break;
+        }
+                                  
+        return theme_path('default-avatar-'.$sizenames[$size].$sex.'.png');
     }
 }

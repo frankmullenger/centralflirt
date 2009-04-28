@@ -46,6 +46,23 @@ class Profile extends Memcached_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 
+    function getDatingProfile() 
+    {
+        //Check that the config setting for dating profiles is enabled before attempting to retrieve dating profiles
+        if (common_config('profile', 'enable_dating')) {
+            
+            //If a dating profile has not been created yet then return an empty one
+            $datingProfile = Dating_profile::staticGet('id', $this->id);
+            if (!$datingProfile instanceof Dating_profile) {
+                $datingProfile = new Dating_profile;
+            }
+            return $datingProfile;
+        }
+        else {
+            return false;
+        }
+    }
+    
     function getAvatar($width, $height=null)
     {
         if (is_null($height)) {

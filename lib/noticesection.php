@@ -76,13 +76,18 @@ class NoticeSection extends Section
         $this->out->elementStart('li', 'hentry notice');
         $this->out->elementStart('div', 'entry-title');
         $avatar = $profile->getAvatar(AVATAR_MINI_SIZE);
+        
+        //Adding sex for dating default avatars
+        $datingProfile = $profile->getDatingProfile();
+        $sex = ($datingProfile)?$datingProfile->sex:null;
+        
         $this->out->elementStart('span', 'vcard author');
         $this->out->elementStart('a', array('title' => ($profile->fullname) ?
                                             $profile->fullname :
                                             $profile->nickname,
                                             'href' => $profile->profileurl,
                                             'class' => 'url'));
-        $this->out->element('img', array('src' => (($avatar) ? $avatar->displayUrl() :  Avatar::defaultImage(AVATAR_MINI_SIZE)),
+        $this->out->element('img', array('src' => (($avatar) ? $avatar->displayUrl() :  Avatar::defaultImage(AVATAR_MINI_SIZE, $sex)),
                                          'width' => AVATAR_MINI_SIZE,
                                          'height' => AVATAR_MINI_SIZE,
                                          'class' => 'avatar photo',

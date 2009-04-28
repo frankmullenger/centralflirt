@@ -283,10 +283,14 @@ class NoticeListItem extends Widget
             $avatar_size = AVATAR_STREAM_SIZE;
         }
         $avatar = $this->profile->getAvatar($avatar_size);
-
+        
+        //Adding sex for dating default avatars
+        $datingProfile = $this->profile->getDatingProfile();
+        $sex = ($datingProfile)?$datingProfile->sex:null;
+        
         $this->out->element('img', array('src' => ($avatar) ?
                                          $avatar->displayUrl() :
-                                         Avatar::defaultImage($avatar_size),
+                                         Avatar::defaultImage($avatar_size, $sex),
                                          'class' => 'avatar photo',
                                          'width' => $avatar_size,
                                          'height' => $avatar_size,

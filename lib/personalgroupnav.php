@@ -107,7 +107,7 @@ class PersonalGroupNav extends Widget
         
             $this->out->menuItem(common_local_url('all', array('nickname' =>
                                                            $nickname)),
-                             _('Personal'),
+                             _('Stream'),
                              sprintf(_('%s and friends'), (($user_profile && $user_profile->fullname) ? $user_profile->fullname : $nickname)),
                              $action == 'all', 'nav_timeline_personal');
                              

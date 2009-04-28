@@ -43,12 +43,12 @@ input.submit,
 #nav_register a,
 .form_settings .form_note,
 .entity_remote_subscribe {
-background-color:#9BB43E;
+background-color:#ef4b75;
 }
 
 input:focus, textarea:focus, select:focus,
 #form_notice.warning #notice_data-text {
-border-color:#9BB43E;
+border-color:#ef4b75;
 }
 input.submit,
 #nav_register a,
@@ -135,7 +135,7 @@ border-color:#fff;
 }
 
 #showstream #anon_notice {
-background-color:#9BB43E;
+background-color:#ef4b75;
 }
 
 
@@ -167,7 +167,7 @@ background-color:transparent;
 .form_group_leave input.submit
 .form_user_subscribe input.submit,
 .form_user_unsubscribe input.submit {
-background-color:#9BB43E;
+background-color:#ef4b75;
 color:#fff;
 }
 .form_user_unsubscribe input.submit,
