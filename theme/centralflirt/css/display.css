@@ -1,4 +1,4 @@
-/** theme: identica
+/** theme: centralflirt
  *
  * @package   Laconica
  * @author Sarven Capadisli <csarven@controlyourself.ca>
@@ -82,6 +82,22 @@ border-top-color:#CEE1E9;
 }
 .section .profile {
 border-top-color:#87B4C8;
+}
+
+#anon_notice {
+    font-weight: normal;
+}
+.hentry .entry-content li li {
+    list-style-position: outside;
+    margin-left: 28px;
+    margin-bottom: 0px;
+    margin-top: 6px; 
+    list-style-type: lower-roman;
+}
+.hentry .entry-content li {
+    list-style-position: outside;
+    margin-left: 12px;
+    list-style-type: none;
 }
 
 

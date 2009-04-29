@@ -1,42 +1,32 @@
-Users on %%site.name%% can create *groups* that other users can join.
-Groups can be a great way to share information and entertainment with
-a group of people who have a common interest or background.
+%%site.name%% users can create public and private groups, groups are 
+basically a great way to share messages with many other users that are 
+part of the same group.
 
-You can find out about groups on the server on the
-[Groups](%%action.groups%%) page. You can join a group by clicking on
-the "Join" button either in the group list or on the group's home page.
-
-Starting a new group
---------------------
-
-If you want, you can start a new group for friends and people with
-common interests. Note that all groups are free for anyone to join.
-
-To start a new group, use the [new group](%%action.newgroup%%) tool
-and fill out the form. Describe your group as best you can if you want
-people to be able to find it.
-
-When choosing the nickname for your group, try to keep it short. The
-nickname is included in every message to and from the group, so the
-less chars the better. Try using acronyms for organizations, or
-airport codes for places (like 'pdx' instead of 'portland').
-
-Sending messages to a group
----------------------------
-
-You can send a message to a group using the syntax "!groupname"
-anywhere in the message. If you have more than one group named, the
-notice will go to each group. Only members can send notices to a
-group, and groups do not respond to direct messages (DMs).
-
-Receiving messages
-------------------
-
-New group messages will appear in your inbox, and will also come to
-your phone or IM client if you've set them up to receive notices.
-
-Remote groups
+Public Groups
 -------------
 
-While it's technically possible, this version of Laconica does not
-support remote group membership.
+Public groups can be started by any user, and any other user can join 
+public groups to be included in the conversation. 
+
+But, as with public notices, notices sent to public groups must have 
+@public included somewhere in the notice, as well as the groupname preceded 
+by an ! (!groupname).
+
+If either the !groupname or the @public parts of the notice are missing then
+the notice will not be successfully sent to the group.
+
+Private Groups
+--------------
+
+Private groups are largely for users to group their followers into separate 
+interests and then send a notice to those followers all at once.
+
+For example, you might have a group for dating: !dating, and a group for 
+partying: !party. You can then add your followers to either group (or both),
+and send all those followers a notice at the same time simply by including 
+!dating or !party in the notice.
+
+"In the green room club tonight come party... !party"
+
+Your followers will not see the !party part of the notice and will not know 
+which groups you have sorted them into. 

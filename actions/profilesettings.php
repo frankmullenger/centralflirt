@@ -206,13 +206,6 @@ class ProfilesettingsAction extends AccountSettingsAction
                         $timezones, _('What timezone are you normally in?'),
                         true, $timezone);
         $this->elementEnd('li');
-        $this->elementStart('li');
-        $this->checkbox('autosubscribe',
-                        _('Automatically subscribe to whoever '.
-                          'subscribes to me (best for non-humans)'),
-                        ($this->arg('autosubscribe')) ?
-                        $this->boolean('autosubscribe') : $user->autosubscribe);
-        $this->elementEnd('li');
         
         
         $this->elementStart('li');

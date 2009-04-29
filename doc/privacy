@@ -15,17 +15,17 @@ license.
   don't use the service.
 - The following data items are considered *private data* that won't be
   shared with other users, business partners, or the public at large:
-  * your private notices (notices which do not have @public explicitely set in the message)
+  * your "private notices"
+  * your "private messages"
   * your password
   * your email address
   * your IM address (AIM, Jabber, or other instant messaging address)
   * your phone number
-  * your "private messages"
-  * your login credentials (username and password) for other services (Twitter, Facebook, etc.)
+  * your login credentials for other services (Twitter, Facebook, etc.)
   * your dating profile
 - Some private data may be published in aggregate, e.g. "30% of our
   users are registered with Hotmail addresses."
-- Your @public notices (including files) can be downloaded and re-used by
+- Your @public notices can be downloaded and re-used by
   other services, either one-by-one or in bulk as
   [RSS](http://en.wikipedia.org/wiki/RSS) files.
 - Based on your email preferences, you may receive automated email
