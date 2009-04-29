@@ -630,21 +630,18 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'name', $datingProfile->firstname.' '.$datingProfile->lastname);
             $this->elementEnd('dl');
         }
-        
-        $this->elementStart('dl', 'address_1');
-        $this->element('dt', null, _('Street'));
-        $this->element('dd', 'address_1', $datingProfile->address_1);
-        $this->elementEnd('dl');
             
         $this->elementStart('dl', 'city');
         $this->element('dt', null, _('City'));
         $this->element('dd', 'city', $datingProfile->city);
         $this->elementEnd('dl');
         
-        $this->elementStart('dl', 'state');
-        $this->element('dt', null, _('State'));
-        $this->element('dd', 'state', $datingProfile->state);
-        $this->elementEnd('dl');
+        if ($datingProfile->state) {
+            $this->elementStart('dl', 'state');
+            $this->element('dt', null, _('State'));
+            $this->element('dd', 'state', $datingProfile->state);
+            $this->elementEnd('dl');
+        }
         
         $niceCountryList = get_nice_country_list();
         $this->elementStart('dl', 'country');

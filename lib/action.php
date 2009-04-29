@@ -706,7 +706,7 @@ class Action extends HTMLOutputter // lawsuit
         } else {
             $instr = _('**%%site.name%%** is a microblogging service. ');
         }
-        $instr .= sprintf(_('It is based on the [Laconica](http://laconi.ca/) microblogging software, version %s, available under the [GNU Affero General Public License](http://www.fsf.org/licensing/licenses/agpl-3.0.html).'), LACONICA_VERSION);
+        $instr .= sprintf(_(' It is based on the [Laconica](http://laconi.ca/) microblogging software, version %s, available under the [GNU Affero General Public License](http://www.fsf.org/licensing/licenses/agpl-3.0.html).'), LACONICA_VERSION);
         $output = common_markup_to_html($instr);
         $this->raw($output);
         $this->elementEnd('dd');

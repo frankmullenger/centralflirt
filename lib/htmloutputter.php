@@ -247,7 +247,10 @@ class HTMLOutputter extends XMLOutputter
     function dropdown($id, $label, $content, $instructions=null,
                       $blank_select=false, $selected=null)
     {
-        $this->element('label', array('for' => $id), $label);
+        if (!is_null($label)) {
+            $this->element('label', array('for' => $id), $label);
+        }
+        
         $this->elementStart('select', array('id' => $id, 'name' => $id));
         if ($blank_select) {
             $this->element('option', array('value' => ''));

@@ -96,10 +96,7 @@ class DatingregisterAction extends Action
             
             //Show the next form in the series for the dating registration.
             $this->formsection = $this->trimmed('formsection');
-            
-            common_debug($this->formsection);
-            common_debug(DatingregisterAction::FORM_PERSONAL_PROFILE);
-            
+
             if ($this->formsection != DatingregisterAction::FORM_PERSONAL_PROFILE) {
                 $this->saveDataToSession();
             }
@@ -191,8 +188,8 @@ class DatingregisterAction extends Action
             $this->showForm(_('Password must be 6 or more characters.'));
         } else if ($password != $confirm) {
             $this->showForm(_('Passwords don\'t match.'));
-        } else if (strlen($headline) < 50) {
-            $this->showForm(_('Headline must be at least 50 characters long.'));
+        } else if (strlen($headline) < 20) {
+            $this->showForm(_('Headline must be at least 20 characters long.'));
         } else if (strlen($bio) < 100) {
             $this->showForm(_('Bio must be at least 100 characters long.'));
         } else {
@@ -433,9 +430,24 @@ class DatingregisterAction extends Action
         } else if ($this->error) {
             $this->element('p', 'error', $this->error);
         } else {
-            $instr =
-              common_markup_to_html(_('With this form you can create '.
-                                      ' a new account. '));
+            
+            switch ($this->formsection) {
+                case  DatingregisterAction::FORM_ACCOUNT_INFO:
+                    $instr = common_markup_to_html(_('<em>Step 2 of 3</em>. Fill in some basic details about yourself for others to find you.'));
+                    break;
+                    
+                case DatingregisterAction::FORM_PERSONAL_DETAILS:
+                    $instr = common_markup_to_html(_('<em>Step 3 of 3</em>.'));
+                    break;
+                    
+                case DatingregisterAction::FORM_PERSONAL_PROFILE:
+                    $instr = common_markup_to_html(_(''));
+                    break;
+                    
+                default: 
+                    $instr = common_markup_to_html(_('With this form you can create a new account.'));
+                    break;
+            }
 
             $this->elementStart('div', 'instructions');
             $this->raw($instr);
@@ -520,6 +532,10 @@ class DatingregisterAction extends Action
                 $this->hidden('formsection', DatingregisterAction::FORM_PERSONAL_DETAILS);
                 $this->elementStart('ul', 'form_data');
                 
+                $this->elementStart('li', 'sub_heading');
+                $this->element('h2', null, _('Address'));
+                $this->elementEnd('li');
+                
                 $this->elementStart('li');
                 $this->input('city', _('City'), $this->arg('city'));
                 $this->elementEnd('li');
@@ -534,6 +550,10 @@ class DatingregisterAction extends Action
                 
                 $this->elementStart('li');
                 $this->input('profession', _('Profession'), $this->arg('profession'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li', 'sub_heading');
+                $this->element('h2', null, _('Physical Appearance'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
@@ -562,6 +582,20 @@ class DatingregisterAction extends Action
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
+                $this->dropdown('body_art', _('Body Art'),
+                             $datingProfile->getNiceBodyArtStatusList(), null, true, $this->arg('body_art'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li');
+                $this->dropdown('best_feature', _('Best feature'),
+                             $datingProfile->getNiceBestFeatureStatusList(), null, true, $this->arg('best_feature'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li', 'sub_heading');
+                $this->element('h2', null, _('Lifestyle'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li');
                 $this->dropdown('marital_status', _('Marital Status'),
                              $datingProfile->getNiceMaritalStatusList(), null, true, $this->arg('marital_status'));
                 $this->elementEnd('li');
@@ -587,7 +621,7 @@ class DatingregisterAction extends Action
                 $this->elementEnd('li');
 
                 $this->elementStart('li');
-                $this->elementStart('fieldset');
+                $this->elementStart('fieldset', array('id' => 'languages'));
                 $this->element('legend', null, 'Languages');
                 $languageList = $datingProfile->getNiceLanguageStatusList();
                 $languageIds = (is_array($this->arg('language')))?$this->arg('language'):array();
@@ -596,7 +630,9 @@ class DatingregisterAction extends Action
                     if (in_array($languageId, $languageIds)) {
                         $checked = true;
                     }
+                    $this->elementStart('div', 'language');
                     $this->checkbox("language[$languageId]", _($language), $checked, $instructions=null, $value=$languageId);
+                    $this->elementEnd('div');
                 }
                 $this->elementEnd('fieldset');
                 $this->elementEnd('li');
@@ -610,17 +646,7 @@ class DatingregisterAction extends Action
                 $this->dropdown('politics', _('Politics'),
                              $datingProfile->getNicePoliticsStatusList(), null, true, $this->arg('politics'));
                 $this->elementEnd('li');
-                
-                $this->elementStart('li');
-                $this->dropdown('best_feature', _('Best feature'),
-                             $datingProfile->getNiceBestFeatureStatusList(), null, true, $this->arg('best_feature'));
-                $this->elementEnd('li');
-                
-                $this->elementStart('li');
-                $this->dropdown('body_art', _('Body Art'),
-                             $datingProfile->getNiceBodyArtStatusList(), null, true, $this->arg('body_art'));
-                $this->elementEnd('li');
-                
+
                 $this->elementEnd('ul');
                 $this->submit('submit', _('Register'));
                 $this->elementEnd('fieldset');
@@ -639,6 +665,10 @@ class DatingregisterAction extends Action
                 $this->hidden('formsection', DatingregisterAction::FORM_PERSONAL_PROFILE);
                 $this->elementStart('ul', 'form_data');
                 
+                $this->elementStart('li', 'sub_heading');
+                $this->element('h2', null, _('Account'));
+                $this->elementEnd('li');
+                
                 $this->elementStart('li');
                 $this->input('nickname', _('Nickname'), $this->trimmed('nickname'), _('1-64 lowercase letters or numbers, no punctuation or spaces. Required.'));
                 $this->elementEnd('li');
@@ -650,12 +680,20 @@ class DatingregisterAction extends Action
                 $this->password('confirm', _('Confirm'),
                                 _('Same as password above. Required.'));
                 $this->elementEnd('li');
+                
+                $this->elementStart('li', 'sub_heading');
+                $this->element('h2', null, _('Profile'));
+                $this->elementEnd('li');
                                 
                 $this->elementStart('li');
                 $this->input('headline', _('Headline'), $this->arg('headline'));
                 $this->elementEnd('li');
                 $this->elementStart('li');
                 $this->textarea('bio', _('Bio'), $this->arg('bio'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li', 'sub_heading');
+                $this->element('h2', null, _('Personality'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
@@ -730,18 +768,13 @@ class DatingregisterAction extends Action
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
-                $this->dropdown('birthdate_day', _('Day'),
-                             $datingProfile->getNiceMonthDayList(), null, false, ($this->arg('birthdate_day'))?$this->arg('birthdate_day'):null);          
-                $this->elementEnd('li');
-                $this->elementStart('li');
-                $this->dropdown('birthdate_month', _('Month'),
+                $this->dropdown('birthdate_day', _('Birthdate'),
+                             $datingProfile->getNiceMonthDayList(), null, false, ($this->arg('birthdate_day'))?$this->arg('birthdate_day'):null);  
+                $this->dropdown('birthdate_month', null,
                              $datingProfile->getNiceMonthList(), null, false, ($this->arg('birthdate_month'))?$this->arg('birthdate_month'):null);
+                $this->dropdown('birthdate_year', null,
+                             $datingProfile->getNiceYearList(), null, false, ($this->arg('birthdate_year'))?$this->arg('birthdate_year'):1978);            
                 $this->elementEnd('li');
-                $this->elementStart('li');
-                $this->dropdown('birthdate_year', _('Year'),
-                             $datingProfile->getNiceYearList(), null, false, ($this->arg('birthdate_year'))?$this->arg('birthdate_year'):1978);
-                $this->elementEnd('li');
-                
                 
                 $this->elementEnd('ul');
                 $this->submit('submit', _('Register'));
@@ -801,6 +834,17 @@ class DatingregisterAction extends Action
                            'you enjoy using this service.'),
                          $nickname, $profileurl);
 
+        if (common_config('profile', 'enable_dating')) {
+            $instr = sprintf(_('Congratulations, %s! And welcome to %%%%site.name%%%%. '.
+                           'From here, you may want to...'. "\n\n" .
+                           '* Go to [your profile](%s) and post your first message.' .  "\n" .
+                           '* [Search for people](%%%%action.datingsearch%%%%) that share your interests. ' . "\n" .
+                           '* Update your [profile settings](%%%%action.datingprofilesettings%%%%) to tell others more about you. ' . "\n" .
+                           '* Get [help](%%%%doc.help%%%%) on how to use this service. ' . "\n\n" .
+                           'Thanks for signing up and we hope you enjoy using this service.'),
+                         $nickname, $profileurl);
+        }
+              
         $this->raw(common_markup_to_html($instr));
 
         $have_email = $this->trimmed('email');

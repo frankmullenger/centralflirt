@@ -352,3 +352,29 @@ width:auto;
     font-style: italic;
     color: #666;   
 }
+
+#form_register li #languages legend {
+    display: inline;
+    font-size: 1em;
+    text-transform: none;
+}
+.form_settings input.checkbox {
+    clear: none;
+}
+.form_settings label.checkbox {
+    width: 130px;
+}   
+div.language {
+    float: left;
+}
+.hentry .entry-content li.sub_heading {
+    margin-bottom: 0px;
+}
+li.sub_heading h2 {
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #3F7085;
+    line-height: normal;
+}
+input#interests, input#headline  {
+    width: 390px;
+}
