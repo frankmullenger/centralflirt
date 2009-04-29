@@ -548,10 +548,6 @@ class DatingregisterAction extends Action
                 $this->input('postcode', _('Postcode'), $this->arg('postcode'));
                 $this->elementEnd('li');
                 
-                $this->elementStart('li');
-                $this->input('profession', _('Profession'), $this->arg('profession'));
-                $this->elementEnd('li');
-                
                 $this->elementStart('li', 'sub_heading');
                 $this->element('h2', null, _('Physical Appearance'));
                 $this->elementEnd('li');
@@ -593,6 +589,10 @@ class DatingregisterAction extends Action
                 
                 $this->elementStart('li', 'sub_heading');
                 $this->element('h2', null, _('Lifestyle'));
+                $this->elementEnd('li');
+                
+                $this->elementStart('li');
+                $this->input('profession', _('Profession'), $this->arg('profession'));
                 $this->elementEnd('li');
                 
                 $this->elementStart('li');
