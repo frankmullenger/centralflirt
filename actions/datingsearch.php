@@ -49,6 +49,9 @@ class DatingsearchAction extends SearchAction
 {
     function getInstructions()
     {
+        if (common_config('profile', 'enable_dating')) {
+            return;
+        }
         return _('Search for people on %%site.name%%.');
     }
 

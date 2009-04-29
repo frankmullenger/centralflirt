@@ -365,7 +365,7 @@ width:auto;
     clear: none;
 }
 .form_settings label.checkbox {
-    width: 130px;
+    /* width: 130px; */
 }   
 div.language {
     float: left;
@@ -384,6 +384,7 @@ input#interests, input#headline  {
 .entity_profile h2.entity_headline {
     display: block;
     color: #333;
+    font-style: normal;
 }
 .entity_profile {
     width: 550px;
