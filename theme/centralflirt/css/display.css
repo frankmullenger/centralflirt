@@ -21,6 +21,12 @@ h2 {
     font-size: 1.1em;
     font-style: italic;
 }
+h3 {
+    font-size: 1em;
+    font-style: italic;
+    margin-bottom: 5px;
+    margin-top: 15px;
+}
 body {
 font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 font-size:1em;
@@ -310,6 +316,26 @@ width:auto;
     padding-top: 8px;
 }
 
+.entity_profile .entity_headline {
+    font-weight: bold;
+    font-size: 1.1em;
+    text-transform:none;
+    margin-top:8px;
+    font-style: italic;
+    margin-bottom: 0px;
+}
+
+
+.entity_profile .entity_bio {
+    margin-bottom: 8px;
+}
+
+.entity_profile .entity_location {
+    font-style: italic;   
+    padding-top: 8px;
+}
+
+
 #content_wide {
     -moz-border-radius-bottomleft:7px;
     -moz-border-radius-bottomright:7px;
@@ -320,4 +346,9 @@ width:auto;
     width: 960px;
     background-color:#FFFFFF;
     border-color:#FFFFFF;
+}
+
+.entity_dating_profile dt {
+    font-style: italic;
+    color: #666;   
 }

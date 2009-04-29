@@ -511,10 +511,17 @@ class ShowstreamAction extends RestrictedAction
         $this->element('dt', null, _('Location'));
         $this->element('dd', 'location', ($datingProfile->city)?$datingProfile->city.', '.$country:$country);
         $this->elementEnd('dl');
+        
+        if ($datingProfile->headline) {
+            $this->elementStart('dl', 'entity_headline');
+            $this->element('dt', null, _('Headline'));
+            $this->element('dd', 'headline', $datingProfile->headline);
+            $this->elementEnd('dl');
+        }
 
         if ($datingProfile->bio) {
             $this->elementStart('dl', 'entity_note');
-            $this->element('dt', null, _('Note'));
+            $this->element('dt', null, _('Bio'));
             $this->element('dd', 'note', $datingProfile->bio);
             $this->elementEnd('dl');
         }
@@ -527,11 +534,10 @@ class ShowstreamAction extends RestrictedAction
             $this->elementStart('ul', 'tags xoxo');
             foreach ($tags as $tag) {
                 $this->elementStart('li');
-                $this->element('span', 'mark_hash', '#');
+                //$this->out->element('span', 'mark_hash', '#');
                 $this->element('a', array('rel' => 'tag',
-                                          'href' => common_local_url('peopletag',
-                                                                     array('tag' => $tag))),
-                               $tag);
+                                               'href' => common_local_url('interesttag', array('tag' => $tag))),
+                                    '#'.$tag);
                 $this->elementEnd('li');
             }
             $this->elementEnd('ul');
@@ -614,7 +620,7 @@ class ShowstreamAction extends RestrictedAction
         }
         
         $this->elementStart('div', 'entity_dating_profile vcard author');
-        $this->element('h2', null, _('Dating profile'));
+        $this->element('h3', null, _('Dating profile'));
         
         //$this->element('p', null, _('Place parts of dating profile in collapsable divs in here.'));
         
@@ -645,18 +651,7 @@ class ShowstreamAction extends RestrictedAction
         $this->element('dt', null, _('Country'));
         $this->element('dd', 'country', $niceCountryList[$datingProfile->country]);
         $this->elementEnd('dl');
-        
-        $this->elementStart('dl', 'postcode');
-        $this->element('dt', null, _('Postcode'));
-        $this->element('dd', 'postcode', $datingProfile->postcode);
-        $this->elementEnd('dl');
-        
-        if ($datingProfile->bio) {
-            $this->elementStart('dl', 'bio');
-            $this->element('dt', null, _('Bio'));
-            $this->element('dd', 'bio', $datingProfile->bio);
-            $this->elementEnd('dl');
-        }
+
         
         if ($datingProfile->birthdate) {
             $birthDateObject = new DateTime($datingProfile->birthdate);
@@ -690,19 +685,8 @@ class ShowstreamAction extends RestrictedAction
             $this->elementEnd('dl');
         }
         
-        if ($datingProfile->profession) {
-            $this->elementStart('dl', 'profession');
-            $this->element('dt', null, _('Profession'));
-            $this->element('dd', 'profession', $datingProfile->profession);
-            $this->elementEnd('dl');
-        }
         
-        if ($datingProfile->headline) {
-            $this->elementStart('dl', 'headline');
-            $this->element('dt', null, _('Headline'));
-            $this->element('dd', 'headline', $datingProfile->headline);
-            $this->elementEnd('dl');
-        }
+        $this->element('h3', null, _('Physical Appearance'));
         
         if ($datingProfile->height) {
             $heightList = $datingProfile->getNiceHeightList();
@@ -740,6 +724,31 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'eye_colour', $eyecolourList[$datingProfile->eye_colour]);
             $this->elementEnd('dl');
         }
+        
+        if ($datingProfile->best_feature) {
+            $featureList = $datingProfile->getNiceBestFeatureStatusList();
+            $this->elementStart('dl', 'best_feature');
+            $this->element('dt', null, _('Best Feature'));
+            $this->element('dd', 'best_feature', $featureList[$datingProfile->best_feature]);
+            $this->elementEnd('dl');
+        }
+        if ($datingProfile->body_art) {
+            $bodyArtList = $datingProfile->getNiceBodyArtStatusList();
+            $this->elementStart('dl', 'body_art');
+            $this->element('dt', null, _('Body Art'));
+            $this->element('dd', 'body_art', $bodyArtList[$datingProfile->body_art]);
+            $this->elementEnd('dl');
+        }
+        
+        $this->element('h3', null, _('Lifestyle'));
+        
+        if ($datingProfile->profession) {
+            $this->elementStart('dl', 'profession');
+            $this->element('dt', null, _('Profession'));
+            $this->element('dd', 'profession', $datingProfile->profession);
+            $this->elementEnd('dl');
+        }
+        
         if ($datingProfile->marital_status) {
             $maritalStatusList = $datingProfile->getNiceMaritalStatusList();
             $this->elementStart('dl', 'marital_status');
@@ -782,6 +791,9 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'education', $educationList[$datingProfile->education]);
             $this->elementEnd('dl');
         }
+        
+        $this->element('h3', null, _('Personality'));
+        
         if ($datingProfile->politics) {
             $politicsList = $datingProfile->getNicePoliticsStatusList();
             $this->elementStart('dl', 'politics');
@@ -789,20 +801,7 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'politics', $politicsList[$datingProfile->politics]);
             $this->elementEnd('dl');
         }
-        if ($datingProfile->best_feature) {
-            $featureList = $datingProfile->getNiceBestFeatureStatusList();
-            $this->elementStart('dl', 'best_feature');
-            $this->element('dt', null, _('Best Feature'));
-            $this->element('dd', 'best_feature', $featureList[$datingProfile->best_feature]);
-            $this->elementEnd('dl');
-        }
-        if ($datingProfile->body_art) {
-            $bodyArtList = $datingProfile->getNiceBodyArtStatusList();
-            $this->elementStart('dl', 'body_art');
-            $this->element('dt', null, _('Body Art'));
-            $this->element('dd', 'body_art', $bodyArtList[$datingProfile->body_art]);
-            $this->elementEnd('dl');
-        }
+        
         if ($datingProfile->fun) {
             $this->elementStart('dl', 'fun');
             $this->element('dt', null, _('What I do for fun'));
@@ -847,11 +846,10 @@ class ShowstreamAction extends RestrictedAction
             $this->elementStart('ul', 'tags xoxo');
             foreach ($tags as $tag) {
                 $this->elementStart('li');
-                $this->element('span', 'mark_hash', '#');
+                //$this->out->element('span', 'mark_hash', '#');
                 $this->element('a', array('rel' => 'tag',
-                                          'href' => common_local_url('interesttag',
-                                                                     array('tag' => $tag))),
-                               $tag);
+                                               'href' => common_local_url('interesttag', array('tag' => $tag))),
+                                    '#'.$tag);
                 $this->elementEnd('li');
             }
             $this->elementEnd('ul');

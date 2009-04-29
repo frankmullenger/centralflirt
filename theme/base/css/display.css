@@ -587,7 +587,7 @@ overflow:hidden;
 font-weight:bold;
 }
 .entity_dating_profile dd {
-margin-left: 140px;
+margin-left: 160px;
 }
 
 .entity_dating_profile .entity_depiction {
@@ -631,7 +631,7 @@ font-weight:normal;
 }
 .entity_dating_profile dt {
 float: left;
-width: 140px;
+width: 160px;
 }
 .entity_dating_profile h2 {
 display: block;
