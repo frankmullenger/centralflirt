@@ -400,3 +400,6 @@ input#interests, input#headline  {
 #form_settings_dating_profile legend {
     display: none;
 }
+textarea {
+    height: 100px;
+}

@@ -822,28 +822,6 @@ class ShowstreamAction extends RestrictedAction
             
             $this->elementEnd('dl');
         }
-        
-        
-        
-        $tags = Dating_profile_tag::getTags($datingProfile->id, $datingProfile->id);
-        if (count($tags) > 0) {
-            $this->elementStart('dl', 'entity_interests');
-            $this->element('dt', null, _('Interests'));
-            $this->elementStart('dd');
-            $this->elementStart('ul', 'tags xoxo');
-            foreach ($tags as $tag) {
-                $this->elementStart('li');
-                //$this->out->element('span', 'mark_hash', '#');
-                $this->element('a', array('rel' => 'tag',
-                                               'href' => common_local_url('interesttag', array('tag' => $tag))),
-                                    '#'.$tag);
-                $this->elementEnd('li');
-            }
-            $this->elementEnd('ul');
-            $this->elementEnd('dd');
-            $this->elementEnd('dl');
-        }
-        
 
         $this->elementEnd('div');
     }
