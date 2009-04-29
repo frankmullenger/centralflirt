@@ -485,46 +485,36 @@ class ShowstreamAction extends RestrictedAction
                                     'alt' => $this->profile->nickname));
         $this->elementEnd('dd');
         $this->elementEnd('dl');
-
-        $this->elementStart('dl', 'entity_nickname');
-        $this->element('dt', null, _('Nickname'));
-        $this->elementStart('dd');
-        $hasFN = ($this->profile->fullname) ? 'nickname url uid' : 'fn nickname url uid';
-        $this->element('a', array('href' => $this->profile->profileurl,
-                                  'rel' => 'me', 'class' => $hasFN),
-                            $this->profile->nickname);
-        $this->elementEnd('dd');
-        $this->elementEnd('dl');
-
-        if ($datingProfile->firstname) {
-            $this->elementStart('dl', 'entity_fn');
-            $this->element('dt', null, _('Full name'));
-            $this->elementStart('dd');
-            $this->element('span', 'fn', ($datingProfile->lastname)?$datingProfile->firstname.' '.$datingProfile->lastname:$datingProfile->firstname);
-            $this->elementEnd('dd');
-            $this->elementEnd('dl');
-        }
-
-        $countryList = get_nice_country_list();
-        $country = $countryList[$datingProfile->country];
-        $this->elementStart('dl', 'entity_location');
-        $this->element('dt', null, _('Location'));
-        $this->element('dd', 'location', ($datingProfile->city)?$datingProfile->city.', '.$country:$country);
-        $this->elementEnd('dl');
+        
+        $this->elementStart('a', array('href' => $this->profile->profileurl,
+                                            'class' => 'url'));
+        $this->elementStart('span', 'entity_nickname');
+        $this->raw($this->profile->nickname);
+        $this->elementEnd('span');
+        $this->elementEnd('a');
+        
+        $age = $datingProfile->getAge();
+        $this->elementStart('span', 'entity_age');
+        $this->raw($age);
+        $this->elementEnd('span');
         
         if ($datingProfile->headline) {
-            $this->elementStart('dl', 'entity_headline');
-            $this->element('dt', null, _('Headline'));
-            $this->element('dd', 'headline', $datingProfile->headline);
-            $this->elementEnd('dl');
+            $this->elementStart('h2', 'entity_headline');
+            $this->raw($datingProfile->headline);
+            $this->elementEnd('h2');
         }
-
         if ($datingProfile->bio) {
-            $this->elementStart('dl', 'entity_note');
-            $this->element('dt', null, _('Bio'));
-            $this->element('dd', 'note', $datingProfile->bio);
-            $this->elementEnd('dl');
+            $this->elementStart('p', 'entity_bio');
+            $this->raw($datingProfile->bio);
+            $this->elementEnd('p');
         }
+        $countryList = get_nice_country_list();
+        $country = $countryList[$datingProfile->country];
+        $state = ($datingProfile->state)?$datingProfile->state.', ':null;
+        
+        $this->elementStart('span', 'entity_location');
+        $this->raw(ucwords(($datingProfile->city)?$datingProfile->city.', '.$state.$country:$state.$country));
+        $this->elementEnd('span');
 
         $tags = Dating_profile_tag::getTags($this->profile->id, $this->profile->id);
         if (count($tags) > 0) {
@@ -630,25 +620,6 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'name', $datingProfile->firstname.' '.$datingProfile->lastname);
             $this->elementEnd('dl');
         }
-            
-        $this->elementStart('dl', 'city');
-        $this->element('dt', null, _('City'));
-        $this->element('dd', 'city', $datingProfile->city);
-        $this->elementEnd('dl');
-        
-        if ($datingProfile->state) {
-            $this->elementStart('dl', 'state');
-            $this->element('dt', null, _('State'));
-            $this->element('dd', 'state', $datingProfile->state);
-            $this->elementEnd('dl');
-        }
-        
-        $niceCountryList = get_nice_country_list();
-        $this->elementStart('dl', 'country');
-        $this->element('dt', null, _('Country'));
-        $this->element('dd', 'country', $niceCountryList[$datingProfile->country]);
-        $this->elementEnd('dl');
-
         
         if ($datingProfile->birthdate) {
             $birthDateObject = new DateTime($datingProfile->birthdate);

@@ -301,19 +301,22 @@ width:auto;
 .profile .entity_profile .entity_headline {
     font-weight: bold;
     font-size: 1.1em;
-    text-transform:none;
+    text-transform: none;
     margin-top:8px;
-    font-style: italic;
+    font-style: normal;
     margin-bottom: 0px;
+    color:#333333;
 }
 
 .profile .entity_profile .entity_bio {
     margin-bottom: 8px;
+    color: #333;
 }
 
 .profile .entity_profile .entity_location {
     font-style: italic;   
     padding-top: 8px;
+    color: #666;
 }
 
 .entity_profile .entity_headline {
@@ -377,4 +380,19 @@ li.sub_heading h2 {
 }
 input#interests, input#headline  {
     width: 390px;
+}
+.entity_profile h2.entity_headline {
+    display: block;
+    color: #333;
+}
+.entity_profile {
+    width: 550px;
+}
+.entity_bio {
+    margin-bottom: 4px;
+    margin-left: 113px;
+}
+.entity_profile .entity_location {
+    color: #666666;
+    font-style: italic;
 }
