@@ -95,12 +95,16 @@ class DatingprofilesettingsAction extends AccountSettingsAction
                                            'class' => 'form_settings',
                                            'action' => common_local_url('datingprofilesettings')));
         $this->elementStart('fieldset');
-        $this->element('legend', null, _('Dating Profile information'));
+        $this->element('legend', null, _('Dating Profile Information'));
         $this->hidden('token', common_session_token());
 
         # too much common patterns here... abstractable?
-
         $this->elementStart('ul', 'form_data');
+        
+        $this->elementStart('li', 'sub_heading');
+        $this->element('h2', null, _('Personal Details'));
+        $this->elementEnd('li');
+
         $this->elementStart('li');
         $this->input('firstname', _('First name'),
                      ($this->arg('firstname')) ? $this->arg('firstname') : $datingProfile->firstname);
@@ -129,10 +133,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->input('postcode', _('Postcode'),
                      ($this->arg('postcode')) ? $this->arg('postcode') : $datingProfile->postcode);
         $this->elementEnd('li');
-        $this->elementStart('li');
-        $this->textarea('bio', _('Bio'),
-                     ($this->arg('bio')) ? $this->arg('bio') : $datingProfile->bio);
-        $this->elementEnd('li');
+        
         $this->elementStart('li');
         $this->dropdown('sex', _('Sex'),
                      $datingProfile->getNiceSexList(), null, false, $datingProfile->sex);
@@ -140,6 +141,10 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementStart('li');
         $this->dropdown('partner_sex', _('Looking For'),
                      $datingProfile->getNiceSexList(), null, false, $datingProfile->partner_sex);
+        $this->elementEnd('li');
+        $this->elementStart('li');
+        $this->dropdown('interested_in', _('Interested In'),
+                     $datingProfile->getNiceInterestList(), null, false, $datingProfile->interested_in);
         $this->elementEnd('li');
 
         $this->elementStart('li');
@@ -151,27 +156,36 @@ class DatingprofilesettingsAction extends AccountSettingsAction
                      $datingProfile->getNiceYearList(), null, false, $datingProfile->getBirthdate('Y'));       
         $this->elementEnd('li');
         
-        $this->elementStart('li');
-        $this->dropdown('interested_in', _('Interested In'),
-                     $datingProfile->getNiceInterestList(), null, false, $datingProfile->interested_in);
+        
+        
+        $this->elementStart('li', 'sub_heading');
+        $this->element('h2', null, _('Profile'));
         $this->elementEnd('li');
         
-        
-        
-        
-        $this->elementStart('li');
-        $this->input('profession', _('Profession'),
-                     ($this->arg('profession')) ? $this->arg('profession') : $datingProfile->profession);
-        $this->elementEnd('li');
         $this->elementStart('li');
         $this->input('headline', _('Headline'),
                      ($this->arg('headline')) ? $this->arg('headline') : $datingProfile->headline);
         $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->textarea('bio', _('Bio'),
+                     ($this->arg('bio')) ? $this->arg('bio') : $datingProfile->bio);
+        $this->elementEnd('li');
+        
+        
+        
         $this->elementStart('li');
         $this->input('interests', _('Interests'),
                      ($this->arg('interests')) ? $this->arg('interests') : implode(', ', $datingProfile->getInterestTags()),
                      _('Tags for yourself, must be comma separated'));
         $this->elementEnd('li');
+        
+        
+        
+        $this->elementStart('li', 'sub_heading');
+        $this->element('h2', null, _('Physical Appearance'));
+        $this->elementEnd('li');
+        
         $this->elementStart('li');
         $this->dropdown('height', _('Height'),
                      $datingProfile->getNiceHeightList(), null, true, $datingProfile->height);
@@ -195,6 +209,25 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementStart('li');
         $this->dropdown('eye_colour', _('Eye Colour'),
                      $datingProfile->getNiceEyeColourList(), null, true, $datingProfile->eye_colour);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('body_art', _('Body Art'),
+                     $datingProfile->getNiceBodyArtStatusList(), null, true, $datingProfile->body_art);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->dropdown('best_feature', _('Best feature'),
+                     $datingProfile->getNiceBestFeatureStatusList(), null, true, $datingProfile->best_feature);
+        $this->elementEnd('li');
+        
+        $this->elementStart('li', 'sub_heading');
+        $this->element('h2', null, _('Lifestyle'));
+        $this->elementEnd('li');
+        
+        $this->elementStart('li');
+        $this->input('profession', _('Profession'),
+                     ($this->arg('profession')) ? $this->arg('profession') : $datingProfile->profession);
         $this->elementEnd('li');
         
         $this->elementStart('li');
@@ -249,15 +282,11 @@ class DatingprofilesettingsAction extends AccountSettingsAction
                      $datingProfile->getNicePoliticsStatusList(), null, true, $datingProfile->politics);
         $this->elementEnd('li');
         
-        $this->elementStart('li');
-        $this->dropdown('best_feature', _('Best feature'),
-                     $datingProfile->getNiceBestFeatureStatusList(), null, true, $datingProfile->best_feature);
+        
+        $this->elementStart('li', 'sub_heading');
+        $this->element('h2', null, _('Personality'));
         $this->elementEnd('li');
         
-        $this->elementStart('li');
-        $this->dropdown('body_art', _('Body Art'),
-                     $datingProfile->getNiceBodyArtStatusList(), null, true, $datingProfile->body_art);
-        $this->elementEnd('li');
         
         $this->elementStart('li');
         $this->textarea('fun', _('What do you do for fun?'),

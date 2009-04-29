@@ -397,3 +397,6 @@ input#interests, input#headline  {
     color: #666666;
     font-style: italic;
 }
+#form_settings_dating_profile legend {
+    display: none;
+}

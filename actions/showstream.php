@@ -505,7 +505,7 @@ class ShowstreamAction extends RestrictedAction
         }
         if ($datingProfile->bio) {
             $this->elementStart('p', 'entity_bio');
-            $this->raw($datingProfile->bio);
+            $this->raw(nl2br($datingProfile->bio));
             $this->elementEnd('p');
         }
         $countryList = get_nice_country_list();
@@ -752,6 +752,18 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'religion', $religionList[$datingProfile->religion]);
             $this->elementEnd('dl');
         }
+        
+        $languages = $datingProfile->getLanguages();
+        $languageList = $datingProfile->getNiceLanguageStatusList();
+        if (!empty($languages)) {
+            $this->elementStart('dl', 'languages');
+            $this->element('dt', null, _('Languages'));
+            foreach ($languages as $language) {
+                $this->element('dd', 'language', $languageList[$language]);
+            }
+            $this->elementEnd('dl');
+        }
+        
         if ($datingProfile->education) {
             $educationList = $datingProfile->getNiceEducationStatusList();
             $this->elementStart('dl', 'education');
@@ -759,8 +771,6 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'education', $educationList[$datingProfile->education]);
             $this->elementEnd('dl');
         }
-        
-        $this->element('h3', null, _('Personality'));
         
         if ($datingProfile->politics) {
             $politicsList = $datingProfile->getNicePoliticsStatusList();
@@ -770,40 +780,49 @@ class ShowstreamAction extends RestrictedAction
             $this->elementEnd('dl');
         }
         
+        $this->element('h3', null, _('Personality'));
+
         if ($datingProfile->fun) {
             $this->elementStart('dl', 'fun');
             $this->element('dt', null, _('What I do for fun'));
-            $this->element('dd', 'fun', $datingProfile->fun);
+
+            $this->elementStart('dd', 'fun');
+            $this->raw(nl2br($datingProfile->fun));
+            $this->elementEnd('dd');
+            
             $this->elementEnd('dl');
         }
         if ($datingProfile->fav_spot) {
             $this->elementStart('dl', 'fav_spot');
             $this->element('dt', null, _('Favourite spot'));
-            $this->element('dd', 'fav_spot', $datingProfile->fav_spot);
+            
+            $this->elementStart('dd', 'fav_spot');
+            $this->raw(nl2br($datingProfile->fav_spot));
+            $this->elementEnd('dd');
+            
             $this->elementEnd('dl');
         }
         if ($datingProfile->fav_media) {
             $this->elementStart('dl', 'fav_media');
             $this->element('dt', null, _('Favourite books/movies'));
-            $this->element('dd', 'fav_media', $datingProfile->fav_media);
+            
+            $this->elementStart('dd', 'fav_media');
+            $this->raw(nl2br($datingProfile->fav_media));
+            $this->elementEnd('dd');
+            
             $this->elementEnd('dl');
         }
         if ($datingProfile->first_date) {
             $this->elementStart('dl', 'first_date');
             $this->element('dt', null, _('My idea of a good first date'));
-            $this->element('dd', 'first_date', $datingProfile->first_date);
+            
+            $this->elementStart('dd', 'first_date');
+            $this->raw(nl2br($datingProfile->first_date));
+            $this->elementEnd('dd');
+            
             $this->elementEnd('dl');
         }
-        $languages = $datingProfile->getLanguages();
-        $languageList = $datingProfile->getNiceLanguageStatusList();
-        if (!empty($languages)) {
-            $this->elementStart('dl', 'first_date');
-            $this->element('dt', null, _('Languages'));
-            foreach ($languages as $language) {
-                $this->element('dd', 'language', $languageList[$language]);
-            }
-            $this->elementEnd('dl');
-        }
+        
         
         
         $tags = Dating_profile_tag::getTags($datingProfile->id, $datingProfile->id);
