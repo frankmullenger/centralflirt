@@ -173,11 +173,15 @@ class EmailsettingsAction extends AccountSettingsAction
                         _('I want to post notices by email.'),
                         $user->emailpost);
         $this->elementEnd('li');
-        $this->elementStart('li');
-        $this->checkbox('emailmicroid',
-                        _('Publish a MicroID for my email address.'),
-                        $user->emailmicroid);
-        $this->elementEnd('li');
+        
+        if (!common_config('profile', 'enable_dating')) {
+            $this->elementStart('li');
+            $this->checkbox('emailmicroid',
+                            _('Publish a MicroID for my email address.'),
+                            $user->emailmicroid);
+            $this->elementEnd('li');
+        }
+        
         $this->elementEnd('ul');
         $this->submit('save', _('Save'));
         $this->elementEnd('fieldset');
