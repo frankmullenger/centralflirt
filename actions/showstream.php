@@ -470,10 +470,15 @@ class ShowstreamAction extends RestrictedAction
         $this->element('h2', null, _('User profile'));
 
         $avatar = $this->profile->getAvatar(AVATAR_PROFILE_SIZE);
+        
+        //Adding sex for dating default avatars
+        $datingProfile = $this->profile->getDatingProfile();
+        $sex = ($datingProfile)?$datingProfile->sex:null;
+        
         $this->elementStart('dl', 'entity_depiction');
         $this->element('dt', null, _('Photo'));
         $this->elementStart('dd');
-        $this->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_PROFILE_SIZE),
+        $this->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_PROFILE_SIZE, $sex),
                                     'class' => 'photo avatar',
                                     'width' => AVATAR_PROFILE_SIZE,
                                     'height' => AVATAR_PROFILE_SIZE,
@@ -542,7 +547,7 @@ class ShowstreamAction extends RestrictedAction
 
         if ($cur && $cur->id == $this->profile->id) {
             $this->elementStart('li', 'entity_edit');
-            $this->element('a', array('href' => common_local_url('profilesettings'),
+            $this->element('a', array('href' => common_local_url('datingprofilesettings'),
                                       'title' => _('Edit profile settings')),
                                       _('Edit'));
             $this->elementEnd('li');
