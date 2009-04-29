@@ -364,8 +364,8 @@ width:auto;
 .form_settings input.checkbox {
     clear: none;
 }
-.form_settings label.checkbox {
-    /* width: 130px; */
+.form_settings .language label.checkbox {
+    width: 130px;
 }   
 div.language {
     float: left;
