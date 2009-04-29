@@ -356,7 +356,7 @@ width:auto;
     color: #666;   
 }
 
-#form_register li #languages legend {
+li #languages legend {
     display: inline;
     font-size: 1em;
     text-transform: none;

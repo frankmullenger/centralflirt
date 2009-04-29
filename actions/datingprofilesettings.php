@@ -143,16 +143,12 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementEnd('li');
 
         $this->elementStart('li');
-        $this->dropdown('birthdate_year', _('Year'),
-                     $datingProfile->getNiceYearList(), null, false, $datingProfile->getBirthdate('Y'));
-        $this->elementEnd('li');
-        $this->elementStart('li');
-        $this->dropdown('birthdate_month', _('Month'),
-                     $datingProfile->getNiceMonthList(), null, false, $datingProfile->getBirthdate('m'));  
-        $this->elementEnd('li');
-        $this->elementStart('li');
-        $this->dropdown('birthdate_day', _('Day'),
-                     $datingProfile->getNiceMonthDayList(), null, false, $datingProfile->getBirthdate('d'));          
+        $this->dropdown('birthdate_day', _('Birthdate'),
+                     $datingProfile->getNiceMonthDayList(), null, false, $datingProfile->getBirthdate('d'));  
+         $this->dropdown('birthdate_month', null,
+                     $datingProfile->getNiceMonthList(), null, false, $datingProfile->getBirthdate('m')); 
+         $this->dropdown('birthdate_year', null,
+                     $datingProfile->getNiceYearList(), null, false, $datingProfile->getBirthdate('Y'));       
         $this->elementEnd('li');
         
         $this->elementStart('li');
@@ -227,7 +223,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         $this->elementEnd('li');
         
         $this->elementStart('li');
-        $this->elementStart('fieldset');
+        $this->elementStart('fieldset', array('id' => 'languages'));
         $this->element('legend', null, 'Languages');
         $languageList = $datingProfile->getNiceLanguageStatusList();
         $languageIds = $datingProfile->getLanguages();
@@ -236,7 +232,9 @@ class DatingprofilesettingsAction extends AccountSettingsAction
             if (in_array($languageId, $languageIds)) {
                 $checked = true;
             }
+            $this->elementStart('div', 'language');
             $this->checkbox("language[$languageId]", _($language), $checked, $instructions=null, $value=$languageId);
+            $this->elementEnd('div');
         }
         $this->elementEnd('fieldset');
         $this->elementEnd('li');
