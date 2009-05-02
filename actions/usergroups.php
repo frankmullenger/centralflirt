@@ -51,6 +51,15 @@ class UsergroupsAction extends GalleryAction
     var $user = null;
     var $page = null;
     var $profile = null;
+    
+    function handle($args)
+    {
+        if (common_config('profile', 'enable_dating')) {
+            $this->clientError(_('Only private groups are enabled on this site.'),403);
+            return;
+        }
+        parent::handle($args);
+    }
 
     function isReadOnly()
     {
@@ -62,9 +71,7 @@ class UsergroupsAction extends GalleryAction
         if ($this->page == 1) {
             return sprintf(_("%s groups"), $this->user->nickname);
         } else {
-            return sprintf(_("%s groups, page %d"),
-                           $this->user->nickname,
-                           $this->page);
+            return sprintf(_("%s groups, page %d"), $this->user->nickname, $this->page);
         }
     }
 
@@ -105,15 +112,9 @@ class UsergroupsAction extends GalleryAction
         return true;
     }
 
-    function handle($args)
-    {
-        parent::handle($args);
-        $this->showPage();
-    }
-
     function showLocalNav()
     {
-        $nav = new SubGroupNav($this, $this->user);
+        $nav = new PersonalGroupNav($this);
         $nav->show();
     }
 
@@ -144,5 +145,19 @@ class UsergroupsAction extends GalleryAction
         $this->pagination($this->page > 1, $cnt > GROUPS_PER_PAGE,
                           $this->page, 'usergroups',
                           array('nickname' => $this->user->nickname));
+    }
+    
+    function showPageNotice()
+    {
+        $notice =
+          sprintf(_('%%%%site.name%%%% groups let you find and talk with ' .
+                    'people of similar interests. After you join a group ' .
+                    'you can send messages to all other members using the ' .
+                    'syntax "!groupname" and "@public". Don\'t see a group you like? Try ' .
+                    '[searching for one](%%%%action.groupsearch%%%%) or ' .
+                    '[start your own!](%%%%action.newgroup%%%%)'));
+        $this->elementStart('div', 'instructions');
+        $this->raw(common_markup_to_html($notice));
+        $this->elementEnd('div');
     }
 }

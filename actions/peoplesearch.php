@@ -47,6 +47,16 @@ require_once INSTALLDIR.'/lib/profilelist.php';
  */
 class PeoplesearchAction extends SearchAction
 {
+
+    function handle($args)
+    {
+        if (common_config('profile', 'enable_dating')) {
+            $this->clientError(_('People search is disabled.'), 403);
+            return;
+        }
+        parent::handle($args);
+    }
+    
     function getInstructions()
     {
         return _('Search for people on %%site.name%% by their name, location, or interests. ' .

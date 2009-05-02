@@ -180,6 +180,10 @@ class ShowgroupAction extends Action
         if (isset($args['usernick'])) {
             $this->privateGroup = true;
         }
+        else {
+            $this->clientError(_('Only private groups are enabled on this site.'),403);
+            return;
+        }
         $this->showPage();
     }
 

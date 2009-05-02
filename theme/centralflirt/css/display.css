@@ -386,8 +386,8 @@ input#interests, input#headline  {
     color: #333;
     font-style: normal;
 }
-.entity_profile {
-    width: 550px;
+#showstream .entity_profile {
+    /* width: 550px; */
 }
 .entity_bio {
     margin-bottom: 4px;
@@ -402,4 +402,21 @@ input#interests, input#headline  {
 }
 textarea {
     height: 100px;
+}
+.entity_dating_profile dd.fun, 
+.entity_dating_profile dd.fav_spot,
+.entity_dating_profile dd.fav_media,
+.entity_dating_profile dd.first_date {
+    clear: left;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+.entity_dating_profile dl.fun dt,
+.entity_dating_profile dl.fav_spot dt,
+.entity_dating_profile dl.fav_media dt,
+.entity_dating_profile dl.first_date dt {
+    width: 100%;
+}
+#showstream .entity_dating_profile {
+    width: 550px;    
 }

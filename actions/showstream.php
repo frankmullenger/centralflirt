@@ -868,6 +868,7 @@ class ShowstreamAction extends RestrictedAction
                     $cloud->show();
                     break;
                 case 3:
+                    $this->showPendingSubscriptions();
                     $this->showSubscriptions();
                     $this->showSubscribers();
                     $this->showGroups();
@@ -885,6 +886,35 @@ class ShowstreamAction extends RestrictedAction
             $cloud = new PersonalTagCloudSection($this, $this->user);
             $cloud->show();
         }
+    }
+    
+    function showPendingSubscriptions()
+    {
+        $profile = $this->user->getPendingSubscribers(0, PROFILES_PER_MINILIST + 1);
+
+        $this->elementStart('div', array('id' => 'entity_subscriptions',
+                                         'class' => 'section'));
+
+        $this->element('h2', null, _('Subscription Requests'));
+
+        if ($profile) {
+            $pml = new ProfileMiniList($profile, $this->user, $this);
+            $cnt = $pml->show();
+            if ($cnt == 0) {
+                $this->element('p', null, _('(None)'));
+            }
+        }
+
+        if ($cnt > PROFILES_PER_MINILIST) {
+            $this->elementStart('p');
+            $this->element('a', array('href' => common_local_url('subscriptions',
+                                                                 array('nickname' => $this->profile->nickname)),
+                                      'class' => 'more'),
+                           _('All subscriptions'));
+            $this->elementEnd('p');
+        }
+
+        $this->elementEnd('div');
     }
 
     function showSubscriptions()
@@ -955,6 +985,10 @@ class ShowstreamAction extends RestrictedAction
         $subbed = new Subscription();
         $subbed->subscribed = $this->profile->id;
         $subbed_count = (int) $subbed->count() - 1;
+        
+        $pending = new Pending_subscription();
+        $pending->subscribed = $this->profile->id;
+        $pending_count = (int) $pending->count();
 
         $notices = new Notice();
         $notices->profile_id = $this->profile->id;
@@ -986,6 +1020,7 @@ class ShowstreamAction extends RestrictedAction
         $this->element('dd', null, (is_int($subs_count)) ? $subs_count : '0');
         $this->elementEnd('dl');
 
+        
         $this->elementStart('dl', 'entity_subscribers');
         $this->elementStart('dt');
         if ($this->auth === 3) {
@@ -999,7 +1034,23 @@ class ShowstreamAction extends RestrictedAction
         $this->elementEnd('dt');
         $this->element('dd', 'subscribers', (is_int($subbed_count)) ? $subbed_count : '0');
         $this->elementEnd('dl');
+        
+        
+        $this->elementStart('dl', 'entity_subscribers');
+        $this->elementStart('dt');
+        if ($this->auth === 3) {
+            $this->element('a', array('href' => common_local_url('pendingsubscribers',
+                                                             array('nickname' => $this->profile->nickname))),
+                       _('Subscription Requests'));
+        }
+        else {
+            $this->element('span', null, _('Subscription Requests'));
+        }
+        $this->elementEnd('dt');
+        $this->element('dd', 'Subscription Requests', (is_int($pending_count)) ? $pending_count : '0');
+        $this->elementEnd('dl');
 
+        
         $this->elementStart('dl', 'entity_notices');
         $this->element('dt', null, _('Notices'));
         $this->element('dd', null, (is_int($notice_count)) ? $notice_count : '0');
@@ -1010,6 +1061,11 @@ class ShowstreamAction extends RestrictedAction
 
     function showGroups()
     {
+        //Do not want to show public groups on the dating site
+        if (common_config('profile', 'enable_dating')) {
+            return;
+        }
+        
         $groups = $this->user->getGroups(0, GROUPS_PER_MINILIST + 1, true);
 
         $this->elementStart('div', array('id' => 'entity_groups',

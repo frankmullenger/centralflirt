@@ -217,17 +217,27 @@ class PublicAction extends Action
 
     function showSections()
     {
-//        $top = new TopPostersSection($this);
-//        $top->show();
-        $pop = new PopularNoticeSection($this);
-        $pop->show();
-        $gbp = new GroupsByPostsSection($this);
-        $gbp->show();
-//        $feat = new FeaturedUsersSection($this);
-//        $feat->show();
+        if (common_config('profile', 'enable_dating')) {
 
-        $cloud = new InterestTagCloudSection($this);
-        $cloud->show();
+            $pop = new PopularNoticeSection($this);
+            $pop->show();
+    
+            $cloud = new InterestTagCloudSection($this);
+            $cloud->show();
+        }
+        else {
+            $top = new TopPostersSection($this);
+            $top->show();
+            $pop = new PopularNoticeSection($this);
+            $pop->show();
+            $gbp = new GroupsByPostsSection($this);
+            $gbp->show();
+            $feat = new FeaturedUsersSection($this);
+            $feat->show();
+    
+            $cloud = new InterestTagCloudSection($this);
+            $cloud->show();
+        }
     }
 
     function showAnonymousMessage()

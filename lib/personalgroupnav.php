@@ -126,15 +126,6 @@ class PersonalGroupNav extends Widget
         }
 
         if ($cur && $cur->id == $user->id) {
-            
-            //If private group pass admin nickname as usernick in home url
-            if (common_config('profile', 'enable_dating')) {
-                $this->out->menuItem(common_local_url('groups', array('usernick' =>
-                                                                         $nickname)),
-                                 _('Groups'),
-                                 _('Your groups'),
-                                 $action == 'groups');
-            }
 
             $this->out->menuItem(common_local_url('inbox', array('nickname' =>
                                                                      $nickname)),

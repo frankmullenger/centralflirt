@@ -190,8 +190,8 @@ class DatingregisterAction extends Action
             $this->showForm(_('Passwords don\'t match.'));
         } else if (strlen($headline) < 20) {
             $this->showForm(_('Headline must be at least 20 characters long.'));
-        } else if (strlen($bio) < 100) {
-            $this->showForm(_('Bio must be at least 100 characters long.'));
+        } else if (strlen($bio) < 50) {
+            $this->showForm(_('Bio must be at least 50 characters long.'));
         } else {
             $registerData = array();
             $registerData['User'] = array('nickname' => $nickname,
@@ -319,7 +319,7 @@ class DatingregisterAction extends Action
                 }
                 
                 // Validation
-                if (!Validate::string($city, array('min_length' => 1))) {
+                if (!Validate::string($city, array('min_length' => 2))) {
                     $this->showForm(_('You must supply a city to help other users find you.'));
                 }
                 else {
@@ -445,7 +445,7 @@ class DatingregisterAction extends Action
                     break;
                     
                 default: 
-                    $instr = common_markup_to_html(_('With this form you can create a new account.'));
+                    $instr = common_markup_to_html(_('60 second registration - step 1 of 3.'));
                     break;
             }
 
@@ -810,8 +810,8 @@ class DatingregisterAction extends Action
     {
         $nickname = $this->arg('nickname');
 
-        $profileurl = common_local_url('showstream',
-                                       array('nickname' => $nickname));
+        $profileurl = common_local_url('showstream', array('nickname' => $nickname));
+        $streamurl = common_local_url('all', array('nickname' => $nickname));
 
         $this->elementStart('div', 'success');
         $instr = sprintf(_('Congratulations, %s! And welcome to %%%%site.name%%%%. '.
@@ -838,11 +838,13 @@ class DatingregisterAction extends Action
             $instr = sprintf(_('Congratulations, %s! And welcome to %%%%site.name%%%%. '.
                            'From here, you may want to...'. "\n\n" .
                            '* Go to [your profile](%s) and post your first message.' .  "\n" .
-                           '* [Search for people](%%%%action.datingsearch%%%%) that share your interests. ' . "\n" .
+                           '* View [your stream](%s) read and post more messages.' .  "\n" .
+                           '* [Search for people](%%%%action.datingsearch%%%%) that share your interests to follow their stream. ' . "\n" .
+                           '* [Upload a photo](%%%%action.avatarsettings%%%%) of yourself to get a lot more attention. ' . "\n" .
                            '* Update your [profile settings](%%%%action.datingprofilesettings%%%%) to tell others more about you. ' . "\n" .
                            '* Get [help](%%%%doc.help%%%%) on how to use this service. ' . "\n\n" .
                            'Thanks for signing up and we hope you enjoy using this service.'),
-                         $nickname, $profileurl);
+                         $nickname, $profileurl, $streamurl);
         }
               
         $this->raw(common_markup_to_html($instr));

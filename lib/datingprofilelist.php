@@ -96,9 +96,13 @@ class DatingprofileList extends Widget
         $this->out->elementStart('div', 'entity_profile vcard');
 
         $avatar = $this->profile->getAvatar(AVATAR_STREAM_SIZE);
+        
+        //Adding sex for dating default avatars
+        $sex = ($datingProfile)?$datingProfile->sex:null;
+        
         $this->out->elementStart('a', array('href' => $this->profile->profileurl,
                                             'class' => 'url'));
-        $this->out->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_STREAM_SIZE),
+        $this->out->element('img', array('src' => ($avatar) ? $avatar->displayUrl() : Avatar::defaultImage(AVATAR_STREAM_SIZE, $sex),
                                          'class' => 'photo avatar',
                                          'width' => AVATAR_STREAM_SIZE,
                                          'height' => AVATAR_STREAM_SIZE,
@@ -129,11 +133,22 @@ class DatingprofileList extends Widget
             $this->out->elementEnd('dd');
             $this->out->elementEnd('dl');
         }
+        
+        
+        
         if ($datingProfile->bio) {
             $this->out->elementStart('dl', 'entity_note');
             $this->out->element('dt', null, _('Note'));
             $this->out->elementStart('dd', 'note');
-            $this->out->raw($this->highlight($datingProfile->bio));
+            
+            //Hack to display part of the bio on the interest tag pages
+            if ($this->action instanceOf InteresttagAction) {
+                $this->out->raw($this->highlight($datingProfile->getTruncatedBio()));
+            }
+            else {
+                $this->out->raw($this->highlight($datingProfile->bio));
+            }
+
             $this->out->elementEnd('dd');
             $this->out->elementEnd('dl');
         }

@@ -157,9 +157,7 @@ $(document).ready(function(){
 	$(".form_user_unsubscribe").each(addAjaxHidden);
     
     var Allow = { dataType: 'xml',
-                      beforeSubmit: function(formData, jqForm, options) { $(".form_user_allow input[type=submit]").attr("disabled", "disabled");
-                                                                          $(".form_user_allow input[type=submit]").addClass("disabled");
-                                                                        },
+                      
                       success: function(xml) { 
                       
                                                var form_disallow = document._importNode($('form', xml).get(0), true);
@@ -171,9 +169,7 @@ $(document).ready(function(){
                     };
 
     var Disallow = { dataType: 'xml',
-                        beforeSubmit: function(formData, jqForm, options) { $(".form_user_disallow input[type=submit]").attr("disabled", "disabled");
-                                                                            $(".form_user_disallow input[type=submit]").addClass("disabled");
-                                                                          },
+                        
                         success: function(xml) { var form_allow = document._importNode($('form', xml).get(0), true);
                                                  var form_allow_id = form_allow.id;
                                                  

@@ -146,15 +146,19 @@ class GroupEditForm extends Form
                      ($this->out->arg('nickname')) ? $this->out->arg('nickname') : $this->group->nickname,
                      _('1-64 lowercase letters or numbers, no punctuation or spaces'));
         $this->out->elementEnd('li');
-        $this->out->elementStart('li');
-        $this->out->input('fullname', _('Full name'),
-                     ($this->out->arg('fullname')) ? $this->out->arg('fullname') : $this->group->fullname);
-        $this->out->elementEnd('li');
-        $this->out->elementStart('li');
-        $this->out->input('homepage', _('Homepage'),
-                     ($this->out->arg('homepage')) ? $this->out->arg('homepage') : $this->group->homepage,
-                     _('URL of the homepage or blog of the group or topic'));
-        $this->out->elementEnd('li');
+        
+        if (!common_config('profile', 'enable_dating')) {
+            $this->out->elementStart('li');
+            $this->out->input('fullname', _('Full name'),
+                         ($this->out->arg('fullname')) ? $this->out->arg('fullname') : $this->group->fullname);
+            $this->out->elementEnd('li');
+            $this->out->elementStart('li');
+            $this->out->input('homepage', _('Homepage'),
+                         ($this->out->arg('homepage')) ? $this->out->arg('homepage') : $this->group->homepage,
+                         _('URL of the homepage or blog of the group or topic'));
+            $this->out->elementEnd('li');
+        }
+
         $this->out->elementStart('li');
         $this->out->textarea('description', _('Description'),
                         ($this->out->arg('description')) ? $this->out->arg('description') : $this->group->description,

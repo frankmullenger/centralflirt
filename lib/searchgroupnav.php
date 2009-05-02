@@ -111,9 +111,6 @@ class SearchGroupNav extends Widget
         }
         $this->out->menuItem(common_local_url('datingsearch', $args), _('Dating'),
             _('Find dates on this site'), $action_name == 'datingsearch', 'nav_search_dating');
-
-        $this->out->menuItem(common_local_url('groupsearch', $args), _('Group'),
-            _('Find groups on this site'), $action_name == 'groupsearch', 'nav_search_group');
         $this->action->elementEnd('ul');
     }
 }

@@ -52,6 +52,16 @@ if (!defined('LACONICA')) {
  */
 class GroupsearchAction extends SearchAction
 {
+    
+    function handle($args)
+    {
+        if (common_config('profile', 'enable_dating')) {
+            $this->clientError(_('Group search is disabled.'), 403);
+            return;
+        }
+        parent::handle($args);
+    }
+    
     function getInstructions()
     {
         return _('Search for groups on %%site.name%% by their name, location, or description. ' .

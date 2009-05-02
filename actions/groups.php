@@ -51,6 +51,7 @@ class GroupsAction extends Action
     var $page = null;
     var $profile = null;
     public $privateGroups = false;
+    public $user = null;
 
     function isReadOnly()
     {
@@ -87,13 +88,17 @@ class GroupsAction extends Action
                 $cur = common_current_user();
                 $usernick = common_canonical_nickname($this->arg('usernick'));
                 $user = User::staticGet('nickname', $usernick);
+                $this->user = $user;
                 
                 if (!$cur || $cur->id != $user->id) {
-                    
                     $this->clientError(_('Only logged in users can access this page.'),403);
                     return;
                 }
             }
+        }
+        else {
+            $this->clientError(_('Only private groups are enabled on this site.'),403);
+            return;
         }
         
         $this->showPage();
@@ -102,7 +107,7 @@ class GroupsAction extends Action
     function showLocalNav()
     {
         if ($this->privateGroups) {
-            $nav = new PersonalGroupNav($this);
+            $nav = new SubGroupNav($this, $this->user);
         }
         else {
             $nav = new PublicGroupNav($this);

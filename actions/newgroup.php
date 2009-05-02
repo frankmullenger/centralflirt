@@ -95,6 +95,13 @@ class NewgroupAction extends Action
             if (isset($args['usernick'])) {
                 $this->privateGroup = true;
             }
+            else {
+                //Disabling public groups on the dating site (too confusing for users)
+                if (common_config('profile', 'enable_dating')) {
+                    $this->clientError(_('Only private groups can be created.'), 403);
+                    return;
+                }
+            }
             $this->showForm();
         }
     }

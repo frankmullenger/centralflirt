@@ -110,17 +110,30 @@ class SubGroupNav extends Widget
                                          common_config('site', 'name')),
                                  $action == 'invite',
                                  'nav_invite');
+                                 
+                                 
+            //If private group pass admin nickname as usernick in home url
+            if (common_config('profile', 'enable_dating')) {
+                $this->out->menuItem(common_local_url('groups', array('usernick' => $this->user->nickname)),
+                                     _('Groups'),
+                                     _('Your private groups'),
+                                     $action == 'groups');
+            }
         }
         
-        $this->out->menuItem(common_local_url('usergroups',
-                                              array('nickname' =>
-                                                    $this->user->nickname)),
-                             _('Groups'),
-                             sprintf(_('Groups %s is a member of'),
-                                     $this->user->nickname),
-                             $action == 'usergroups',
-                             'nav_usergroups');
+        if (!common_config('profile', 'enable_dating')) {
+            $this->out->menuItem(common_local_url('usergroups',
+                                                  array('nickname' =>
+                                                        $this->user->nickname)),
+                                 _('Groups'),
+                                 sprintf(_('Groups %s is a member of'),
+                                         $this->user->nickname),
+                                 $action == 'usergroups',
+                                 'nav_usergroups');
+        }
+        
         
         $this->out->elementEnd('ul');
     }
+
 }

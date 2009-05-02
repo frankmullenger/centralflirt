@@ -74,7 +74,7 @@ class InteresttagAction extends Action
         
         $profile->query(sprintf($qry, $this->tag, $lim));
 
-        $pl = new DatingProfileList($profile, null, $this);
+        $pl = new DatingprofileList($profile, null, $this);
         $cnt = $pl->show();
                 
         $this->pagination($this->page > 1,
