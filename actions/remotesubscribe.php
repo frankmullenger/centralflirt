@@ -44,6 +44,11 @@ class RemotesubscribeAction extends Action
 
     function handle($args)
     {
+        //Redirect to the dating register for dating enabled sites.
+        if (common_config('profile', 'enable_dating')) {
+            common_redirect(common_local_url('datingregister'), 301);
+        }
+        
         parent::handle($args);
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
