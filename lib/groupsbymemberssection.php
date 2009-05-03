@@ -59,10 +59,11 @@ SELECT user_group.*, count(*) as value
 FROM user_group JOIN group_member 
 ON user_group.id = group_member.group_id  
 WHERE user_group.admin_nickname = '%s' 
+AND group_member.profile_id != %d 
 GROUP BY user_group.id 
 ORDER BY value DESC 
 EOS;
-            $qry = sprintf($qry, $cur->nickname);
+            $qry = sprintf($qry, $cur->nickname, $cur->id);
         }
         
         $limit = GROUPS_PER_SECTION;

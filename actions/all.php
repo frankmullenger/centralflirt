@@ -133,5 +133,32 @@ class AllAction extends RestrictedAction
             $this->element('h1', NULL, sprintf(_('%s and friends'), $this->user->nickname));
         }
     }
+      
+    function showPageNotice()
+    {
+        $user =& common_current_user();
+        if ($user && ($user->id == $this->user->id)) {
+            $this->element('p', NULL, _("Notices from yourself and the friends you are subscribed to."));
+        } else { 
+            
+            //Show different messages depending on status of relationship between users
+            if (!$user->isSubscribed($this->user)) {
+                
+                if ($user->isPendingSubscriptionTo($this->user)) {
+                    $this->element('p', NULL, sprintf(_('Your subscription to %s is still pending, once @s approves you as a subscriber you will be able to see their stream.'), 
+                                                        ucfirst($this->user->nickname), 
+                                                        ucfirst($this->user->nickname)));             
+                }
+                else {
+                    $this->element('p', NULL, sprintf(_('Notices from %s cannot be displayed until you subscribe to %s.'), 
+                                                        ucfirst($this->user->nickname),
+                                                        ucfirst($this->user->nickname)));             
+                }
+            }
+            else {
+                $this->element('p', NULL, sprintf(_('Notices from %s since you became a subscriber of %s.'), ucfirst($this->user->nickname), ucfirst($this->user->nickname)));             
+            }
+        }
+    }
 
 }
