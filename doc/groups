@@ -1,24 +1,8 @@
-%%site.name%% users can create public and private groups, groups are 
+%%site.name%% users can create private groups, groups are 
 basically a great way to share messages with many other users that are 
 part of the same group.
 
-Public Groups
--------------
-
-Public groups can be started by any user, and any other user can join 
-public groups to be included in the conversation. 
-
-But, as with public notices, notices sent to public groups must have 
-@public included somewhere in the notice, as well as the groupname preceded 
-by an ! (!groupname).
-
-If either the !groupname or the @public parts of the notice are missing then
-the notice will not be successfully sent to the group.
-
-Private Groups
---------------
-
-Private groups are largely for users to group their followers into separate 
+Groups are largely for users to group their followers into separate 
 interests and then send a notice to those followers all at once.
 
 For example, you might have a group for dating: !dating, and a group for 

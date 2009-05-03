@@ -168,13 +168,14 @@ class EmailsettingsAction extends AccountSettingsAction
                         _('Allow friends to nudge me and send me an email.'),
                         $user->emailnotifynudge);
         $this->elementEnd('li');
-        $this->elementStart('li');
-        $this->checkbox('emailpost',
-                        _('I want to post notices by email.'),
-                        $user->emailpost);
-        $this->elementEnd('li');
         
         if (!common_config('profile', 'enable_dating')) {
+            $this->elementStart('li');
+            $this->checkbox('emailpost',
+                            _('I want to post notices by email.'),
+                            $user->emailpost);
+            $this->elementEnd('li');
+
             $this->elementStart('li');
             $this->checkbox('emailmicroid',
                             _('Publish a MicroID for my email address.'),
