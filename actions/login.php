@@ -131,9 +131,7 @@ class LoginAction extends Action
             // We don't have to return to it again
             common_set_returnto(null);
         } else {
-            $url = common_local_url('all',
-                                    array('nickname' =>
-                                          $nickname));
+            $url = common_local_url('all', array('nickname' => $nickname));
         }
 
         common_redirect($url);

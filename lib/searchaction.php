@@ -73,8 +73,15 @@ class SearchAction extends Action
 
     function showLocalNav()
     {
-        $nav = new SearchGroupNav($this, $this->trimmed('q'));
-        $nav->show();
+        if (!common_config('profile', 'enable_dating')) {
+            $nav = new SearchGroupNav($this, $this->trimmed('q'));
+            $nav->show();
+        }
+        else {
+            $cur = common_current_user();
+            $nav = new SubGroupNav($this, $cur);
+            $nav->show();
+        }
     }
 
     function showTop($arr=null)
@@ -96,10 +103,6 @@ class SearchAction extends Action
     function title()
     {
         return null;
-    }
-
-    function showNoticeForm() {
-        // remote post notice form
     }
 
     function showContent() {

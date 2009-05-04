@@ -151,16 +151,7 @@ class ProfilesettingsAction extends AccountSettingsAction
                         ($this->arg('autosubscribe')) ?
                         $this->boolean('autosubscribe') : $user->autosubscribe);
         $this->elementEnd('li');
-        
-        
-        $this->elementStart('li');
-        $this->checkbox('post_privately',
-                        _('Posts are private for your subscribers only.'),
-                        ($this->arg('post_privately')) ?
-                        $this->boolean('post_privately') : $user->post_privately);
-        $this->elementEnd('li');
-        
-        
+
         $this->elementEnd('ul');
         $this->submit('save', _('Save'));
 
@@ -207,14 +198,16 @@ class ProfilesettingsAction extends AccountSettingsAction
                         true, $timezone);
         $this->elementEnd('li');
         
-        
+        /*
+         * Disabled posting privately as an option
+         *
         $this->elementStart('li');
         $this->checkbox('post_privately',
                         _('Posts are private for your subscribers only.'),
                         ($this->arg('post_privately')) ?
                         $this->boolean('post_privately') : $user->post_privately);
         $this->elementEnd('li');
-        
+        */
         
         $this->elementEnd('ul');
         $this->submit('save', _('Save'));
@@ -244,15 +237,18 @@ class ProfilesettingsAction extends AccountSettingsAction
         }
 
         $nickname = $this->trimmed('nickname');
-        $fullname = $this->trimmed('fullname');
-        $homepage = $this->trimmed('homepage');
-        $bio = $this->trimmed('bio');
-        $location = $this->trimmed('location');
-        $autosubscribe = $this->boolean('autosubscribe');
-        $post_privately = $this->boolean('post_privately');
         $language = $this->trimmed('language');
         $timezone = $this->trimmed('timezone');
-        $tagstring = $this->trimmed('tags');
+        //$autosubscribe = $this->boolean('autosubscribe');
+        
+        if (!common_config('profile', 'enable_dating')) {
+            $fullname = $this->trimmed('fullname');
+            $homepage = $this->trimmed('homepage');
+            $bio = $this->trimmed('bio');
+            $location = $this->trimmed('location');
+            $post_privately = $this->boolean('post_privately');
+            $tagstring = $this->trimmed('tags');
+        }
 
         # Some validation
 

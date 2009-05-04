@@ -75,7 +75,7 @@ class SubGroupNav extends Widget
         $this->out->elementStart('ul', array('class' => 'nav'));
 
         
-        if ($this->user->id == $cur->id) {
+        if ($this->user->id == $cur->id && common_logged_in()) {
             
             $this->out->menuItem(common_local_url('subscribers',
                                               array('nickname' =>
@@ -105,6 +105,19 @@ class SubGroupNav extends Widget
                                      $this->user->nickname),
                              $action == 'subscriptions',
                              'nav_subscriptions');
+                             
+            //If private group pass admin nickname as usernick in home url
+            if (common_config('profile', 'enable_dating')) {
+                $this->out->menuItem(common_local_url('groups', array('usernick' => $this->user->nickname)),
+                                     _('Groups'),
+                                     _('Your private groups'),
+                                     $action == 'groups');
+                                     
+                $this->out->menuItem(common_local_url('datingsearch', array()),
+                                     _('Search'),
+                                     _('Search for friends'),
+                                     $action == 'datingsearch');
+            }
             
             $this->out->menuItem(common_local_url('invite'),
                                  _('Invite'),
@@ -112,15 +125,12 @@ class SubGroupNav extends Widget
                                          common_config('site', 'name')),
                                  $action == 'invite',
                                  'nav_invite');
-                                 
-                                 
-            //If private group pass admin nickname as usernick in home url
-            if (common_config('profile', 'enable_dating')) {
-                $this->out->menuItem(common_local_url('groups', array('usernick' => $this->user->nickname)),
-                                     _('Groups'),
-                                     _('Your private groups'),
-                                     $action == 'groups');
-            }
+        }
+        elseif (common_config('profile', 'enable_dating')) {
+            $this->out->menuItem(common_local_url('datingsearch', array()),
+                                     _('Search'),
+                                     _('Search for friends'),
+                                     $action == 'datingsearch');
         }
         
         if (!common_config('profile', 'enable_dating')) {
