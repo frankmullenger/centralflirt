@@ -377,6 +377,7 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         echo '<pre>';
         echo 'work dammit <br/>';
         print_r($this->arg('language'));
+        print_r($_POST['language']);
         print_r($_POST);
         print_r($this->args);
         echo '</pre>';
