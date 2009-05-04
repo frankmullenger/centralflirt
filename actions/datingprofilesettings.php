@@ -375,7 +375,6 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         
         //TODO frank: why the fuck is this not working on the live site?!?!
         echo '<pre>';
-        echo 'work dammit <br/>';
         print_r($this->arg('language'));
         print_r($_POST['language']);
         print_r($_POST);
