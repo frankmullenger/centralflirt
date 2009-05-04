@@ -372,15 +372,6 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         /*
          * Languages and interests need to be treated differently
          */
-        
-        //TODO frank: why the fuck is this not working on the live site?!?!
-        echo '<pre>';
-        print_r($this->arg('language'));
-        print_r($_POST['language']);
-        print_r($_POST);
-        print_r($this->args);
-        echo '</pre>';
-        
         $languages = '';
         if ($this->arg('language')) {
             $languages = implode(';', $this->arg('language'));
