@@ -225,7 +225,12 @@ class Dating_profile extends Memcached_DataObject
     
     function getLanguages()
     {
-        return explode(';', $this->languages);
+        if (empty($this->languages)) {
+            return null;
+        }
+        else {
+            return explode(';', $this->languages);
+        }
     }
     
     function getBirthdate($format='Y-m-d') 
