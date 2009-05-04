@@ -16,6 +16,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #3f7085;   
     font-family: arial;
     font-size: 1.3em;
+    text-transform: capitalize;
 }
 h2 {
     font-size: 1.1em;
@@ -419,4 +420,18 @@ textarea {
 }
 #showstream .entity_dating_profile {
     width: 550px;    
+}
+.aside .section {
+    margin-bottom: 15px;
+    color: #666;
+}
+.aside .section dl {
+    font-size: 0.9em;
+}
+.aside .section h2 {
+    color: #000;
+    font-size: 1.3em;
+    text-transform: capitalize;
+    font-weight: normal; 
+    font-style: normal;
 }

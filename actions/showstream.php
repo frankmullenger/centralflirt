@@ -512,9 +512,9 @@ class ShowstreamAction extends RestrictedAction
         $country = $countryList[$datingProfile->country];
         $state = ($datingProfile->state)?$datingProfile->state.', ':null;
         
-        $this->elementStart('span', 'entity_location');
+        $this->elementStart('p', 'entity_location');
         $this->raw(ucwords(($datingProfile->city)?$datingProfile->city.', '.$state.$country:$state.$country));
-        $this->elementEnd('span');
+        $this->elementEnd('p');
 
         $tags = Dating_profile_tag::getTags($this->profile->id, $this->profile->id);
         if (count($tags) > 0) {
