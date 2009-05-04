@@ -44,7 +44,7 @@ require_once INSTALLDIR.'/lib/publicgroupnav.php';
  * @link     http://laconi.ca/
  */
 
-class GroupmembersAction extends Action
+class GroupmembersAction extends GroupRestrictedAction
 {
     var $page = null;
     public $privateGroup = false;
@@ -108,6 +108,7 @@ class GroupmembersAction extends Action
                 $this->group->find();
                 $this->group->fetch();
             }
+
         }
 
         if (!$this->group) {
@@ -135,13 +136,12 @@ class GroupmembersAction extends Action
         parent::handle($args);
         $this->showPage();
     }
-
+    
     function showPageNotice()
     {
         if ($this->privateGroup) {   
             //TODO frank: this markup is a bit messed up, there must be a better way to inject a link into a paragraph...      
-            $notice =
-              sprintf(_('A list of the users in this group.'));
+            $notice = sprintf(_('A list of the users in this group.'));
             $this->elementStart('p', 'instructions');
             $this->raw(common_markup_to_html($notice));
             $this->element('a', 
@@ -184,4 +184,5 @@ class GroupmembersAction extends Action
                           $this->page, 'groupmembers',
                           array('nickname' => $this->group->nickname));
     }
+     
 }

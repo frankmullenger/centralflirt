@@ -372,8 +372,11 @@ class Action extends HTMLOutputter // lawsuit
         $user = common_current_user();
         $this->elementStart('ul', array('class' => 'nav'));
         if ($user) {
-            $this->menuItem(common_local_url('showstream', array('nickname' => $user->nickname)),
+            $this->menuItem(common_local_url('all', array('nickname' => $user->nickname)),
                             _('Home'), _('Personal profile and friends timeline'), false, 'nav_home');
+                            
+            $this->menuItem(common_local_url('subscribers', array('nickname' => $user->nickname)),
+                                _('Friends'), _('Subscribers'), false, 'nav_subscribers');
         }
 
         $this->menuItem(common_local_url('datingsearch'),

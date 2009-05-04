@@ -45,7 +45,7 @@ require_once INSTALLDIR.'/lib/publicgroupnav.php';
  * @link     http://www.centralflirt.com/
  */
 
-class AddtogroupAction extends Action
+class AddtogroupAction extends GroupRestrictedAction
 {
     /**
      * What I want to do with this class is list all of the subscribers to current user, then provide a join group button to add them to the group basically?
@@ -104,6 +104,12 @@ class AddtogroupAction extends Action
                 $this->clientError(_('No user nickname'), 404);
                 return false;
             }
+        }
+        
+        $cur = common_current_user();
+        if (!$cur->isAdmin($this->group)) {
+            $this->clientError(_('You must be an admin to edit the group'), 403);
+            return false;
         }
 
         if (!$this->group) {

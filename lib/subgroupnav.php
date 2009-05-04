@@ -74,15 +74,10 @@ class SubGroupNav extends Widget
 
         $this->out->elementStart('ul', array('class' => 'nav'));
 
-        $this->out->menuItem(common_local_url('subscriptions',
-                                              array('nickname' =>
-                                                    $this->user->nickname)),
-                             _('Subscriptions'),
-                             sprintf(_('People %s subscribes to'),
-                                     $this->user->nickname),
-                             $action == 'subscriptions',
-                             'nav_subscriptions');
-        $this->out->menuItem(common_local_url('subscribers',
+        
+        if ($this->user->id == $cur->id) {
+            
+            $this->out->menuItem(common_local_url('subscribers',
                                               array('nickname' =>
                                                     $this->user->nickname)),
                              _('Subscribers'),
@@ -90,8 +85,6 @@ class SubGroupNav extends Widget
                                      $this->user->nickname),
                              $action == 'subscribers',
                              'nav_subscribers');
-                             
-        if ($this->user->id == $cur->id) {
             
             if (common_config('profile', 'enable_dating')) {
                 $this->out->menuItem(common_local_url('pendingsubscribers',
@@ -103,6 +96,15 @@ class SubGroupNav extends Widget
                              $action == 'pendingsubscribers',
                              'nav_pendingsubscribers');
             }
+            
+            $this->out->menuItem(common_local_url('subscriptions',
+                                              array('nickname' =>
+                                                    $this->user->nickname)),
+                             _('Subscriptions'),
+                             sprintf(_('People %s subscribes to'),
+                                     $this->user->nickname),
+                             $action == 'subscriptions',
+                             'nav_subscriptions');
             
             $this->out->menuItem(common_local_url('invite'),
                                  _('Invite'),

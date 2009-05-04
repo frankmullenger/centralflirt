@@ -868,9 +868,9 @@ class ShowstreamAction extends RestrictedAction
                     $cloud->show();
                     break;
                 case 3:
+                    $this->showSubscribers();
                     $this->showPendingSubscriptions();
                     $this->showSubscriptions();
-                    $this->showSubscribers();
                     $this->showGroups();
                     $this->showStatistics();
                     $cloud = new PersonalTagCloudSection($this, $this->user, false);
@@ -895,7 +895,7 @@ class ShowstreamAction extends RestrictedAction
         $this->elementStart('div', array('id' => 'entity_subscriptions',
                                          'class' => 'section'));
 
-        $this->element('h2', null, _('Subscription Requests'));
+        $this->element('h2', null, _('Requests'));
 
         if ($profile) {
             $pml = new ProfileMiniList($profile, $this->user, $this);
@@ -1006,20 +1006,6 @@ class ShowstreamAction extends RestrictedAction
                                                  strtotime($this->profile->created)));
         $this->elementEnd('dl');
 
-        $this->elementStart('dl', 'entity_subscriptions');
-        $this->elementStart('dt');
-        if ($this->auth === 3) {
-            $this->element('a', array('href' => common_local_url('subscriptions',
-                                                             array('nickname' => $this->profile->nickname))),
-                           _('Subscriptions'));
-        }
-        else {
-            $this->element('span', null, _('Subscriptions'));
-        }        
-        $this->elementEnd('dt');
-        $this->element('dd', null, (is_int($subs_count)) ? $subs_count : '0');
-        $this->elementEnd('dl');
-
         
         $this->elementStart('dl', 'entity_subscribers');
         $this->elementStart('dt');
@@ -1041,15 +1027,29 @@ class ShowstreamAction extends RestrictedAction
         if ($this->auth === 3) {
             $this->element('a', array('href' => common_local_url('pendingsubscribers',
                                                              array('nickname' => $this->profile->nickname))),
-                       _('Subscription Requests'));
+                       _('Requests'));
         }
         else {
             $this->element('span', null, _('Subscription Requests'));
         }
         $this->elementEnd('dt');
-        $this->element('dd', 'Subscription Requests', (is_int($pending_count)) ? $pending_count : '0');
+        $this->element('dd', 'Requests', (is_int($pending_count)) ? $pending_count : '0');
         $this->elementEnd('dl');
 
+        
+        $this->elementStart('dl', 'entity_subscriptions');
+        $this->elementStart('dt');
+        if ($this->auth === 3) {
+            $this->element('a', array('href' => common_local_url('subscriptions',
+                                                             array('nickname' => $this->profile->nickname))),
+                           _('Subscriptions'));
+        }
+        else {
+            $this->element('span', null, _('Subscriptions'));
+        }        
+        $this->elementEnd('dt');
+        $this->element('dd', null, (is_int($subs_count)) ? $subs_count : '0');
+        $this->elementEnd('dl');
         
         $this->elementStart('dl', 'entity_notices');
         $this->element('dt', null, _('Notices'));

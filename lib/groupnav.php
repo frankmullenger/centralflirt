@@ -141,7 +141,11 @@ class GroupNav extends Widget
                                  sprintf(_('%s group members'), $nickname),
                                  $action_name == 'groupmembers',
                                  'nav_group_members');
-
+            $this->out->menuItem(common_local_url('addtogroup', array('nickname' => $nickname, 'usernick' => $cur->nickname)),
+                                 _('Add Members'),
+                                 _('Add group members'),
+                                 $action_name == 'addtogroup',
+                                 'nav_group_members');
             $this->out->menuItem(common_local_url('editgroup', array('nickname' => $nickname, 'usernick' => $cur->nickname)),
                                  _('Admin'),
                                  sprintf(_('Edit %s group properties'), $nickname),

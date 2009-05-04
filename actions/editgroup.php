@@ -44,7 +44,7 @@ if (!defined('LACONICA')) {
  * @link     http://laconi.ca/
  */
 
-class EditgroupAction extends Action
+class EditgroupAction extends GroupRestrictedAction
 {
     var $msg;
     var $group = null;
@@ -127,13 +127,6 @@ class EditgroupAction extends Action
 
         if (!$this->group) {
             $this->clientError(_('No such group'), 404);
-            return false;
-        }
-
-        $cur = common_current_user();
-
-        if (!$cur->isAdmin($this->group)) {
-            $this->clientError(_('You must be an admin to edit the group'), 403);
             return false;
         }
 

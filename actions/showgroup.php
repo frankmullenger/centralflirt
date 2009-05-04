@@ -47,7 +47,7 @@ define('MEMBERS_PER_SECTION', 81);
  * @link     http://laconi.ca/
  */
 
-class ShowgroupAction extends Action
+class ShowgroupAction extends GroupRestrictedAction
 {
     /** group we're viewing. */
     var $group = null;
@@ -366,89 +366,6 @@ class ShowgroupAction extends Action
                                          'title' => sprintf(_('Notice feed for %s group'),
                                                             $this->group->nickname)));
         }
-    }
-
-    /**
-     * Fill in the sidebar.
-     *
-     * @return void
-     */
-
-    function showSections()
-    {
-        $this->showMembers();
-        $this->showStatistics();
-        $cloud = new GroupTagCloudSection($this, $this->group);
-        $cloud->show();
-    }
-
-    /**
-     * Show mini-list of members
-     *
-     * @return void
-     */
-
-    function showMembers()
-    {
-        $member = $this->group->getMembers(0, MEMBERS_PER_SECTION);
-
-        if (!$member) {
-            return;
-        }
-
-        $this->elementStart('div', array('id' => 'entity_members',
-                                         'class' => 'section'));
-
-        $this->element('h2', null, _('Members'));
-
-        $pml = new ProfileMiniList($member, null, $this);
-        $cnt = $pml->show();
-        if ($cnt == 0) {
-             $this->element('p', null, _('(None)'));
-        }
-
-        if ($cnt == MEMBERS_PER_SECTION) {
-            $this->element('a', array('href' => common_local_url('groupmembers',
-                                                                 array('nickname' => $this->group->nickname))),
-                           _('All members'));
-        }
-
-        $this->elementEnd('div');
-    }
-
-    /**
-     * Show some statistics
-     *
-     * @return void
-     */
-
-    function showStatistics()
-    {
-        // XXX: WORM cache this
-        $members = $this->group->getMembers();
-        $members_count = 0;
-        /** $member->count() doesn't work. */
-        while ($members->fetch()) {
-            $members_count++;
-        }
-
-        $this->elementStart('div', array('id' => 'entity_statistics',
-                                         'class' => 'section'));
-
-        $this->element('h2', null, _('Statistics'));
-
-        $this->elementStart('dl', 'entity_created');
-        $this->element('dt', null, _('Created'));
-        $this->element('dd', null, date('j M Y',
-                                                 strtotime($this->group->created)));
-        $this->elementEnd('dl');
-
-        $this->elementStart('dl', 'entity_members');
-        $this->element('dt', null, _('Members'));
-        $this->element('dd', null, (is_int($members_count)) ? $members_count : '0');
-        $this->elementEnd('dl');
-
-        $this->elementEnd('div');
     }
 
     function showAnonymousMessage()
