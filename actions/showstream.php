@@ -654,7 +654,11 @@ class ShowstreamAction extends RestrictedAction
         }
         
         
-        $this->element('h3', null, _('Physical Appearance'));
+        if ($datingProfile->height || $datingProfile->hair || $datingProfile->body_type ||
+            $datingProfile->ethnicity || $datingProfile->eye_colour || $datingProfile->best_feature ||
+            $datingProfile->body_art) {
+            $this->element('h3', null, _('Physical Appearance'));
+        }
         
         if ($datingProfile->height) {
             $heightList = $datingProfile->getNiceHeightList();
@@ -708,7 +712,12 @@ class ShowstreamAction extends RestrictedAction
             $this->elementEnd('dl');
         }
         
-        $this->element('h3', null, _('Lifestyle'));
+        $languages = $datingProfile->getLanguages();
+        if ($datingProfile->profession || $datingProfile->marital_status || $datingProfile->have_children ||
+            $datingProfile->smoke || $datingProfile->drink || $datingProfile->religion ||
+            $datingProfile->education || $datingProfile->politics || !empty($languages)) {
+            $this->element('h3', null, _('Lifestyle'));
+        }
         
         if ($datingProfile->profession) {
             $this->elementStart('dl', 'profession');
@@ -752,8 +761,7 @@ class ShowstreamAction extends RestrictedAction
             $this->element('dd', 'religion', $religionList[$datingProfile->religion]);
             $this->elementEnd('dl');
         }
-        
-        $languages = $datingProfile->getLanguages();
+
         $languageList = $datingProfile->getNiceLanguageStatusList();
         if (!empty($languages)) {
             $this->elementStart('dl', 'languages');
@@ -780,7 +788,11 @@ class ShowstreamAction extends RestrictedAction
             $this->elementEnd('dl');
         }
         
-        $this->element('h3', null, _('Personality'));
+        
+        if ($datingProfile->fun || $datingProfile->fav_spot || $datingProfile->fav_media ||
+            $datingProfile->first_date) {
+            $this->element('h3', null, _('Personality')); 
+        }
 
         if ($datingProfile->fun) {
             $this->elementStart('dl', 'fun');
