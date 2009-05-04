@@ -372,14 +372,18 @@ class DatingprofilesettingsAction extends AccountSettingsAction
         /*
          * Languages and interests need to be treated differently
          */
+        echo '<pre>';
+        echo 'why is this not working?!';
+        print_r($this->arg('language'));
+        print_r($this->args);
+        echo '</pre>';
+        
         $languages = '';
         if ($this->arg('language')) {
             $languages = implode(';', $this->arg('language'));
         }
         
-        echo '<pre>';
-        print_r($this->arg('language'));
-        echo '</pre>';
+        
         
         $interests = $this->trimmed('interests');
 
