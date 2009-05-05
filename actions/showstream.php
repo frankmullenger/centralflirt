@@ -870,14 +870,10 @@ class ShowstreamAction extends RestrictedAction
                 case 1:
                     $this->showGroups();
                     $this->showStatistics();
-                    $cloud = new PersonalTagCloudSection($this, $this->user, true);
-                    $cloud->show();
                     break;
                 case 2:
                     $this->showGroups();
                     $this->showStatistics();
-                    $cloud = new PersonalTagCloudSection($this, $this->user, true);
-                    $cloud->show();
                     break;
                 case 3:
                     $this->showSubscribers();
@@ -885,8 +881,6 @@ class ShowstreamAction extends RestrictedAction
                     $this->showSubscriptions();
                     $this->showGroups();
                     $this->showStatistics();
-                    $cloud = new PersonalTagCloudSection($this, $this->user, false);
-                    $cloud->show();
                     break;
             }
         }

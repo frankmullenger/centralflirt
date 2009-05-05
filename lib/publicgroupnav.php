@@ -79,10 +79,10 @@ class PublicGroupNav extends Widget
         if (!common_config('profile', 'enable_dating')) {
             $this->out->menuItem(common_local_url('groups'), _('Groups'),
                 _('User groups'), $action_name == 'groups', 'nav_groups');
-        }
-        
-        $this->out->menuItem(common_local_url('publictagcloud'), _('Recent tags'),
+                
+            $this->out->menuItem(common_local_url('publictagcloud'), _('Recent tags'),
             _('Recent tags'), $action_name == 'publictagcloud', 'nav_recent-tags');
+        }
 
         if (count(common_config('nickname', 'featured')) > 0) {
             $this->out->menuItem(common_local_url('featured'), _('Featured'),

@@ -84,6 +84,12 @@ class PublictagcloudAction extends Action
 
     function handle($args)
     {
+        //Disable viewing tags for the dating site
+        if (common_config('profile', 'enable_dating')) {
+            $this->clientError(_('Tags are disabled.'), 403);
+            return;
+        }
+        
         parent::handle($args);
         $this->showPage();
     }

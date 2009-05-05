@@ -95,8 +95,7 @@ class Notice extends Memcached_DataObject
             return true;
         }
         
-        
-        //TODO frank: why did I do this?!
+
         /*
          * If a post is private, then remove the tags and do not enter them in the db
          */
@@ -217,8 +216,12 @@ class Notice extends Memcached_DataObject
         # XXX: do we need to change this for remote users?
 
         $notice->saveReplies();
-        $notice->saveTags();
         $notice->saveGroups();
+        
+        //Theres really no point having tags on a dating site is there?
+        if (!common_config('profile', 'enable_dating')) {
+            $notice->saveTags();
+        }
 
         $notice->addToInboxes();
 		$notice->query('COMMIT');
