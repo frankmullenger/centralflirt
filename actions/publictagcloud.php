@@ -59,8 +59,20 @@ class PublictagcloudAction extends Action
 
     function showPageNotice()
     {
-        $this->element('p', 'instructions',
-                       sprintf(_('These are most popular recent tags on %s '),
+                      
+       if (common_config('profile', 'enable_dating')) {
+           $this->element('p', 'instructions',
+                       sprintf(_('These are most popular recent tags included in public notices on %s. '),
+                               common_config('site', 'name')));
+                               
+           $this->element('p', 'help',
+                       _('You can add as many tags as you want to your notices by using "#tagname" in your notices.'));
+           return;
+       }
+       
+       $this->element('p', 'instructions',
+                       sprintf(_('These are most popular recent tags included in public notices on %s. '.
+                                 'You can add as many tags as you want to your notices including "#tagname" in your notices.'),
                                common_config('site', 'name')));
     }
 

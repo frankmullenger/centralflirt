@@ -434,3 +434,11 @@ textarea {
     font-weight: normal; 
     margin-bottom:0;
 }
+.help .favor_logo {
+    background: transparent url(../images/icons/twotone/green/favourite.gif) no-repeat scroll 0 0;
+    display: inline;
+    float: left;
+    height: 16px;
+    margin-right: 5px;
+    width: 16px;
+}

@@ -137,6 +137,20 @@ class FavoritedAction extends Action
 
     function showPageNotice()
     {
+        
+        if (common_config('profile', 'enable_dating')) {
+           $this->element('p', 'instructions',
+                       sprintf(_('These are most popular public notices on %s. '),
+                               common_config('site', 'name')));
+
+           $this->elementStart('p', 'help');
+           $this->element('img', 'favor_logo');
+           $this->raw(_('You can make a notice popular by favoring a notice - clicking on the heart alongside the notice.'));
+           $this->elementEnd('p');
+
+           return;
+       }
+        
         $instr  = $this->getInstructions();
         $output = common_markup_to_html($instr);
 

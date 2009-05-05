@@ -118,14 +118,17 @@ class GroupsAction extends Action
     function showPageNotice()
     {
         if ($this->privateGroups) {
-            $notice =
-              sprintf(_('%%%%site.name%%%% private groups let you sort your followers ' .
-                        'into groups so that you can message a select group of your followers ' .
-                        'at once. You can send messages to one of your groups using the ' .
-                        'syntax "!groupname".'));
+            $notice = _('These are the groups you can sort your friends into. ');
             $this->elementStart('div', 'instructions');
             $this->raw(common_markup_to_html($notice));
             $this->elementEnd('div');
+            
+            $this->elementStart('p', 'help');
+            $this->raw(_('Create a group and add friends to it then message that group at once by including '.
+                            '"!groupname" in the notice somewhere. The notice will be sent to all the members of that group. '.
+                            'Name the groups what you want, the "!groupname" part of the notice will be removed from the notice. '));
+            $this->elementEnd('p');
+            
             return;
         }
         

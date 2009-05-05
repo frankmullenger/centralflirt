@@ -259,4 +259,19 @@ class PublicAction extends Action
             $this->elementEnd('div');
         }
     }
+    
+    function showPageNotice()
+    {
+        
+        if (common_config('profile', 'enable_dating')) {
+           $this->element('p', 'instructions',
+                       sprintf(_('These are all the public notices on %s. '),
+                               common_config('site', 'name')));
+
+           $this->elementStart('p', 'help');
+           $this->raw(_('To create a public notice include "@public" in the notice.'));
+           $this->elementEnd('p');
+       }
+
+    }
 }
