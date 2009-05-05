@@ -1,6 +1,3 @@
-These are some *Frequently Asked Questions* about this service, with
-some answers.
-
 What is %%site.name%%?
 ----------------------
 
@@ -10,16 +7,43 @@ rolled into one.
 You can use it to write short notices about yourself, where you are,
 and what you're doing, and those notices will be sent to all your admirers.
 
-What is different about %%site.name%% is that you control who can receive your notices, other users will 
-request to follow you and based on their profile you can allow them to do so.
+How do I start?
+---------------
 
-On %%site.name%% you can also sort your followers into groups, you might have a group of prospective romantic partners and
-a group of casual friends, when you post a notice on %%site.name%% you decide which group you want to send the notice
-to by adding the group name to your notice using ! followed by the group name.
+Start by [registering](%%action.datingregister%%), after that post some notices about yourself or search 
+for other users to follow and flirt with.
 
-The users in the groups will see your notice but will not know which private group you have sorted them into.
+How do I follow another user?
+-----------------------------
 
-With %%site.name%% you have ultimate control over who receives your notices, all notices are private by default.
-If you want to post a public message however you can just put @public in the notice body and it will become public.
-This way you can post messages to twitter as well when you want to, or just join in the public discussion in one
-of the public groups for instance.
+Find a %%site.name%% user you like and click on the "follow" link next to their name. You will not be able to 
+follow their notices straight away, but once they permit you to be one of their followers you will start 
+receiving notices from that user.
+
+What are groups and how do I use them?
+--------------------------------------
+
+Groups are a way for you to group your followers together and message them all at once. Create a group, add 
+some of your followers to that group and message the group by using "!groupname" in the notice.
+
+All of your followers in that group will receive your notice, but they will not know which group it was sent to.
+
+Will my followers know which groups I have put them in?
+-------------------------------------------------------
+
+No. There is no way for other users to see your groups or who you have in each group.
+
+Will other user be able to see who I follow or who follows me?
+--------------------------------------------------------------
+
+No. Your followers and who you follow is private information for your eyes only.
+
+How to I make a post to the public timeline on the home page?
+-------------------------------------------------------------
+
+All your notices are private by default, if you want one of your notices to be publicly available on the home page
+simply include "@public" somewhere in the notice and that notice will be publicly available on the web.
+
+
+<h3>Have a question?</h3>
+If you have a question please contact us by emailing cupid@centralflirt.com and we will endeavour to answer it for you.

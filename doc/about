@@ -1,12 +1,13 @@
-%%site.name%% is a
-[micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service
-based on the Free Software [Laconica](http://laconi.ca/) tool.
+%%site.name%% is a bit different to other dating sites, it uses micro blogging 
+as the main tool to connect users on the site.
 
-If you [register](%%action.register%%) for an account,
-you can post small (140 chars or less) text notices
-about yourself, where you are, what you're doing, or practically
-anything you want. 
+The idea behind %%site.name%% was to provide a place where you could meet new people 
+and send messages to them telling them what you are thinking, doing or thinking of doing.
 
-What makes central flirt different is the control you have over your 
-notices - you can chose who receives your notices easily and restrict 
-who can view your notices as well.
+These messages should act as a window into your personality, as well as being open invitations
+to meet in many cases. 
+
+Our goals for the future include providing a way for our users to send notices to %%site.name%% 
+via text messages - so you can notify your followers when you are on the go or on a night out.
+For now we are trialing %%site.name%% and hopefully you will enjoy the site and tell your friends 
+about it!

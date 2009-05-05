@@ -1,17 +1,55 @@
-%%site.name%% is a **microblogging service**. Users post short (140
-character) notices which are broadcast to their friends and fans using
-the Web, RSS, or instant messages.
+%%site.name%% is a dating site with a difference. %%site.name%% provides a form of 
+communication between you and your prospective dates, a way of flirting via short 
+messages.
 
-If you'd like to try it out, first [register](%%action.register%%) a new account.
-Then, on the [public timeline](%%action.public%%), enter your message into
-the textbox at the top of the page, and click "Send". It will go out on the
-public timeline and to anyone who is subscribed to your notices (probably nobody,
-at first).
+The purpose of %%site.name%% is to communicate with other singles by projecting yourself,
+your thoughts, your actions, your personality via short messages - and also follow and 
+flirt with other users.
 
-To subscribe to other people's notifications, go to their profile page
-and click the "subscribe" button. They'll get a notice that you're now
-subscribed to their notifications, and, who knows?, they might subscribe
-back.
+You will notice a lot of similarities between this site and say Twitter, there are subtle 
+differences which allow %%site.name%% to focus on dating and flirting.
+
+Your Notices on %%site.name%% Are Private
+-----------------------------------------
+On %%site.name%% all your notices are private by default and can only be read by your friends
+on the site - those users which you have allowed to follow you.
+
+You can still post notices to the public stream on the %%site.name%% home page, you just need 
+to include "@public" somewhere in the notice.
+
+You Choose Who Can Follow You
+-----------------------------
+Unlike Twitter you need permission to follow another user on %%site.name%%, and other users 
+need your permission to follow you.
+
+Once you allow another user to follow you, then you automatically have permission to follow them.
+
+You Choose Who Receives Your Notices
+------------------------------------
+Ok, we've already said that your notices are private on %%site.name%% for your followers only, 
+moreover, you can send your notices to just one follower, a group of followers or all your 
+followers at the same time.
+
+<h3>Sending to a Single Follower</h3>
+To send a message to a single follower simply include their nickname somewhere in the notice 
+using "@nickname".
+
+<h3>Sending to a Group of Followers</h3>
+To send a message to a group of your followers simply create a group and add some of your 
+followers to that group. Then include the group name using "!groupname" somewhere in your notice 
+and that message will be sent to all the members of that group.
+
+You can create as many groups as you like, and add your followers to as many of your groups as 
+you want. And don't worry - your followers will not know which of your groups they are a part of 
+because the name of the group is removed from the notices.
+
+<h3>Sending to all your Followers</h3>
+Notices are sent to all your followers by default, so, unless you have added @username or !groupname 
+to your notice the messages will be sent to all your followers automatically.
+
+
+I'd love for you to [try out %%site.name%%](%%action.datingregister%%) and let me know what you think.
+
 
 More help
 ---------
@@ -21,7 +59,6 @@ Here are some documents that you might find helpful in understanding
 
 * [About](%%doc.about%%) - an overview of the service
 * [FAQ](%%doc.faq%%) - frequently-asked questions about %%site.name%%
-* [Contact](%%doc.contact%%) - who to contact with questions about the service
-* [Groups](%%doc.groups%%) - joining together in groups
 * [Privacy](%%doc.privacy%%) - %%site.name%%'s privacy policy
+* [Contact](%%doc.contact%%) - who to contact with questions about the service
 * [Source](%%doc.source%%) - How to get the Laconica source code
