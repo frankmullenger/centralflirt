@@ -56,6 +56,7 @@ class Notice extends Memcached_DataObject
     
     private $isPublicSet = false;
     private $noticeForGroup = false;
+    private $noticeInReplyTo = array();
 
     function getProfile()
     {
@@ -94,8 +95,10 @@ class Notice extends Memcached_DataObject
             return true;
         }
         
+        
+        //TODO frank: why did I do this?!
         /*
-         * If a post is private, then remove the tags and do not enter then in the db
+         * If a post is private, then remove the tags and do not enter them in the db
          */
         if ($this->is_private) {
 
@@ -621,6 +624,33 @@ class Notice extends Memcached_DataObject
             if (common_config('profile', 'enable_dating') && $this->is_private && $this->noticeForGroup) {
                 return;
             }
+            /*
+             * If this is for the dating site and the message has been a private reply, then only add a notice to the inbox of users
+             * that were the recipient of the reply...
+             */
+            if (common_config('profile', 'enable_dating') && $this->is_private && !empty($this->noticeInReplyTo)) {
+                
+                $repliedTo = implode(', ', array_keys($this->noticeInReplyTo));
+                
+                $inbox = new Notice_inbox();
+                $UT = common_config('db','type')=='pgsql'?'"user"':'user';
+                
+                $qry = 'INSERT INTO notice_inbox (user_id, notice_id, created) ' .
+                  "SELECT $UT.id, " . $this->id . ', "' . $this->created . '" ' .
+                  "FROM $UT JOIN subscription ON $UT.id = subscription.subscriber " .
+                  'WHERE subscription.subscribed = ' . $this->profile_id . ' ' .
+                  'AND subscription.subscriber IN ('.$repliedTo.') '.
+                  'AND NOT EXISTS (SELECT user_id, notice_id ' .
+                                    'FROM notice_inbox ' .
+                                    "WHERE user_id = $UT.id " .
+                                    'AND notice_id = ' . $this->id . ' )';
+                if ($enabled === 'transitional') {
+                    $qry .= " AND $UT.inboxed = 1";
+                }
+                
+                $inbox->query($qry); 
+                return;
+            }
             
             $inbox = new Notice_inbox();
             $UT = common_config('db','type')=='pgsql'?'"user"':'user';
@@ -804,6 +834,7 @@ class Notice extends Memcached_DataObject
                 $replied[$recipient->id] = 1;
             }
         }
+        $this->noticeInReplyTo = $replied;
 
         // Hash format replies, too
         $cnt = preg_match_all('/(?:^|\s)@#([a-z0-9]{1,64})/', $this->content, $match);
