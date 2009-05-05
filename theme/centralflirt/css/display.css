@@ -438,7 +438,22 @@ textarea {
     background: transparent url(../images/icons/twotone/green/favourite.gif) no-repeat scroll 0 0;
     display: inline;
     float: left;
-    height: 16px;
+    height: 18px;
     margin-right: 5px;
-    width: 16px;
+    width: 18px;
+}
+p.help {
+    -moz-border-radius-bottomleft:7px;
+    -moz-border-radius-bottomright:7px;
+    -moz-border-radius-topleft:7px;
+    -moz-border-radius-topright:7px;
+    background-color:#CEE1E9;
+    border:1px solid #FFFFFF;
+    color:#3F7085;
+    float:left;
+    font-style:italic;
+    margin:12px 0;
+    padding:8px;
+    width:100%;
+    font-size:0.9em;
 }
