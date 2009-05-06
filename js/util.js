@@ -214,7 +214,9 @@ $(document).ready(function(){
 
                                                         var classString = this.valueOf();
                                                         jQuery.each(pageNoticeClasses, function() {
-                                                            if (this.indexOf(classString) > -1) {
+                                                            
+                                                            var pageNoticeClassString = this.valueOf();
+                                                            if (pageNoticeClassString == classString) {
                                                                 prependNotice = true;
                                                             }
                                                         });

@@ -379,4 +379,9 @@ class ShowgroupAction extends GroupRestrictedAction
         $this->raw(common_markup_to_html($m));
         $this->elementEnd('div');
     }
+    
+    function getNoticeClass()
+    {
+        return 'group_'.$this->group->id;
+    }
 }

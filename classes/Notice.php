@@ -69,16 +69,43 @@ class Notice extends Memcached_DataObject
     {
         $classes = array();
         
+        //Is the notice private
         if (!$this->is_private) {
             $classes[] = self::NOTICE_CLASS_PUBLIC;
         }
         
+        //Was the notice sent by a particular user
         $user = User::staticGet('id', $this->profile_id);
         if ($user) {
             $classes[] = $user->nickname;
         }
         
+        //Was the notice sent to any particular groups?
+        $groups = $this->getGroups();
+        
+        if (!empty($groups)) {
+            foreach ($groups as $group) {
+                $classes[] = 'group_'.$group->group_id;
+            }
+        }
+
         return $classes;
+    }
+    
+    function getGroups()
+    {
+        //TODO frank: this adds a bit of an overhead, probably should cache
+        $result = array();
+        $groupInbox = new Group_inbox();
+        
+        $groupInbox->whereAdd("notice_id = ".$this->id);
+        $groupInbox->find();
+        
+        while ($groupInbox->fetch()) {
+            $result[] = $groupInbox;
+        }
+
+        return $result;
     }
 
     function delete()
