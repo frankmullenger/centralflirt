@@ -1014,4 +1014,9 @@ EOS;
             $this->elementEnd('div');
         }
     }
+    
+    function getNoticeClass()
+    {
+        //Override in child classes
+    }
 }

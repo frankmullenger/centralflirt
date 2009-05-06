@@ -83,7 +83,15 @@ class NoticeList extends Widget
 
     function show()
     {
-        $this->out->elementStart('div', array('id' =>'notices_primary'));
+        //Passing in classes to flag where on the site the notices are being displayed
+        if ($extrClass = $this->out->getNoticeClass()) {
+            $attrs = array('id' =>'notices_primary', 'class'=>$extrClass);
+        }
+        else {
+            $attrs = array('id' =>'notices_primary');
+        }
+        
+        $this->out->elementStart('div', $attrs);
         $this->out->element('h2', null, _('Notices'));
         $this->out->elementStart('ul', array('class' => 'notices'));
 
@@ -212,6 +220,7 @@ class NoticeListItem extends Widget
             $this->out->elementEnd('div');
         }
     }
+    
 
     /**
      * start a single notice.
@@ -223,7 +232,16 @@ class NoticeListItem extends Widget
     {
         // XXX: RDFa
         // TODO: add notice_type class e.g., notice_video, notice_image
-        $this->out->elementStart('li', array('class' => 'hentry notice',
+        
+        //Adding classes for type of notice, to filter where it is updated on the site
+        if ($extraClasses = $this->notice->getClasses()) {
+            $classes = 'hentry notice '.implode(' ', $extraClasses);
+        }
+        else {
+            $classes = 'hentry notice';
+        }
+        
+        $this->out->elementStart('li', array('class' => $classes,
                                              'id' => 'notice-' . $this->notice->id));
     }
 

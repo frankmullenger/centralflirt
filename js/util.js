@@ -198,11 +198,35 @@ $(document).ready(function(){
 													alert(result);
 												}
 												else {
-													$("#notices_primary .notices").prepend(document._importNode($("li", xml).get(0), true));
-													$("#notice_data-text").val("");
-													counter();
-													$("#notices_primary .notice:first").css({display:"none"});
-													$("#notices_primary .notice:first").fadeIn(2500);
+                                                    
+                                                    //Get classes out of the xml and only post to div with that class
+                                                    //which means adding classes to all the places on the site that have notices displayed.
+                                                    var classes = $("li", xml).attr('class');
+                                                    classes = classes.split(" ");
+                                                    
+                                                    //Using only the first class
+                                                    var pageNoticeClasses = $("#notices_primary").attr('class');
+                                                    pageNoticeClasses = pageNoticeClasses.split(" ");
+                                                    
+                                                    var prependNotice = false;
+                                                    
+                                                    jQuery.each(classes, function() {
+
+                                                        var classString = this.valueOf();
+                                                        jQuery.each(pageNoticeClasses, function() {
+                                                            if (this.indexOf(classString) > -1) {
+                                                                prependNotice = true;
+                                                            }
+                                                        });
+                                                    });
+                                                    
+                                                    if (prependNotice) {
+                                                        $("#notices_primary .notices").prepend(document._importNode($("li", xml).get(0), true));
+                                                        $("#notice_data-text").val("");
+                                                        counter();
+                                                        $("#notices_primary .notice:first").css({display:"none"});
+                                                        $("#notices_primary .notice:first").fadeIn(2500);
+                                                    }
 													NoticeHover();
 													NoticeReply();
 												}

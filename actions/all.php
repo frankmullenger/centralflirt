@@ -160,5 +160,10 @@ class AllAction extends RestrictedAction
             }
         }
     }
+    
+    function getNoticeClass()
+    {
+        return $this->user->nickname;
+    }
 
 }

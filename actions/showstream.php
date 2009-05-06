@@ -1119,6 +1119,10 @@ class ShowstreamAction extends RestrictedAction
         $this->elementEnd('div');
     }
 
+    function getNoticeClass()
+    {
+        return $this->user->nickname;
+    }
 }
 
 // We don't show the author for a profile, since we already know who it is!

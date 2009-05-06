@@ -274,4 +274,9 @@ class PublicAction extends Action
        }
 
     }
+    
+    function getNoticeClass()
+    {
+        return Notice::NOTICE_CLASS_PUBLIC;
+    }
 }

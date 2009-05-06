@@ -54,6 +54,8 @@ class Notice extends Memcached_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
     
+    const NOTICE_CLASS_PUBLIC = 'public';
+    
     private $isPublicSet = false;
     private $noticeForGroup = false;
     private $noticeInReplyTo = array();
@@ -61,6 +63,22 @@ class Notice extends Memcached_DataObject
     function getProfile()
     {
         return Profile::staticGet('id', $this->profile_id);
+    }
+    
+    function getClasses()
+    {
+        $classes = array();
+        
+        if (!$this->is_private) {
+            $classes[] = self::NOTICE_CLASS_PUBLIC;
+        }
+        
+        $user = User::staticGet('id', $this->profile_id);
+        if ($user) {
+            $classes[] = $user->nickname;
+        }
+        
+        return $classes;
     }
 
     function delete()
@@ -89,7 +107,7 @@ class Notice extends Memcached_DataObject
 
     function saveTags()
     {
-        /* extract all #hastags */
+        /* extract all #hashtags */
         $count = preg_match_all('/(?:^|\s)#([A-Za-z0-9_\-\.]{1,64})/', strtolower($this->content), $match);
         if (!$count) {
             return true;
