@@ -224,11 +224,12 @@ $(document).ready(function(){
                                                     
                                                     if (prependNotice) {
                                                         $("#notices_primary .notices").prepend(document._importNode($("li", xml).get(0), true));
-                                                        $("#notice_data-text").val("");
-                                                        counter();
                                                         $("#notices_primary .notice:first").css({display:"none"});
                                                         $("#notices_primary .notice:first").fadeIn(2500);
                                                     }
+                                                    
+                                                    counter();
+                                                    $("#notice_data-text").val("");
 													NoticeHover();
 													NoticeReply();
 												}
