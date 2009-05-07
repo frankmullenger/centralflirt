@@ -626,8 +626,9 @@ google_ad_height = 200;
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>    
 EOS;
+        $this->elementStart('div', 'adsense');
         $this->raw($output);
-
+        $this->elementEnd('div');
     }
 
     /**

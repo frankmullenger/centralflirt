@@ -462,3 +462,7 @@ p.help {
 #anon_notice p a {
     font-weight: bold;
 }
+.adsense {
+    width: 100%;
+    text-align: center;
+}

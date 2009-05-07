@@ -91,8 +91,7 @@ class Section extends Widget
 
     function showContent()
     {
-        $this->out->element('p', null,
-                            _('(None)'));
+        $this->out->element('p', null, _('(None)'));
         return false;
     }
 
