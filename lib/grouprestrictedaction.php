@@ -70,6 +70,7 @@ class GroupRestrictedAction extends Action
             $this->clientError(_('User passed is not admin for this group.'), 403);
             return false;
         }
+        
         //Also make sure the current user is the administrator of the group
         if (!$this->cur->isAdmin($this->group)) {
             $this->clientError(_('You must be an admin to edit the group.'), 403);

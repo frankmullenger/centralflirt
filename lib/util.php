@@ -745,6 +745,12 @@ function common_fancy_url($action, $args=null)
         } else {
             return common_path('main/register');
         }
+    case 'datingregister':
+        if ($args && $args['code']) {
+            return common_path('main/register/'.$args['code']);
+        } else {
+            return common_path('main/register');
+        }
      case 'remotesubscribe':
         if ($args && $args['nickname']) {
             return common_path('main/remote?nickname=' . $args['nickname']);
@@ -757,6 +763,8 @@ function common_fancy_url($action, $args=null)
         return common_path('main/openid');
      case 'profilesettings':
         return common_path('settings/profile');
+     case 'datingprofilesettings':
+        return common_path('settings/dating');
      case 'passwordsettings':
         return common_path('settings/password');
      case 'emailsettings':
@@ -800,6 +808,7 @@ function common_fancy_url($action, $args=null)
         }
      case 'subscriptions':
      case 'subscribers':
+     case 'pendingsubscribers':
         $nickname = $args['nickname'];
         unset($args['nickname']);
         if (isset($args['tag'])) {
@@ -843,6 +852,8 @@ function common_fancy_url($action, $args=null)
         return common_path('settings/im');
      case 'avatarsettings':
         return common_path('settings/avatar');
+     case 'datingsearch':
+        return common_path('search/dating' . (($args) ? ('?' . http_build_query($args)) : ''));
      case 'groupsearch':
         return common_path('search/group' . (($args) ? ('?' . http_build_query($args)) : ''));
      case 'peoplesearch':
@@ -904,10 +915,11 @@ function common_fancy_url($action, $args=null)
         } else {
             return common_path('main/sup');
         }
+     /* TODO frank: fix the groups fancy URLS for dating site
      case 'newgroup':
         return common_path('group/new');
      case 'showgroup':
-        return common_path('group/'.$args['nickname'] . (($args['page']) ? ('?page=' . $args['page']) : ''));
+        return common_path('group/'.$args['nickname'] . (($args) ? ('?' . http_build_query($args)) : ''));
      case 'editgroup':
         return common_path('group/'.$args['nickname'].'/edit');
      case 'joingroup':
@@ -928,6 +940,7 @@ function common_fancy_url($action, $args=null)
         return common_path($nickname.'/groups' . (($args) ? ('?' . http_build_query($args)) : ''));
      case 'groups':
         return common_path('group' . (($args) ? ('?' . http_build_query($args)) : ''));
+     */
      default:
         return common_simple_url($action, $args);
     }

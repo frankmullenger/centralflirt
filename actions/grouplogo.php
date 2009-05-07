@@ -221,7 +221,7 @@ class GrouplogoAction extends GroupRestrictedAction
                                           'class' => 'form_settings',
                                           'action' =>
                                           common_local_url('grouplogo',
-                                                           array('nickname' => $this->group->nickname))));
+                                                           array('nickname' => $this->group->nickname, 'usernick' => $this->user->nickname))));
         $this->elementStart('fieldset');
         $this->element('legend', null, _('Group logo'));
         $this->hidden('token', common_session_token());
@@ -280,7 +280,7 @@ class GrouplogoAction extends GroupRestrictedAction
                                           'class' => 'form_settings',
                                           'action' =>
                                           common_local_url('grouplogo',
-                                                           array('nickname' => $this->group->nickname))));
+                                                           array('nickname' => $this->group->nickname, 'usernick' => $this->user->nickname))));
         $this->elementStart('fieldset');
         $this->element('legend', null, _('Avatar settings'));
         $this->hidden('token', common_session_token());

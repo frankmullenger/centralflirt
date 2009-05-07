@@ -104,8 +104,14 @@ class GroupEditForm extends Form
     function action()
     {
         if ($this->group) {
-            return common_local_url('editgroup',
+            if (common_config('profile', 'enable_dating')) {
+                return common_local_url('editgroup',
+                                    array('nickname' => $this->group->nickname, 'usernick' => $this->out->user->nickname));
+            }
+            else {
+                return common_local_url('editgroup',
                                     array('nickname' => $this->group->nickname));
+            }
         } else {
             return common_local_url('newgroup');
         }

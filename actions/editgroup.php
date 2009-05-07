@@ -174,7 +174,6 @@ class EditgroupAction extends GroupRestrictedAction
         $form = new GroupEditForm($this, $this->group);
         $form->show();
     }
-    
 
     function showPageNotice()
     {
