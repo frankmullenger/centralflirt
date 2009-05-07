@@ -868,6 +868,10 @@ function common_fancy_url($action, $args=null)
         $path = 'tag/' . $args['tag'];
         unset($args['tag']);
         return common_path($path . (($args) ? ('?' . http_build_query($args)) : ''));
+     case 'interesttag':
+        $path = 'interest/' . $args['tag'];
+        unset($args['tag']);
+        return common_path($path . (($args) ? ('?' . http_build_query($args)) : ''));
      case 'publictagcloud':
         return common_path('tags');
      case 'peopletag':

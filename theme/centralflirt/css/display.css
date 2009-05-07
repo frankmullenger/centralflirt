@@ -455,3 +455,10 @@ p.help {
     width:100%;
     font-size:0.9em;
 }
+#anon_notice p {
+    margin: 4px 0;
+    font-size:1em;
+}
+#anon_notice p a {
+    font-weight: bold;
+}

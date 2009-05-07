@@ -251,9 +251,10 @@ class PublicAction extends Action
             $this->elementEnd('div');
         }
         else {
-            $m = _('Welcome to %%site.name%%. Its a bit like a dating site mixed with twitter. ' .
-                   '[Register](%%action.datingregister%%) for an account, post messages privately to your admirers, or publicly to the web and to twitter. ' .
-                   'Flirt with everyone, centrally, from your cellphone or laptop.');
+            $m = _('<p>Welcome to <b>%%site.name%%</b>.</p> ' .
+                   '<p>[Register](%%action.datingregister%%) for an account, post messages privately to your admirers, or publicly to the web. ' .
+                   '[Find](%%action.datingsearch%%) other singles to follow and flirt with them.</p> ' .
+                   '<p>Flirt with everyone, from your cellphone or laptop.</p>');
             $this->elementStart('div', array('id' => 'anon_notice'));
             $this->raw(common_markup_to_html($m));
             $this->elementEnd('div');

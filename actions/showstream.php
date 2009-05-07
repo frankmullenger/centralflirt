@@ -1111,9 +1111,9 @@ class ShowstreamAction extends RestrictedAction
                      $this->user->nickname, $this->user->nickname);
         
         if (common_config('profile', 'enable_dating')) {             
-            $m = sprintf(_('You are viewing **%s**\'s account on %%%%site.name%%%%, a dating site which incorporates micro blogging. ' .
-                           'Because you are not logged in you can only see part of **%s**\'s account and not dating information. ' .
-                           '[Join now](%%%%action.register%%%%) to follow **%s**\'s notices and flirt! ([Read more](%%%%doc.help%%%%))'),
+            $m = sprintf(_('<p>You are viewing **%s**\'s account on %%%%site.name%%%%.</p> ' .
+                           '<p>Because you are not logged in you can only see part of **%s**\'s profile.</p> ' .
+                           '<p>[Join now](%%%%action.register%%%%) to see **%s**\'s profile and flirt with them!</p>'),
                          $this->user->nickname, $this->user->nickname, $this->user->nickname);
         }
                      
