@@ -483,7 +483,7 @@ class ShowstreamAction extends RestrictedAction
                                     'width' => AVATAR_PROFILE_SIZE,
                                     'height' => AVATAR_PROFILE_SIZE,
                                     'alt' => $this->profile->nickname));
-        if (!$avatar) {
+        if (!$avatar && $this->auth == 3) {
             $this->element('a', array('href' => common_local_url('avatarsettings')), _('Upload Photo'));
         }
         $this->elementEnd('dd');
