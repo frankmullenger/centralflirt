@@ -33,7 +33,7 @@ font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 font-size:1em;
 }
 address {
-margin-right:71px;
+margin-right:0px;
 }
 address .fn {
 display:none;
@@ -465,4 +465,7 @@ p.help {
 .adsense {
     width: 100%;
     text-align: center;
+}
+.beta {
+    color: red;
 }

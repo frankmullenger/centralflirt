@@ -305,6 +305,12 @@ class Action extends HTMLOutputter // lawsuit
         }
         $this->element('span', array('class' => 'fn org'), common_config('site', 'name'));
         $this->elementEnd('a');
+        
+        //$this->element('span', 'beta', 'beta');
+        $this->element('img', array('class' => 'beta photo',
+                                        'src' => theme_path('beta.gif'),
+                                        'alt' => 'beta'));
+        
         $this->elementEnd('address');
     }
 
