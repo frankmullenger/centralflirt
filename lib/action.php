@@ -263,6 +263,9 @@ class Action extends HTMLOutputter // lawsuit
         $this->showCore();
         $this->showFooter();
         $this->elementEnd('div');
+        
+        $this->showAnalytics();
+        
         $this->elementEnd('body');
     }
 
@@ -306,7 +309,6 @@ class Action extends HTMLOutputter // lawsuit
         $this->element('span', array('class' => 'fn org'), common_config('site', 'name'));
         $this->elementEnd('a');
         
-        //$this->element('span', 'beta', 'beta');
         $this->element('img', array('class' => 'beta photo',
                                         'src' => theme_path('beta.gif'),
                                         'alt' => 'beta'));
@@ -617,24 +619,15 @@ class Action extends HTMLOutputter // lawsuit
     function showSections()
     {
         // for each section, show it
-
+        
         //Adding some adverts to the sidebar
-        $output = <<<EOS
-<script type="text/javascript"><!--
-google_ad_client = "pub-8648085348871471";
-/* 200x200, created 4/28/09 */
-google_ad_slot = "0739100966";
-google_ad_width = 200;
-google_ad_height = 200;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>    
-EOS;
-        $this->elementStart('div', 'adsense');
-        $this->raw($output);
-        $this->elementEnd('div');
+        $adwords = common_config('site', 'adwords');
+        
+        if ($adwords) {
+            $this->elementStart('div', 'adsense');
+            $this->raw($adwords);
+            $this->elementEnd('div');
+        }
     }
 
     /**
@@ -762,6 +755,16 @@ EOS;
         $this->text(_('license.'));
         $this->elementEnd('p');
         $this->elementEnd('dd');
+    }
+    
+    function showAnalytics()
+    {
+        //Adding some tracking
+        $analytics = common_config('site', 'analytics');
+        
+        if ($analytics) {
+            $this->raw($analytics);
+        }
     }
 
     /**
