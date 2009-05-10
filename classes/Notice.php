@@ -680,6 +680,9 @@ class Notice extends Memcached_DataObject
                 
                 $repliedTo = implode(', ', array_keys($this->noticeInReplyTo));
                 
+                //Add the user posting the message to the inbox
+                $repliedTo = $repliedTo . ', ' . $this->profile_id;
+                
                 $inbox = new Notice_inbox();
                 $UT = common_config('db','type')=='pgsql'?'"user"':'user';
                 
