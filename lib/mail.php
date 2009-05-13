@@ -237,9 +237,10 @@ function mail_subscribe_notify_profile($listenee, $other)
                                         'your notices on %2$s.'),
                                       $other->getBestName(),
                                       common_config('site', 'name'));
-
+                             
         //If $other is pending subscription to $listenee, then change the message accordingly
-        if ($other->isPendingSubscriptionTo($listenee)) {
+        $listener = User::staticGet('id', $other->id);
+        if ($listener->isPendingSubscriptionTo($listenee)) {
             
             $body = sprintf(_('%1$s is requesting to follow your notices on %2$s.'."\n\n".
                               "\t".'%3$s'."\n\n".
@@ -249,7 +250,7 @@ function mail_subscribe_notify_profile($listenee, $other)
                               "\n".'Faithfully yours,'."\n".'%7$s.'."\n\n".
                               "----\n".
                               "Change your email address or ".
-                              "notification options at ".'%8$s\n'),
+                              "notification options at ".'%8$s \n'),
                             $long_name,
                             common_config('site', 'name'),
                             $other->profileurl,
@@ -271,7 +272,7 @@ function mail_subscribe_notify_profile($listenee, $other)
                               "\n".'Faithfully yours,'."\n".'%7$s.'."\n\n".
                               "----\n".
                               "Change your email address or ".
-                              "notification options at ".'%8$s\n'),
+                              "notification options at ".'%8$s \n'),
                             $long_name,
                             common_config('site', 'name'),
                             $other->profileurl,
