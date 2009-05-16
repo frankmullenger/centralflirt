@@ -20,7 +20,7 @@ class Dating_profile extends Memcached_DataObject
     public $state;                           // string(255)  
     public $country;                         // int(11)  
     public $postcode;                        // string(255)  
-    public $bio;                             // string(255)  
+    public $bio;                             // blob(65535)  blob
     public $birthdate;                       // date(10)  binary
     public $sex;                             // int(11)  
     public $partner_sex;                     // int(11)  
@@ -226,7 +226,7 @@ class Dating_profile extends Memcached_DataObject
     function getLanguages()
     {
         if (empty($this->languages)) {
-            return null;
+            return array();
         }
         else {
             return explode(';', $this->languages);
