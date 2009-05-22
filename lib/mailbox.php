@@ -53,6 +53,11 @@ class MailboxAction extends PersonalAction
 
     function prepare($args) 
     {
+        if (common_config('profile', 'enable_dating')) {
+            $this->clientError(_('Mail is disabled.'), 403);
+            return;
+        }
+        
         parent::prepare($args);
 
         $nickname   = common_canonical_nickname($this->arg('nickname'));

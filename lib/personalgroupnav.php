@@ -125,18 +125,20 @@ class PersonalGroupNav extends Widget
             }
         }
 
-        if ($cur && $cur->id == $user->id) {
-
-            $this->out->menuItem(common_local_url('inbox', array('nickname' =>
-                                                                     $nickname)),
-                             _('Inbox'),
-                             _('Your incoming messages'),
-                             $action == 'inbox');
-            $this->out->menuItem(common_local_url('outbox', array('nickname' =>
-                                                                     $nickname)),
-                             _('Outbox'),
-                             _('Your sent messages'),
-                             $action == 'outbox');
+        if (!common_config('profile', 'enable_dating')) {
+            if ($cur && $cur->id == $user->id) {
+    
+                $this->out->menuItem(common_local_url('inbox', array('nickname' =>
+                                                                         $nickname)),
+                                 _('Inbox'),
+                                 _('Your incoming messages'),
+                                 $action == 'inbox');
+                $this->out->menuItem(common_local_url('outbox', array('nickname' =>
+                                                                         $nickname)),
+                                 _('Outbox'),
+                                 _('Your sent messages'),
+                                 $action == 'outbox');
+            }
         }
 
         $this->out->elementEnd('ul');

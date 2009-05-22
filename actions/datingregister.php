@@ -188,8 +188,8 @@ class DatingregisterAction extends Action
             $this->showForm(_('Password must be 6 or more characters.'));
         } else if ($password != $confirm) {
             $this->showForm(_('Passwords don\'t match.'));
-        } else if (strlen($headline) < 20) {
-            $this->showForm(_('Headline must be at least 20 characters long.'));
+        } else if (strlen($headline) < 15) {
+            $this->showForm(_('Headline must be at least 15 characters long.'));
         } else if (strlen($bio) < 50) {
             $this->showForm(_('Bio must be at least 50 characters long.'));
         } else {
