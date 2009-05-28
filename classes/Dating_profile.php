@@ -47,6 +47,7 @@ class Dating_profile extends Memcached_DataObject
     public $fav_spot;                        // blob(65535)  not_null blob binary
     public $fav_media;                       // blob(65535)  not_null blob binary
     public $first_date;                      // blob(65535)  not_null blob binary
+    public $fake;                            // int(1)  not_null
     public $created;                         // datetime(19)  not_null binary
     public $modified;                        // timestamp(19)  not_null unsigned zerofill binary timestamp
 
