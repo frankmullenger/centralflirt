@@ -1014,7 +1014,7 @@ class ShowstreamAction extends RestrictedAction
         $this->elementStart('dl', 'entity_member-since');
         $this->element('dt', null, _('Member since'));
         $this->element('dd', null, date('j M Y',
-                                                 strtotime($this->datingProfile->created)));
+                                                 strtotime($datingProfile->created)));
         $this->elementEnd('dl');
         
         $this->elementStart('dl', 'entity_subscribers');
