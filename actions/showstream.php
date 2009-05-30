@@ -1002,6 +1002,8 @@ class ShowstreamAction extends RestrictedAction
         $notices = new Notice();
         $notices->profile_id = $this->profile->id;
         $notice_count = (int) $notices->count();
+        
+        $datingProfile = $this->profile->getDatingProfile();
 
         $this->elementStart('div', array('id' => 'entity_statistics',
                                          'class' => 'section'));
@@ -1012,9 +1014,8 @@ class ShowstreamAction extends RestrictedAction
         $this->elementStart('dl', 'entity_member-since');
         $this->element('dt', null, _('Member since'));
         $this->element('dd', null, date('j M Y',
-                                                 strtotime($this->profile->created)));
+                                                 strtotime($this->datingProfile->created)));
         $this->elementEnd('dl');
-
         
         $this->elementStart('dl', 'entity_subscribers');
         $this->elementStart('dt');
