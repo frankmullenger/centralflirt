@@ -181,7 +181,9 @@ class DatingsearchAction extends SearchAction
         //TODO wrap in a try/catch 
         $search_engine = $datingProfile->getSearchEngine('identica_dating');
         
-        $search_engine->set_sort_mode('chron');
+        //$search_engine->set_sort_mode('chron');
+        $search_engine->set_sort_mode('modified');
+        
         # Ask for an extra to see if there's more.
         $search_engine->limit((($page-1)*PROFILES_PER_PAGE), PROFILES_PER_PAGE + 1);
         if (false === $search_engine->query($q)) {

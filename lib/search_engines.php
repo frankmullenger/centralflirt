@@ -43,6 +43,8 @@ class SearchEngine
     {
         if ('chron' === $mode)
             return $this->target->orderBy('created desc');
+            
+        if ('modified' === $mode) return $this->target->orderBy('modified desc'); 
     }
 }
 
