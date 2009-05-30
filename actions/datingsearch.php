@@ -322,7 +322,7 @@ class DatingSearchResults extends ProfileList
     
         $countryList = get_nice_country_list();
         $this->out->elementStart('span', 'entity_location');
-        $this->out->raw($this->highlight(ucwords(($this->datingProfile->city)?$this->datingProfile->city.', '.$countryList[$this->datingProfile->country]:$countryList[$this->datingProfile->country])));
+        $this->out->raw(htmlentities(ucwords(($this->datingProfile->city)?$this->datingProfile->city.', '.$countryList[$this->datingProfile->country]:$countryList[$this->datingProfile->country])));
         $this->out->elementEnd('span');
 
         if ($user && $user->id == $this->owner->id) {
@@ -363,6 +363,7 @@ class DatingSearchResults extends ProfileList
     
     function highlight($text)
     {
+        return;
         return preg_replace($this->pattern, '<strong>\\1</strong>', htmlspecialchars($text));
     }
 
