@@ -1058,10 +1058,12 @@ class ShowstreamAction extends RestrictedAction
         $this->element('dd', null, (is_int($subs_count)) ? $subs_count : '0');
         $this->elementEnd('dl');
         
-        $this->elementStart('dl', 'entity_notices');
-        $this->element('dt', null, _('Notices'));
-        $this->element('dd', null, (is_int($notice_count)) ? $notice_count : '0');
-        $this->elementEnd('dl');
+        if ($this->auth == 3) {
+            $this->elementStart('dl', 'entity_notices');
+            $this->element('dt', null, _('Notices'));
+            $this->element('dd', null, (is_int($notice_count)) ? $notice_count : '0');
+            $this->elementEnd('dl');
+        }
 
         $this->elementEnd('div');
     }
