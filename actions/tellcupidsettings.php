@@ -21,7 +21,7 @@ if (!defined('LACONICA')) { exit(1); }
 
 require_once INSTALLDIR.'/lib/facebookaction.php';
 
-class FacebooksettingsAction extends FacebookAction
+class TellCupidSettingsAction extends FacebookAction
 {
 
     function handle($args)

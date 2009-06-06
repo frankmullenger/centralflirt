@@ -21,7 +21,7 @@ if (!defined('LACONICA')) { exit(1); }
 
 require_once(INSTALLDIR.'/lib/facebookaction.php');
 
-class FacebookinviteAction extends FacebookAction
+class TellCupidInviteAction extends FacebookAction
 {
 
     function handle($args)
