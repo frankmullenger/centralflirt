@@ -92,6 +92,10 @@ class TellCupidInviteAction extends FacebookAction
 
         // Get a list of users who are already using the app for exclusion
         $exclude_ids = $this->facebook->api_client->friends_getAppUsers();
+        
+        if (!$exclude_ids) {
+            $exclude_ids = array();
+        }
 
         $content = sprintf(_('You have been invited to %s'), common_config('site', 'name')) .
             htmlentities('<fb:req-choice url="' . $this->app_uri . '" label="Add"/>');
@@ -110,8 +114,7 @@ class TellCupidInviteAction extends FacebookAction
 
         $this->elementEnd('fb:request-form');
 
-        $this->element('h2', null, sprintf(_('Friends already using %s:'), 
-            common_config('site', 'name')));
+        $this->element('h2', null, sprintf(_('Friends already using %s:'), common_config('site', 'name')));
         $this->elementStart('ul', array('id' => 'facebook-friends'));
         
         foreach ($exclude_ids as $friend) {
@@ -129,5 +132,26 @@ class TellCupidInviteAction extends FacebookAction
     {
         return sprintf(_('Send invitations'));
     }
+    
+    // Make this into a widget later
+    function showLocalNav()
+    {
+        $this->elementStart('ul', array('class' => 'nav'));
+
+        $this->elementStart('li', array('class' =>
+            ($this->action == 'tellcupidhome') ? 'current' : 'facebook_home'));
+        $this->element('a',
+            array('href' => 'index.php', 'title' => _('Home')), _('Home'));
+        $this->elementEnd('li');
+
+        $this->elementStart('li',
+            array('class' =>
+                ($this->action == 'tellcupidinvite') ? 'current' : 'facebook_invite'));
+        $this->element('a',
+            array('href' => 'invite.php', 'title' => _('Invite')), _('Invite'));
+        $this->elementEnd('li');
+
+        $this->elementEnd('ul');
+    }  
 
 }
