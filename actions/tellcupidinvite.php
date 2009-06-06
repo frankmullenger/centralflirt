@@ -110,7 +110,8 @@ class TellCupidInviteAction extends FacebookAction
         $this->element('fb:multi-friend-selector', array('showborder' => 'false',
                                                                'actiontext' => $actiontext,
                                                                'exclude_ids' => implode(',', $exclude_ids),
-                                                               'bypass' => 'cancel'));
+                                                               'bypass' => 'cancel',
+                                                                'cols' => '3'));
 
         $this->elementEnd('fb:request-form');
 
