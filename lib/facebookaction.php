@@ -208,21 +208,21 @@ class FacebookAction extends Action
         $this->elementStart('ul', array('class' => 'nav'));
 
         $this->elementStart('li', array('class' =>
-            ($this->action == 'tellcupidhome') ? 'current' : 'facebook_home'));
+            ($this->action == 'facebookhome') ? 'current' : 'facebook_home'));
         $this->element('a',
             array('href' => 'index.php', 'title' => _('Home')), _('Home'));
         $this->elementEnd('li');
 
         $this->elementStart('li',
             array('class' =>
-                ($this->action == 'tellcupidinvite') ? 'current' : 'facebook_invite'));
+                ($this->action == 'facebookinvite') ? 'current' : 'facebook_invite'));
         $this->element('a',
             array('href' => 'invite.php', 'title' => _('Invite')), _('Invite'));
         $this->elementEnd('li');
 
         $this->elementStart('li',
             array('class' =>
-                ($this->action == 'tellcupidsettings') ? 'current' : 'facebook_settings'));
+                ($this->action == 'facebooksettings') ? 'current' : 'facebook_settings'));
         $this->element('a',
             array('href' => 'settings.php',
                 'title' => _('Settings')), _('Settings'));
