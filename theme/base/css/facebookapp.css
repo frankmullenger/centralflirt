@@ -98,3 +98,8 @@ list-style-type:none;
 .form_settings label {
 margin-right:18px;
 }
+
+#fb_multi_friend_selector_wrapper {
+    background:#FFFFFF none repeat scroll 0 0;
+    padding:11px;
+}

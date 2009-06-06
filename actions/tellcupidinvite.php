@@ -114,19 +114,6 @@ class TellCupidInviteAction extends FacebookAction
                                                                 'cols' => '4'));
 
         $this->elementEnd('fb:request-form');
-
-        $this->element('h2', null, sprintf(_('Friends already using %s:'), common_config('site', 'name')));
-        $this->elementStart('ul', array('id' => 'facebook-friends'));
-        
-        foreach ($exclude_ids as $friend) {
-            $this->elementStart('li');
-            $this->element('fb:profile-pic', array('uid' => $friend, 'size' => 'square'));
-            $this->element('fb:name', array('uid' => $friend,
-                                            'capitalize' => 'true'));
-            $this->elementEnd('li');
-        }
-
-        $this->elementEnd("ul");
     }
     
     function title() 
