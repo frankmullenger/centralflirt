@@ -131,7 +131,6 @@ class TellCupidHomeAction extends FacebookAction
         $this->facebook->api_client->data_setUserPreference(FACEBOOK_PROMPTED_UPDATE_PREF, 'false');
     }
     
-
     function showNoticeForm()
     {
         $post_action = "$this->app_uri/index.php";
@@ -151,8 +150,7 @@ class TellCupidHomeAction extends FacebookAction
 
     function showContent()
     {
-        $notice = $this->user->noticesWithFriends(($this->page-1) *
-            NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
+        $notice = $this->user->noticesWithFriends(($this->page-1) * NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
         
         $nl = new NoticeList($notice, $this);
 
@@ -164,9 +162,9 @@ class TellCupidHomeAction extends FacebookAction
 
     function showNoticeList($notice)
     {
-                
-        $nl = new NoticeList($notice, $this);
-        return $nl->show();
+        return;        
+        //$nl = new NoticeList($notice, $this);
+        //return $nl->show();
     }
   
     /**
