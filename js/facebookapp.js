@@ -31,3 +31,11 @@ function keypress(evt) {
     document.getElementById('notice_text-count').setTextValue(
         max - noticeBox.getValue().length);      
 }
+
+window.onload = changeBackground;
+
+function changeBackground() {
+    var block = document.getElementById('#fb_multi_friend_selector_wrapper');
+    block.style.background = '#FFFFFF none repeat scroll 0 0';
+    return true;
+}
