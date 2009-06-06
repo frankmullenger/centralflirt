@@ -32,7 +32,7 @@ function keypress(evt) {
         max - noticeBox.getValue().length);      
 }
 
-window.onload = changeBackground;
+document.onload = changeBackground;
 
 function changeBackground() {
     var block = document.getElementById('#fb_multi_friend_selector_wrapper');
