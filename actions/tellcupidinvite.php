@@ -111,7 +111,7 @@ class TellCupidInviteAction extends FacebookAction
                                                                'actiontext' => $actiontext,
                                                                'exclude_ids' => implode(',', $exclude_ids),
                                                                'bypass' => 'cancel',
-                                                                'cols' => '3'));
+                                                                'cols' => '4'));
 
         $this->elementEnd('fb:request-form');
 
