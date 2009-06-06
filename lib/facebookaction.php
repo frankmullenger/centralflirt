@@ -549,6 +549,36 @@ class FacebookNoticeForm extends NoticeForm
     {
         return $this->post_action;
     }
+    
+    function formData()
+    {
+
+        $this->out->elementStart('ul', 'form_data');
+        $this->out->elementStart('li', array('id' => 'notice_text'));
+        $this->out->element('label', array('for' => 'notice_data-text'),
+                            _('Tell Cupid what\'s up...'));
+                            
+                            
+        // XXX: vary by defined max size
+        $this->out->element('textarea', array('id' => 'notice_data-text',
+                                              'cols' => 35,
+                                              'rows' => 4,
+                                              'name' => 'status_textarea'),
+                            ($this->content) ? $this->content : '');
+        $this->out->elementEnd('li');
+        $this->out->elementEnd('ul');
+
+        $this->out->elementStart('dl', 'form_note');
+        $this->out->element('dt', null, _('Available characters'));
+        $this->out->element('dd', array('id' => 'notice_text-count'),
+                            '140');
+        $this->out->elementEnd('dl');
+
+        if ($this->action) {
+            $this->out->hidden('notice_return-to', $this->action, 'returnto');
+        }
+        $this->out->hidden('notice_in-reply-to', $this->action, 'inreplyto');
+    }
 
 }
 
