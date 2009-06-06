@@ -99,6 +99,9 @@ class TellCupidHomeAction extends FacebookAction
                 $flink_id = $flink->insert();
 
                 // XXX: Do some error handling here
+                if (!$flink_id) {
+                    $this->showLoginForm(_("Could not insert the foreign link."));
+                }
 
                 $this->setDefaults();
                 
@@ -151,6 +154,11 @@ class TellCupidHomeAction extends FacebookAction
 
     function showContent()
     {
+        echo '<pre>';
+        print_r($this->user);
+        echo '</pre>';
+        
+        
         $notice = $this->user->noticesWithFriends(($this->page-1) * NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
         
         $nl = new NoticeList($notice, $this);
@@ -163,6 +171,7 @@ class TellCupidHomeAction extends FacebookAction
 
     function showNoticeList($notice)
     {      
+        return;
         $nl = new NoticeList($notice, $this);
         return $nl->show();
     }
