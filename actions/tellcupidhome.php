@@ -154,15 +154,8 @@ class TellCupidHomeAction extends FacebookAction
 
     function showContent()
     {
-        echo '<pre>';
-        print_r($this->user);
-        echo '</pre>'; 
         
         $notice = $this->user->noticesWithFriends(($this->page-1) * NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
-        
-        echo '<pre>';
-        print_r($notice);
-        echo '</pre>';
         
         $nl = new NoticeList($notice, $this);
 
@@ -174,7 +167,6 @@ class TellCupidHomeAction extends FacebookAction
 
     function showNoticeList($notice)
     {      
-        return;
         $nl = new NoticeList($notice, $this);
         return $nl->show();
     }

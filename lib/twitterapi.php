@@ -26,6 +26,10 @@ class TwitterapiAction extends Action
 
     function handle($args)
     {
+        if (common_config('profile', 'enable_dating')) {
+            exit('Disabled momentarily until secured that personal notices cannot be accessed without authorisation.');
+        }
+        
         parent::handle($args);
     }
     
