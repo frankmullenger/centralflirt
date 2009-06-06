@@ -139,8 +139,10 @@ class TellCupidHomeAction extends FacebookAction
     {
         $post_action = "$this->app_uri/index.php";
         
+        $this->elementStart('div', array('style'=>'width:100%; text-align:center;'));
         $notice_form = new FacebookNoticeForm($this, $post_action, null, $post_action, $this->user);
         $notice_form->show();
+        $this->elementEnd('div');
     }
 
     function title()

@@ -97,7 +97,7 @@ class TellCupidInviteAction extends FacebookAction
             $exclude_ids = array();
         }
 
-        $content = sprintf(_('You have been invited to %s'), common_config('site', 'name')) .
+        $content = _('You have been invited to Tell Cupid') .
             htmlentities('<fb:req-choice url="' . $this->app_uri . '" label="Add"/>');
 
         $this->elementStart('fb:request-form', array('action' => 'invite.php',
@@ -106,7 +106,7 @@ class TellCupidInviteAction extends FacebookAction
                                                       'type' => common_config('site', 'name'),
                                                       'content' => $content));
         $this->hidden('invite', 'true');
-        $actiontext = sprintf(_('Invite your friends to use %s'), common_config('site', 'name'));
+        $actiontext = _('Invite your friends to use Tell Cupid');
         $this->element('fb:multi-friend-selector', array('showborder' => 'false',
                                                                'actiontext' => $actiontext,
                                                                'exclude_ids' => implode(',', $exclude_ids),
