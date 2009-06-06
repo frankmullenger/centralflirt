@@ -102,6 +102,7 @@ class TellCupidHomeAction extends FacebookAction
 
                 $this->setDefaults();
                 
+                $this->user = $flink->getUser();
                 $this->showPage();
                 return;
 
@@ -161,10 +162,9 @@ class TellCupidHomeAction extends FacebookAction
     }
 
     function showNoticeList($notice)
-    {
-        return;        
-        //$nl = new NoticeList($notice, $this);
-        //return $nl->show();
+    {      
+        $nl = new NoticeList($notice, $this);
+        return $nl->show();
     }
   
     /**
