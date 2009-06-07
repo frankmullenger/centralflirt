@@ -62,13 +62,13 @@ EOS;
 <p>
 <ul>
 <li>
-@public our eyes met above a copy of the metro, northern line London. You had long brown hair, I was in jeans and brown shirt...
+<em>@public</em> our eyes met above a copy of the metro, northern line London. You had long brown hair, I was in jeans and brown shirt...
 </li>
 <li>
-@public looking for a special man, sensitive, 22-27, tall in and around Sydney, Australia...
+<em>@public</em> looking for a special man, sensitive, 22-27, tall in and around Sydney, Australia...
 </li>
 <li>
-@public nice non scene guy looking for same, going to fabric tonight see you there!
+<em>@public</em> nice non scene guy looking for same, going to fabric tonight see you there!
 </li>
 </ul>
 </p>
