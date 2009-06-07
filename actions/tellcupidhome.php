@@ -149,11 +149,7 @@ class TellCupidHomeAction extends FacebookAction
 
     function title()
     {
-        if ($this->page > 1) {
-            return sprintf(_("%s and friends, page %d"), $this->user->nickname, $this->page);
-        } else {
-            return sprintf(_("%s and friends"), $this->user->nickname);
-        }
+        return _("Public Timeline");
     }
 
     function showContent()

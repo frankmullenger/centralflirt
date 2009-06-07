@@ -83,7 +83,7 @@ EOS;
     
     function title() 
     {
-        return;
+        return _("How It Works");
     }
     
     // Make this into a widget later
