@@ -2,7 +2,7 @@
 @import url("../../identica/css/display.css");
 
 * {
-font-size:14px;
+font-size:12px;
 font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
@@ -16,6 +16,15 @@ width:auto;
 p,label,
 h1,h2,h3,h4,h5,h6 {
 color:#000;
+line-height:1.65;
+font-size: 1em;
+}
+
+div.entry-content p {
+color:#333;
+}
+#licenses {
+font-size:0.9em;
 }
 
 #content {
