@@ -45,11 +45,22 @@ class TellCupidHowAction extends FacebookAction
         $this->elementstart('p');
         $this->text('Tell Cupid is an application');
         $this->elementend('p');
+        
+        $content = <<<EOS
+<p>
+Tell Cupid is the application for finding and flirting with people in your city.
+</p>
+<p>
+Tell Cupid about your crush and he will post the message to dating site Central Flirt where thousands of members can view it. The message you send is
+automatically added to the Central Flirt home page.
+</p>
+EOS;
+        $this->raw($content);
     }
     
     function title() 
     {
-        return sprintf(_('How Does This Work?'));
+        return;
     }
     
     // Make this into a widget later
