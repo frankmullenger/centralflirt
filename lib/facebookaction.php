@@ -558,7 +558,6 @@ class FacebookNoticeForm extends NoticeForm
         $this->out->element('label', array('for' => 'notice_data-text'),
                             _('Tell Cupid what\'s up...'));
                             
-                            
         // XXX: vary by defined max size
         $this->out->element('textarea', array('id' => 'notice_data-text',
                                               'cols' => 35,

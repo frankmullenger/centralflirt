@@ -150,8 +150,7 @@ class FacebookhomeAction extends FacebookAction
     {
         $post_action = "$this->app_uri/index.php";
         
-        $notice_form = new FacebookNoticeForm($this, $post_action, null, 
-            $post_action, $this->user);
+        $notice_form = new FacebookNoticeForm($this, $post_action, null, $post_action, $this->user);
         $notice_form->show();
     }
 

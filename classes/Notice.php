@@ -223,7 +223,7 @@ class Notice extends Memcached_DataObject
         $notice->uri = $uri;
         
         //Set the privacy of the notice if dating site is enabled
-        if (common_config('profile', 'enable_dating')) {
+        if (common_config('profile', 'enable_dating') || $source == 'Facebook') {
             
             //Need to check the notice for @public and set notice privacy accordingly - if a message is to a public group it must have @public.
             $cnt = preg_match_all('/(?:^|\s)@public(?:$|\s)+/i', $notice->content, $match);
