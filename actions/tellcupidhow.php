@@ -88,6 +88,7 @@ EOS;
         $content = <<<EOS
 <p>
 Watch the public timeline on the <a href="http://centralflirt.com" target="_blank">Central Flirt</a> home page for someone to respond to your message, maybe your match is watching!
+You can view the Central Flirt home page by clicking on the <a href="http://apps.facebook.com/tellcupid/index.php">home</a> tab above.
 </p>
 <p>
 Or you can sign up on <a href="http://centralflirt.com/main/register" target="_blank">Central Flirt</a> and start flirting with other singles from your own account where you can keep your messages private 
