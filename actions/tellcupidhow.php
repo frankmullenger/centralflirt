@@ -47,7 +47,7 @@ class TellCupidHowAction extends FacebookAction
 Tell Cupid is the application for finding and flirting with people in your city.
 </p>
 <p>
-Have a crush? Saw someone you like and want to find them? Looking for love?
+Have a crush? <br />Saw someone you like and want to find them? <br />Looking for love?
 </p>
 <p>
 Tell Cupid in 140 characters and he will post your message to dating site Central Flirt where thousands of singles can see it.
@@ -68,6 +68,8 @@ EOS;
         $content = <<<EOS
 <p>
 Watch the public timeline on the Central Flirt home page for someone to respond to your message, maybe your match is watching!
+</p>
+<p>
 Or you can sign up for Central Flirt and start flirting with other singles from your own account where you can keep your messages private 
 and respond to other users.
 </p>
