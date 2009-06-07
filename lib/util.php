@@ -728,8 +728,10 @@ function common_fancy_url($action, $args=null)
         } else {
             return common_path('opensearch/people');
         }
+     /* TODO frank: fix these links 403 error live server
      case 'doc':
         return common_path('doc/'.$args['title']);
+     */
      case 'block':
      case 'login':
      case 'logout':
