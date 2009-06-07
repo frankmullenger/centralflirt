@@ -17,14 +17,14 @@ p,label,
 h1,h2,h3,h4,h5,h6 {
 color:#000;
 line-height:1.65;
-font-size: 0.9em;
 }
 
 div.entry-content p {
 color:#333;
 }
-#licenses {
+#footer {
 font-size:0.9em;
+width: 100%;
 }
 
 #content {
