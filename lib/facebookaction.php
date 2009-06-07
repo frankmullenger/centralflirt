@@ -564,7 +564,7 @@ class FacebookNoticeForm extends NoticeForm
                                               'cols' => 35,
                                               'rows' => 4,
                                               'name' => 'status_textarea'),
-                            ($this->content) ? $this->content : '');
+                            ($this->content) ? $this->content : '@public ');
         $this->out->elementEnd('li');
         $this->out->elementEnd('ul');
 
