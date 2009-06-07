@@ -23,7 +23,7 @@ div.entry-content p {
 color:#333;
 }
 #footer {
-width: 100%;
+width: inherit;
 }
 #footer p {
 font-size:0.9em; 
