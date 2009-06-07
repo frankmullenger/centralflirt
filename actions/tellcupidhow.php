@@ -57,6 +57,24 @@ Tell Cupid in 140 characters and he will post your message to dating site <a hre
 EOS;
         $this->raw($content);
         
+        $this->element('h2', null, _('Examples'));
+        $content = <<<EOS
+<p>
+<ul>
+<li>
+@public our eyes met above a copy of the metro, northern line London. You had long brown hair, I was in jeans and brown shirt...
+</li>
+<li>
+@public looking for a special man, sensitive, 22-27, tall in and around Sydney, Australia...
+</li>
+<li>
+@public nice non scene guy looking for same, going to fabric tonight see you there!
+</li>
+</ul>
+</p>
+EOS;
+        $this->raw($content);
+        
         $this->element('h2', null, _('What Does @public Mean?'));
         $content = <<<EOS
 <p>
@@ -72,7 +90,7 @@ EOS;
 Watch the public timeline on the <a href="http://centralflirt.com" target="_blank">Central Flirt</a> home page for someone to respond to your message, maybe your match is watching!
 </p>
 <p>
-Or you can sign up for <a href="http://centralflirt.com" target="_blank">Central Flirt</a> and start flirting with other singles from your own account where you can keep your messages private 
+Or you can sign up on <a href="http://centralflirt.com/main/register" target="_blank">Central Flirt</a> and start flirting with other singles from your own account where you can keep your messages private 
 and respond to other users.
 </p>
 EOS;
