@@ -29,6 +29,14 @@ width: inherit;
 #footer p {
 font-size:0.9em; 
 }
+.entry-content li {
+list-style-position:outside;
+list-style-type:none;
+margin-left:12px;
+}
+.entry-content li {
+margin-bottom:18px;
+}
 /* end css hacking */
 
 #content {
