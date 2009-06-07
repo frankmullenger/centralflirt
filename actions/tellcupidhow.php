@@ -41,6 +41,8 @@ class TellCupidHowAction extends FacebookAction
 
     function showContent()
     {
+        $this->elementStart('div', array('id' => 'content', 'class' => 'hentry'));
+        $this->elementStart('div', array('id' => 'content_inner', 'class' => 'entry-content'));
         $this->element('h2', null, _('How Does This Work?'));
         $content = <<<EOS
 <p>
@@ -75,6 +77,8 @@ and respond to other users.
 </p>
 EOS;
         $this->raw($content);
+        $this->elementEnd('div');
+        $this->elementEnd('div');
     }
     
     function title() 
