@@ -103,18 +103,18 @@ class FacebookAction extends Action
                                      'href' => theme_path('css/display.css', 'base') . '?ts=' . $ts));
                                      
         $theme = common_config('site', 'theme');
-        
-        $ts = filemtime(INSTALLDIR. '/theme/' . $theme .'/css/display.css');
-                                     
-        $this->element('link', array('rel' => 'stylesheet',
-                                     'type' => 'text/css',
-                                     'href' => theme_path('css/display.css', null) . '?ts=' . $ts));
                                      
         $ts = filemtime(INSTALLDIR.'/theme/base/css/facebookapp.css');
         
         $this->element('link', array('rel' => 'stylesheet',
                                      'type' => 'text/css',
                                      'href' => theme_path('css/facebookapp.css', 'base') . '?ts=' . $ts));
+        
+        $ts = filemtime(INSTALLDIR. '/theme/' . $theme .'/css/display.css');
+                                     
+        $this->element('link', array('rel' => 'stylesheet',
+                                     'type' => 'text/css',
+                                     'href' => theme_path('css/display.css', null) . '?ts=' . $ts));
     }
   
     function showScripts()
