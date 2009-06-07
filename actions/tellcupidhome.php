@@ -227,22 +227,7 @@ class TellCupidHomeAction extends FacebookAction
     // Make this into a widget later
     function showLocalNav()
     {
-        $this->elementStart('ul', array('class' => 'nav'));
-
-        $this->elementStart('li', array('class' =>
-            ($this->action == 'tellcupidhome') ? 'current' : 'facebook_home'));
-        $this->element('a',
-            array('href' => 'index.php', 'title' => _('Home')), _('Home'));
-        $this->elementEnd('li');
-
-        $this->elementStart('li',
-            array('class' =>
-                ($this->action == 'tellcupidinvite') ? 'current' : 'facebook_invite'));
-        $this->element('a',
-            array('href' => 'invite.php', 'title' => _('Invite')), _('Invite'));
-        $this->elementEnd('li');
-
-        $this->elementEnd('ul');
+        $this->showLocalCupidNav();
     }  
 
 }

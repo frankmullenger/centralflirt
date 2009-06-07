@@ -229,7 +229,34 @@ class FacebookAction extends Action
         $this->elementEnd('li');
 
         $this->elementEnd('ul');
-    }     
+    }   
+
+    function showLocalCupidNav()
+    {
+        $this->elementStart('ul', array('class' => 'nav'));
+
+        $this->elementStart('li', array('class' =>
+            ($this->action == 'tellcupidhome') ? 'current' : 'facebook_home'));
+        $this->element('a',
+            array('href' => 'index.php', 'title' => _('Home')), _('Home'));
+        $this->elementEnd('li');
+        
+        $this->elementStart('li',
+            array('class' =>
+                ($this->action == 'tellcupidhow') ? 'current' : 'facebook_how'));
+        $this->element('a',
+            array('href' => 'how.php', 'title' => _('How Does Thiw Work?')), _('How Does This Work?'));
+        $this->elementEnd('li');
+
+        $this->elementStart('li',
+            array('class' =>
+                ($this->action == 'tellcupidinvite') ? 'current' : 'facebook_invite'));
+        $this->element('a',
+            array('href' => 'invite.php', 'title' => _('Invite')), _('Invite'));
+        $this->elementEnd('li');
+
+        $this->elementEnd('ul');
+    }
     
     /**
      * Show header of the page.
@@ -556,7 +583,7 @@ class FacebookNoticeForm extends NoticeForm
         $this->out->elementStart('ul', 'form_data');
         $this->out->elementStart('li', array('id' => 'notice_text'));
         $this->out->element('label', array('for' => 'notice_data-text'),
-                            _('Tell Cupid what\'s up...'));
+                            _('Tell Cupid...'));
                             
         // XXX: vary by defined max size
         $this->out->element('textarea', array('id' => 'notice_data-text',
