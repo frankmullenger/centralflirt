@@ -29,19 +29,6 @@ width: inherit;
 #footer p {
 font-size:0.9em; 
 }
-.pagination .nav_prev a,
-.pagination .nav_next a {
-background-repeat:no-repeat;
-border-color:#CEE1E9;
-}
-.pagination .nav_prev a {
-background-image:url(http://centralflirt.com/theme/centralflirt/images/icons/twotone/green/arrow-left.gif);
-background-position:10% 45%;
-}
-.pagination .nav_next a {
-background-image:url(http://centralflirt.com/theme/centralflirt/images/icons/twotone/green/arrow-right.gif);
-background-position:90% 45%;
-}
 /* end css hacking */
 
 #content {

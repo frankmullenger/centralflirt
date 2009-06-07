@@ -280,12 +280,15 @@ margin-right: 2em;
 background-repeat:no-repeat;
 border-color:#CEE1E9;
 }
+/* full path for fb app */
 .pagination .nav_prev a {
-background-image:url(../images/icons/twotone/green/arrow-left.gif);
+/* background-image:url(../images/icons/twotone/green/arrow-left.gif); */
+background-image:url(http://centralflirt.com/theme/centralflirt/images/icons/twotone/green/arrow-left.gif);
 background-position:10% 45%;
 }
 .pagination .nav_next a {
-background-image:url(../images/icons/twotone/green/arrow-right.gif);
+/* background-image:url(../images/icons/twotone/green/arrow-right.gif); */
+background-image:url(http://centralflirt.com/theme/centralflirt/images/icons/twotone/green/arrow-right.gif);
 background-position:90% 45%;
 }
 
