@@ -42,17 +42,34 @@ class TellCupidHowAction extends FacebookAction
     function showContent()
     {
         $this->element('h2', null, _('How Does This Work?'));
-        $this->elementstart('p');
-        $this->text('Tell Cupid is an application');
-        $this->elementend('p');
-        
         $content = <<<EOS
 <p>
 Tell Cupid is the application for finding and flirting with people in your city.
 </p>
 <p>
-Tell Cupid about your crush and he will post the message to dating site Central Flirt where thousands of members can view it. The message you send is
-automatically added to the Central Flirt home page.
+Have a crush? Saw someone you like and want to find them? Looking for love?
+</p>
+<p>
+Tell Cupid in 140 characters and he will post your message to dating site Central Flirt where thousands of singles can see it.
+</p>
+EOS;
+        $this->raw($content);
+        
+        $this->element('h2', null, _('What Does @public Mean?'));
+        $content = <<<EOS
+<p>
+By putting @public in your message ensures your message will be posted to the public timeline on the Central Flirt home page, which means 
+a lot more people will see your message.
+</p>
+EOS;
+        $this->raw($content);
+        
+        $this->element('h2', null, _('What Next?'));
+        $content = <<<EOS
+<p>
+Watch the public timeline on the Central Flirt home page for someone to respond to your message, maybe your match is watching!
+Or you can sign up for Central Flirt and start flirting with other singles from your own account where you can keep your messages private 
+and respond to other users.
 </p>
 EOS;
         $this->raw($content);
