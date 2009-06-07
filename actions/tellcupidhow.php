@@ -27,22 +27,6 @@ class TellCupidHowAction extends FacebookAction
     function handle($args)
     {
         parent::handle($args);
-        $this->showForm();
-    }
-
-    /**
-     * Wrapper for showing a page
-     *
-     * Stores an error and shows the page
-     *
-     * @param string $error Error, if any
-     *
-     * @return void
-     */
-
-    function showForm($error=null)
-    {
-        $this->error = $error;
         $this->showPage();
     }
 
@@ -57,68 +41,15 @@ class TellCupidHowAction extends FacebookAction
 
     function showContent()
     {
-        if ($this->arg('ids')) {
-            $this->showSuccessContent();
-        } else {
-            $this->showFormContent();
-        }
-    }
-
-    function showSuccessContent()
-    {
-
-        $this->element('h2', null, sprintf(_('Thanks for inviting your friends to use %s'), 
-            common_config('site', 'name')));
-        $this->element('p', null, _('Invitations have been sent to the following users:'));
-
-        $friend_ids = $_POST['ids']; // XXX: Hmm... is this the best way to acces the list?
-
-        $this->elementStart('ul', array('id' => 'facebook-friends'));
-
-        foreach ($friend_ids as $friend) {
-            $this->elementStart('li');
-            $this->element('fb:profile-pic', array('uid' => $friend));
-            $this->element('fb:name', array('uid' => $friend,
-                                            'capitalize' => 'true'));
-            $this->elementEnd('li');
-        }
-
-        $this->elementEnd("ul");
-
-    }
-
-    function showFormContent()
-    {
-
-        // Get a list of users who are already using the app for exclusion
-        $exclude_ids = $this->facebook->api_client->friends_getAppUsers();
-        
-        if (!$exclude_ids) {
-            $exclude_ids = array();
-        }
-
-        $content = _('You have been invited to Tell Cupid') .
-            htmlentities('<fb:req-choice url="' . $this->app_uri . '" label="Add"/>');
-
-        $this->elementStart('fb:request-form', array('action' => 'invite.php',
-                                                      'method' => 'post',
-                                                      'invite' => 'true',
-                                                      'type' => common_config('site', 'name'),
-                                                      'content' => $content));
-        $this->hidden('invite', 'true');
-        $actiontext = _('Invite your friends to use Tell Cupid');
-        $this->element('fb:multi-friend-selector', array('showborder' => 'false',
-                                                               'actiontext' => $actiontext,
-                                                               'exclude_ids' => implode(',', $exclude_ids),
-                                                               'bypass' => 'cancel',
-                                                                'cols' => '4'));
-
-        $this->elementEnd('fb:request-form');
+        $this->element('h2', null, _('How Does This Work?'));
+        $this->elementstart('p');
+        $this->text('Tell Cupid is an application');
+        $this->elementend('p');
     }
     
     function title() 
     {
-        return sprintf(_('Send invitations'));
+        return sprintf(_('How Does This Work?'));
     }
     
     // Make this into a widget later
