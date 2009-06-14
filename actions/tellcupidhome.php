@@ -143,7 +143,7 @@ class TellCupidHomeAction extends FacebookAction
         $this->elementStart('div', array('style'=>'width:470px; margin:0 auto; text-align:left;'));
         
         $this->element('img', array('class' => 'logo photo',
-                                        'src' => theme_path('images/icons/tell_cupid_logo_2.jpg'),
+                                        'src' => theme_path('images/icons/tell_cupid_logo_2_small.jpg'),
                                         'alt' => 'Tell Cupid in association with Central Flirt'));
         
         $notice_form = new FacebookNoticeForm($this, $post_action, null, $post_action, $this->user);
