@@ -137,7 +137,6 @@ class FacebookAction extends Action
      *
      * @return void
      */
-
     function startHTML($type=null) 
     {          
         $this->showStylesheets();
